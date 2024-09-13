@@ -2,11 +2,30 @@
 
 import { createClient, createConfig, type Options, formDataBodySerializer } from '@hey-api/client-fetch';
 import type { GetAllEntitiesError, GetAllEntitiesResponse, UpdateUserData, UpdateUserError, UpdateUserResponse, CreateEntityData, CreateEntityError, CreateEntityResponse, GetProductCateData, GetProductCateError, GetProductCateResponse, UpdateProductCateData, UpdateProductCateError, UpdateProductCateResponse, DeleteProductCateData, DeleteProductCateError, DeleteProductCateResponse, GetAllEntities2Error, GetAllEntities2Response, UpdateEntityData, UpdateEntityError, UpdateEntityResponse, CreateEntity2Data, CreateEntity2Error, CreateEntity2Response, GetAllEntities6Error, GetAllEntities6Response, UpdateAddressData, UpdateAddressError, UpdateAddressResponse, CreateEntity5Data, CreateEntity5Error, CreateEntity5Response, GetAllEntities7Error, GetAllEntities7Response, UpdateEntity1Data, UpdateEntity1Error, UpdateEntity1Response, CreateEntity6Data, CreateEntity6Error, CreateEntity6Response, GetAllEntities1Error, GetAllEntities1Response, CreateEntity1Data, CreateEntity1Error, CreateEntity1Response, GetAllEntities3Error, GetAllEntities3Response, CreateEntity3Data, CreateEntity3Error, CreateEntity3Response, GetAllEntities4Error, GetAllEntities4Response, CreateEntity4Data, CreateEntity4Error, CreateEntity4Response, GetAllEntities5Error, GetAllEntities5Response, CreateOrderData, CreateOrderError, CreateOrderResponse, LoginData, LoginError, LoginResponse, GetEntityByNameData, GetEntityByNameError, GetEntityByNameResponse, GetEntityByName1Data, GetEntityByName1Error, GetEntityByName1Response } from './types.gen';
+// import { customFetch } from '@/utils/customFetch';
 
 const API_BASE_URL = 'http://localhost:80';
 
 export const client = createClient(createConfig({baseUrl: API_BASE_URL}));
+client.interceptors.request.use((request, options) => {
+    console.log('request',request)
+    console.log("request headers"+JSON.stringify(request.headers))
+    const token = localStorage.getItem('token')
+    if(token !== null){
+        request.headers.set('Authorization', token);
+    }
+    return request;
+});
 
+client.interceptors.response.use((response, request, options) => {
+    const token = response.headers.get('Authorization')
+    console.log('response',response)
+    console.debug("response headers", response.headers.keys() )
+    if(token !== null){
+        localStorage.setItem('token',token)
+    }
+    return response;
+});
 export const getAllEntities = <ThrowOnError extends boolean = false>(options?: Options<unknown, ThrowOnError>) => { return (options?.client ?? client).get<GetAllEntitiesResponse, GetAllEntitiesError, ThrowOnError>({
     ...options,
     url: '/user'
