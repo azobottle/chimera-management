@@ -27,8 +27,11 @@ export type Product = {
     cateId?: ObjectId;
     name?: string;
     imgURL?: string;
+    price?: number;
     describe?: string;
+    short_desc?: string;
     status?: number;
+    delete?: number;
     productOptionIds?: Array<ObjectId>;
 };
 
@@ -94,9 +97,9 @@ export type ServiceResultObjectObject = {
     success?: boolean;
 };
 
-export type GetAllEntitiesResponse = (Array<User>);
+export type GetAllUsersResponse = (Array<User>);
 
-export type GetAllEntitiesError = unknown;
+export type GetAllUsersError = unknown;
 
 export type UpdateUserData = {
     body: User;
@@ -106,13 +109,13 @@ export type UpdateUserResponse = (User);
 
 export type UpdateUserError = unknown;
 
-export type CreateEntityData = {
+export type CreateUserData = {
     body: User;
 };
 
-export type CreateEntityResponse = (User);
+export type CreateUserResponse = (User);
 
-export type CreateEntityError = unknown;
+export type CreateUserError = unknown;
 
 export type GetProductCateData = {
     path: {
@@ -145,32 +148,32 @@ export type DeleteProductCateResponse = (unknown);
 
 export type DeleteProductCateError = unknown;
 
-export type GetAllEntities2Response = (Array<Product>);
+export type GetAllProductsResponse = (Array<Product>);
 
-export type GetAllEntities2Error = unknown;
+export type GetAllProductsError = unknown;
 
-export type UpdateEntityData = {
+export type UpdateProductData = {
     body: Product;
 };
 
-export type UpdateEntityResponse = (Product);
+export type UpdateProductResponse = (Product);
 
-export type UpdateEntityError = unknown;
+export type UpdateProductError = unknown;
 
-export type CreateEntity2Data = {
+export type CreateProductData = {
     body?: {
         product: Product;
         image: (Blob | File);
     };
 };
 
-export type CreateEntity2Response = (Product);
+export type CreateProductResponse = (Product);
 
-export type CreateEntity2Error = unknown;
+export type CreateProductError = unknown;
 
-export type GetAllEntities6Response = (Array<Address>);
+export type GetAllAddressesResponse = (Array<Address>);
 
-export type GetAllEntities6Error = unknown;
+export type GetAllAddressesError = unknown;
 
 export type UpdateAddressData = {
     body: Address;
@@ -180,76 +183,76 @@ export type UpdateAddressResponse = (Address);
 
 export type UpdateAddressError = unknown;
 
-export type CreateEntity5Data = {
+export type CreateAddressData = {
     body: Address;
 };
 
-export type CreateEntity5Response = (Address);
+export type CreateAddressResponse = (Address);
 
-export type CreateEntity5Error = unknown;
+export type CreateAddressError = unknown;
 
-export type GetAllEntities7Response = (Array<Activity>);
+export type GetAllActivitiesResponse = (Array<Activity>);
 
-export type GetAllEntities7Error = unknown;
+export type GetAllActivitiesError = unknown;
 
-export type UpdateEntity1Data = {
+export type UpdateActivityData = {
     body: Activity;
 };
 
-export type UpdateEntity1Response = (Activity);
+export type UpdateActivityResponse = (Activity);
 
-export type UpdateEntity1Error = unknown;
+export type UpdateActivityError = unknown;
 
-export type CreateEntity6Data = {
+export type CreateActivityData = {
     body?: {
         activity: Activity;
         image: (Blob | File);
     };
 };
 
-export type CreateEntity6Response = (Activity);
+export type CreateActivityResponse = (Activity);
 
-export type CreateEntity6Error = unknown;
+export type CreateActivityError = unknown;
 
-export type GetAllEntities1Response = (Array<ProductCate>);
+export type GetAllProductCatesResponse = (Array<ProductCate>);
 
-export type GetAllEntities1Error = unknown;
+export type GetAllProductCatesError = unknown;
 
-export type CreateEntity1Data = {
+export type CreateProductCateData = {
     body: ProductCate;
 };
 
-export type CreateEntity1Response = (ProductCate);
+export type CreateProductCateResponse = (ProductCate);
 
-export type CreateEntity1Error = unknown;
+export type CreateProductCateError = unknown;
 
-export type GetAllEntities3Response = (Array<ProductOption>);
+export type GetAllProductOptionsResponse = (Array<ProductOption>);
 
-export type GetAllEntities3Error = unknown;
+export type GetAllProductOptionsError = unknown;
 
-export type CreateEntity3Data = {
+export type CreateProductOptionData = {
     body: ProductOption;
 };
 
-export type CreateEntity3Response = (ProductOption);
+export type CreateProductOptionResponse = (ProductOption);
 
-export type CreateEntity3Error = unknown;
+export type CreateProductOptionError = unknown;
 
-export type GetAllEntities4Response = (Array<ProcessorMap>);
+export type GetAllProcessorMapsResponse = (Array<ProcessorMap>);
 
-export type GetAllEntities4Error = unknown;
+export type GetAllProcessorMapsError = unknown;
 
-export type CreateEntity4Data = {
+export type CreateProcessorMapData = {
     body: ProcessorMap;
 };
 
-export type CreateEntity4Response = (ProcessorMap);
+export type CreateProcessorMapResponse = (ProcessorMap);
 
-export type CreateEntity4Error = unknown;
+export type CreateProcessorMapError = unknown;
 
-export type GetAllEntities5Response = (Array<Order>);
+export type GetAllOrdersResponse = (Array<Order>);
 
-export type GetAllEntities5Error = unknown;
+export type GetAllOrdersError = unknown;
 
 export type CreateOrderData = {
     body: Order;
@@ -270,22 +273,22 @@ export type LoginResponse = (string);
 
 export type LoginError = unknown;
 
-export type GetEntityByNameData = {
+export type GetUserByNameData = {
     path: {
         name: string;
     };
 };
 
-export type GetEntityByNameResponse = (User);
+export type GetUserByNameResponse = (User);
 
-export type GetEntityByNameError = unknown;
+export type GetUserByNameError = unknown;
 
-export type GetEntityByName1Data = {
+export type GetAddressByNameData = {
     path: {
         school: string;
     };
 };
 
-export type GetEntityByName1Response = (Array<Address>);
+export type GetAddressByNameResponse = (Array<Address>);
 
-export type GetEntityByName1Error = unknown;
+export type GetAddressByNameError = unknown;

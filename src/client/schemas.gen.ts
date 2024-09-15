@@ -77,10 +77,21 @@ export const ProductSchema = {
         imgURL: {
             type: 'string'
         },
+        price: {
+            type: 'number',
+            format: 'double'
+        },
         describe: {
             type: 'string'
         },
+        short_desc: {
+            type: 'string'
+        },
         status: {
+            type: 'integer',
+            format: 'int32'
+        },
+        delete: {
             type: 'integer',
             format: 'int32'
         },
