@@ -9,6 +9,7 @@ import ProductOpt from '../views/ProductOpt.vue'
 import User from '../views/User.vue'
 import UserAddress from '../views/UserAddress.vue'
 import Stats from '../views/Stats.vue'
+import Login from '../views/Login.vue'
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -21,6 +22,7 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/user', component: User },
   { path: '/userAddress', component: UserAddress },
   { path: '/stats', component: Stats },
+  { path: '/login', component: Login }
 ]
 
 const router = createRouter({
@@ -28,4 +30,12 @@ const router = createRouter({
   routes,
 })
 
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token'); 
+  if (!token && to.path !== '/login') {  // 如果用户未登录，且目标路由不是登录页
+    next('/login');
+  } else {    // 允许继续访问
+    next();
+  }
+});
 export default router
