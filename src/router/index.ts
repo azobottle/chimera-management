@@ -5,7 +5,7 @@ import OrderRefund from '../views/OrderRefund.vue'
 import OrderPrint from '../views/OrderPrint.vue'
 import Product from '../views/Product.vue'
 import ProductCate from '../views/ProductCate.vue'
-import ProductAttr from '../views/ProductAttr.vue'
+import ProductOpt from '../views/ProductOpt.vue'
 import User from '../views/User.vue'
 import UserAddress from '../views/UserAddress.vue'
 import Stats from '../views/Stats.vue'
@@ -18,7 +18,7 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/orderPrint', component: OrderPrint },
   { path: '/product', component: Product },
   { path: '/productCate', component: ProductCate },
-  { path: '/productAttr', component: ProductAttr },
+  { path: '/productOpt', component: ProductOpt },
   { path: '/user', component: User },
   { path: '/userAddress', component: UserAddress },
   { path: '/stats', component: Stats },

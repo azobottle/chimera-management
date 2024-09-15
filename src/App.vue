@@ -25,7 +25,7 @@
           <el-menu-item-group>
             <el-menu-item index="/product">商品管理</el-menu-item>
             <el-menu-item index="/productCate">商品分类</el-menu-item>
-            <el-menu-item index="/productAttr">商品属性</el-menu-item>
+            <el-menu-item index="/productOpt">商品选项</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
 
