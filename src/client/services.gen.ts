@@ -7,9 +7,7 @@ import type { GetAllEntitiesError, GetAllEntitiesResponse, UpdateUserData, Updat
 const API_BASE_URL = 'http://localhost:80';
 
 export const client = createClient(createConfig({baseUrl: API_BASE_URL}));
-client.interceptors.request.use((request, options) => {
-    console.log('request',request)
-    console.log("request headers"+JSON.stringify(request.headers))
+client.interceptors.request.use((request) => {
     const token = localStorage.getItem('token')
     if(token !== null){
         request.headers.set('Authorization', token);
@@ -17,10 +15,8 @@ client.interceptors.request.use((request, options) => {
     return request;
 });
 
-client.interceptors.response.use((response, request, options) => {
+client.interceptors.response.use((response) => {
     const token = response.headers.get('Authorization')
-    console.log('response',response)
-    console.debug("response headers", response.headers.keys() )
     if(token !== null){
         localStorage.setItem('token',token)
     }

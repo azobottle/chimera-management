@@ -31,19 +31,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token'); // 检查 JWT 是否存在
-  console.log('router token :'+token)
-  // 如果用户未登录，且目标路由不是登录页
-  if (!token && to.path !== '/login') {
-    console.log("重定向到登录页");
-    next('/login'); // 重定向到登录页
-  } else if (token && to.path === '/login') {
-    // 如果用户已登录，但尝试访问登录页，跳转到首页或其他页面
-    console.log("已登录，重定向到首页");
-    next('/'); // 重定向到首页
-  } else {
-    // 允许继续访问
-    console.log("允许访问目标页");
+  const token = localStorage.getItem('token'); 
+  if (!token && to.path !== '/login') {  // 如果用户未登录，且目标路由不是登录页
+    next('/login');
+  } else {    // 允许继续访问
     next();
   }
 });

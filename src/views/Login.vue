@@ -56,8 +56,8 @@
             await login({
                 query:form.value
             })
-              // 登录成功，跳转到首页
-              router.push({ path: '/' })
+              // 登录成功，跳转到统计页面
+              router.push({ path: '/stats' })
 
           } catch (error) {
             if (error instanceof Error) {
