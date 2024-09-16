@@ -97,6 +97,11 @@ export type ServiceResultObjectObject = {
     success?: boolean;
 };
 
+export type LoginDTO = {
+    username: string;
+    password: string;
+};
+
 export type GetAllUsersResponse = (Array<User>);
 
 export type GetAllUsersError = unknown;
@@ -263,10 +268,7 @@ export type CreateOrderResponse = (ServiceResultObjectObject);
 export type CreateOrderError = unknown;
 
 export type LoginData = {
-    query: {
-        password: string;
-        username: string;
-    };
+    body: LoginDTO;
 };
 
 export type LoginResponse = (string);

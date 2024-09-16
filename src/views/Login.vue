@@ -54,10 +54,16 @@
         if (valid) {
           try {
             await login({
-                query:form.value
+              body:{
+                username:form.value.username,
+                password:form.value.password
+              },
+              throwOnError:true
             })
-              // 登录成功，跳转到统计页面
-              router.push({ path: '/stats' })
+              // 获取 redirect 参数，默认跳转到 '/stats'
+              const redirect = router.currentRoute.value.query.redirect || '/stats';
+              // 登录成功，跳转到目标页面
+              router.push(redirect as string);
 
           } catch (error) {
             if (error instanceof Error) {

@@ -33,7 +33,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token'); 
   if (!token && to.path !== '/login') {  // 如果用户未登录，且目标路由不是登录页
-    next('/login');
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath } // 保存要跳转的路径
+    });
   } else {    // 允许继续访问
     next();
   }

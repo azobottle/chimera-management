@@ -269,3 +269,16 @@ export const ServiceResultObjectObjectSchema = {
         }
     }
 } as const;
+
+export const LoginDTOSchema = {
+    required: ['password', 'username'],
+    type: 'object',
+    properties: {
+        username: {
+            type: 'string'
+        },
+        password: {
+            type: 'string'
+        }
+    }
+} as const;
