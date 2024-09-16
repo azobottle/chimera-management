@@ -3,26 +3,7 @@
 import { createClient, createConfig, type Options, formDataBodySerializer } from '@hey-api/client-fetch';
 import type { GetAllUsersError, GetAllUsersResponse, UpdateUserData, UpdateUserError, UpdateUserResponse, CreateUserData, CreateUserError, CreateUserResponse, GetProductCateData, GetProductCateError, GetProductCateResponse, UpdateProductCateData, UpdateProductCateError, UpdateProductCateResponse, DeleteProductCateData, DeleteProductCateError, DeleteProductCateResponse, GetAllProductsError, GetAllProductsResponse, UpdateProductData, UpdateProductError, UpdateProductResponse, CreateProductData, CreateProductError, CreateProductResponse, GetAllAddressesError, GetAllAddressesResponse, UpdateAddressData, UpdateAddressError, UpdateAddressResponse, CreateAddressData, CreateAddressError, CreateAddressResponse, GetAllActivitiesError, GetAllActivitiesResponse, UpdateActivityData, UpdateActivityError, UpdateActivityResponse, CreateActivityData, CreateActivityError, CreateActivityResponse, GetAllProductCatesError, GetAllProductCatesResponse, CreateProductCateData, CreateProductCateError, CreateProductCateResponse, GetAllProductOptionsError, GetAllProductOptionsResponse, CreateProductOptionData, CreateProductOptionError, CreateProductOptionResponse, GetAllProcessorMapsError, GetAllProcessorMapsResponse, CreateProcessorMapData, CreateProcessorMapError, CreateProcessorMapResponse, GetAllOrdersError, GetAllOrdersResponse, CreateOrderData, CreateOrderError, CreateOrderResponse, LoginData, LoginError, LoginResponse, GetUserByNameData, GetUserByNameError, GetUserByNameResponse, GetAddressByNameData, GetAddressByNameError, GetAddressByNameResponse } from './types.gen';
 
-
-const API_BASE_URL = 'http://localhost:80';
-export const client = createClient(createConfig({baseUrl: API_BASE_URL}));
-
-
-client.interceptors.request.use((request) => {
-    const token = localStorage.getItem('token')
-    if(token !== null){
-        request.headers.set('Authorization', token);
-    }
-    return request;
-});
-
-client.interceptors.response.use((response) => {
-    const token = response.headers.get('Authorization')
-    if(token !== null){
-        localStorage.setItem('token',token)
-    }
-    return response;
-});
+export const client = createClient(createConfig());
 
 export const getAllUsers = <ThrowOnError extends boolean = false>(options?: Options<unknown, ThrowOnError>) => { return (options?.client ?? client).get<GetAllUsersResponse, GetAllUsersError, ThrowOnError>({
     ...options,
