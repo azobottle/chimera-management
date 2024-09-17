@@ -18,6 +18,183 @@ const imageFile = ref<File | null>(null);
 const imagePreview = ref<string | null>(null);
 const isCreating = ref(false);
 
+
+
+const selectedOptions = ref<string[]>([]);
+
+const availableOptions = computed(() => {
+  // Get options not currently selected
+  const selectedIds = new Set(selectedOptions.value);
+  return Array.from(productOptions.value.values()).filter(option => !selectedIds.has(option.id));
+});
+
+// // Method to add option
+// const addOption = (optionId: string) => {
+//   if (!selectedOptions.value.includes(optionId)) {
+//     selectedOptions.value.push(optionId);
+//   }
+// };
+
+// // Method to remove option
+// const removeOption = (optionId: string) => {
+//   selectedOptions.value = selectedOptions.value.filter(id => id !== optionId);
+// };
+
+
+// const openEditDialog = (product: Product) => {
+//   editableProduct.value = {
+//     ...product,
+//     cateId: productCategories.value.get(product.cateId) || '' // 显示对应的 title
+//   };
+//   imageFile.value = null;
+//   imagePreview.value = product.imgURL || null;
+//   isCreating.value = false;
+//   isEditDialogVisible.value = true;
+// };
+
+// // Save Product Changes (Create or Update)
+// const saveProductChanges = async () => {
+//   if (!editableProduct.value) return;
+
+//   isSaving.value = true;
+//   let imageFilename = editableProduct.value.imgURL;
+
+//   try {
+//     if (imageFile.value) {
+//       const formData = new FormData();
+//       formData.append('image', imageFile.value);
+
+//       try {
+//         // 上传图片
+//         const imageResponse = await uploadImage({
+//           body: formData
+//         });
+//         imageFilename = imageResponse.data; // 假设响应包含文件名
+//       } catch (error) {
+//         console.error('Image upload failed:', error);
+//       }
+//     }
+
+
+
+//     if (imageFilename.includes('/')) {
+//       imageFilename = imageFilename.split('/').pop(); // 取最后一个 '/' 后的部分
+//     }
+
+//     // 设置产品的 imgURL 为图片文件名
+//     editableProduct.value.imgURL = imageFilename;
+
+//     // 将 cateId 从 title 转换为对应的 id
+//     const cateIdEntry = Array.from(productCategories.value.entries()).find(
+//       ([id, title]) => title === editableProduct.value.cateId
+//     );
+//     if (cateIdEntry) {
+//       editableProduct.value.cateId = cateIdEntry[0]; // 转换为对应的 id
+//     }
+
+//     console.log(editableProduct.value);
+
+//     if (isCreating.value) {
+//       // 创建产品，直接发送 JSON
+//       console.log('create product');
+//       await createProduct({
+//         body: editableProduct.value
+//       });
+//       ElMessage.success('Product created successfully');
+//     } else {
+//       // 更新产品，直接发送 JSON
+//       console.log('update product');
+//       await updateProduct({
+//         body: editableProduct.value,
+//         method: 'PUT'
+//       });
+//       ElMessage.success('Product updated successfully');
+//     }
+
+//     await fetchProducts(); // 更新产品列表
+//     isEditDialogVisible.value = false;
+//   } catch (error) {
+//     console.error('Error saving product:', error);
+//     ElMessage.error('Failed to save product');
+//   } finally {
+//     isSaving.value = false;
+//   }
+// };
+
+// Sync selectedOptions with editableProduct when opening dialog
+const openEditDialog = (product: Product) => {
+  editableProduct.value = {
+    ...product,
+    cateId: productCategories.value.get(product.cateId) || '',
+    productOptionIds: product.productOptionIds || [] // Initialize with existing options
+  };
+  selectedOptions.value = product.productOptionIds || [];
+  imageFile.value = null;
+  imagePreview.value = product.imgURL || null;
+  isCreating.value = false;
+  isEditDialogVisible.value = true;
+};
+
+// Sync selectedOptions with editableProduct before saving
+const saveProductChanges = async () => {
+  if (!editableProduct.value) return;
+
+  isSaving.value = true;
+  let imageFilename = editableProduct.value.imgURL;
+
+  try {
+    if (imageFile.value) {
+      const formData = new FormData();
+      formData.append('image', imageFile.value);
+
+      try {
+        const imageResponse = await uploadImage({
+          body: formData
+        });
+        imageFilename = imageResponse.data;
+      } catch (error) {
+        console.error('Image upload failed:', error);
+      }
+    }
+
+    if (imageFilename.includes('/')) {
+      imageFilename = imageFilename.split('/').pop();
+    }
+
+    editableProduct.value.imgURL = imageFilename;
+    editableProduct.value.productOptionIds = selectedOptions.value; // Update options
+
+    const cateIdEntry = Array.from(productCategories.value.entries()).find(
+      ([id, title]) => title === editableProduct.value.cateId
+    );
+    if (cateIdEntry) {
+      editableProduct.value.cateId = cateIdEntry[0];
+    }
+
+    if (isCreating.value) {
+      await createProduct({
+        body: editableProduct.value
+      });
+      ElMessage.success('Product created successfully');
+    } else {
+      await updateProduct({
+        body: editableProduct.value,
+        method: 'PUT'
+      });
+      ElMessage.success('Product updated successfully');
+    }
+
+    await fetchProducts();
+    isEditDialogVisible.value = false;
+  } catch (error) {
+    console.error('Error saving product:', error);
+    ElMessage.error('Failed to save product');
+  } finally {
+    isSaving.value = false;
+  }
+};
+
+
 const fetchProducts = async () => {
   try {
     const productResponse = await getAllProducts();
@@ -129,18 +306,6 @@ const openCreateDialog = () => {
   isEditDialogVisible.value = true;
 };
 
-
-const openEditDialog = (product: Product) => {
-  editableProduct.value = {
-    ...product,
-    cateId: productCategories.value.get(product.cateId) || '' // 显示对应的 title
-  };
-  imageFile.value = null;
-  imagePreview.value = product.imgURL || null;
-  isCreating.value = false;
-  isEditDialogVisible.value = true;
-};
-
 const onImageChange = (file: any) => {
   if (file && file.raw) {
     imageFile.value = file.raw;
@@ -150,87 +315,13 @@ const onImageChange = (file: any) => {
   }
 };
 
-// Save Product Changes (Create or Update)
-const saveProductChanges = async () => {
-  if (!editableProduct.value) return;
-
-  isSaving.value = true;
-  let imageFilename = editableProduct.value.imgURL;
-
-  try {
-    if (imageFile.value) {
-      const formData = new FormData();
-      formData.append('image', imageFile.value);
-
-      try {
-        // 上传图片
-        const imageResponse = await uploadImage({
-          body: formData,
-          // headers: {
-          //   'Content-Type': 'multipart/form-data', // 确保请求头为 multipart/form-data
-          // },
-        });
-        imageFilename = imageResponse.data; // 假设响应包含文件名
-      } catch (error) {
-        console.error('Image upload failed:', error);
-      }
-    }
-
-
-
-    if (imageFilename.includes('/')) {
-      imageFilename = imageFilename.split('/').pop(); // 取最后一个 '/' 后的部分
-    }
-
-    // 设置产品的 imgURL 为图片文件名
-    editableProduct.value.imgURL = imageFilename;
-
-    // 将 cateId 从 title 转换为对应的 id
-    const cateIdEntry = Array.from(productCategories.value.entries()).find(
-      ([id, title]) => title === editableProduct.value.cateId
-    );
-    if (cateIdEntry) {
-      editableProduct.value.cateId = cateIdEntry[0]; // 转换为对应的 id
-    }
-
-    console.log(editableProduct.value);
-
-    if (isCreating.value) {
-      // 创建产品，直接发送 JSON
-      console.log('create product');
-      await createProduct({
-        body: editableProduct.value
-      });
-      ElMessage.success('Product created successfully');
-    } else {
-      // 更新产品，直接发送 JSON
-      console.log('update product');
-      await updateProduct({
-        body: editableProduct.value,
-        method: 'PUT'
-      });
-      ElMessage.success('Product updated successfully');
-    }
-
-    await fetchProducts(); // 更新产品列表
-    isEditDialogVisible.value = false;
-  } catch (error) {
-    console.error('Error saving product:', error);
-    ElMessage.error('Failed to save product');
-  } finally {
-    isSaving.value = false;
-  }
-};
-
-
-
-
-
 </script>
 
 
 <template>
   <div>
+    <h6>搜索：名称，分类，状态； 搜索，重置</h6>
+    <h6>分页</h6>
 
     <el-button type="primary" @click="openCreateDialog">创建商品</el-button>
 
@@ -326,6 +417,19 @@ const saveProductChanges = async () => {
             <el-radio :label="0">下架</el-radio>
           </el-radio-group>
         </el-form-item>
+
+        <el-form-item label="可选项">
+          <el-select v-model="selectedOptions" multiple placeholder="请选择可选项">
+            <el-option
+              v-for="option in availableOptions"
+              :key="option.id"
+              :value="option.id"
+              :label="getProductOptionDisplay(option.id)"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+
       
         <div style="display: flex; align-items: center; gap: 20px;">
           <!-- 图片上传按钮 -->
