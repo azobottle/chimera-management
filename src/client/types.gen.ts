@@ -166,10 +166,7 @@ export type UpdateProductResponse = (Product);
 export type UpdateProductError = unknown;
 
 export type CreateProductData = {
-    body?: {
-        product: Product;
-        image: (Blob | File);
-    };
+    body: Product;
 };
 
 export type CreateProductResponse = (Product);
@@ -242,6 +239,16 @@ export type CreateProductOptionData = {
 export type CreateProductOptionResponse = (ProductOption);
 
 export type CreateProductOptionError = unknown;
+
+export type UploadImageData = {
+    body?: {
+        image: (Blob | File);
+    };
+};
+
+export type UploadImageResponse = (string);
+
+export type UploadImageError = unknown;
 
 export type GetAllProcessorMapsResponse = (Array<ProcessorMap>);
 
