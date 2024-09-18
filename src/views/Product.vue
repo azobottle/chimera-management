@@ -36,14 +36,13 @@ const paginatedProducts = computed(() => {
   return filteredProducts.value.slice(start, end);
 });
 
+// 搜索相关
+
 const searchQuery = ref({
   name: '',
   cateId: '',
   status: ''
 });
-
-
-// 搜索相关
 
 const filterProducts = () => {
   currentPage.value = 1; // Reset to first page when searching
@@ -62,7 +61,7 @@ const resetFilters = () => {
 const filteredProducts = computed(() => {
   return products.value.filter(product => {
     const matchesName = searchQuery.value.name === '' || product.name.includes(searchQuery.value.name);
-    const matchesCate = searchQuery.value.cateId === '' || product.cateId === searchQuery.value.cateId;
+    const matchesCate = searchQuery.value.cateId === '' || productCategories.value.get(product.cateId) === searchQuery.value.cateId;
     const matchesStatus = searchQuery.value.status === '' || product.status === searchQuery.value.status;
     return matchesName && matchesCate && matchesStatus && product.delete !== 1;
   });
@@ -155,7 +154,9 @@ const fetchProducts = async () => {
 const fetchProductCategories = async () => {
   try {
     const response = await getAllProductCates();
-    const categories: ProductCate[] = response.data;
+    const categories: ProductCate[] = response.data
+      .filter((category: ProductCate) => category.delete === 0) // Filter out deleted categories
+      .sort((a: ProductCate, b: ProductCate) => b.priority - a.priority); // Sort by priority
     const categoryMap = new Map<string, string>();
     categories.forEach(category => {
       if (category.id && category.title) {
@@ -268,7 +269,7 @@ const onImageChange = (file: any) => {
 
 <template>
   <div>
-    <h6>搜索：名称，分类，状态； 搜索，重置</h6>
+    <h3>搜索</h3>
 
     <el-form inline>
       <el-form-item label="名称">
@@ -294,7 +295,7 @@ const onImageChange = (file: any) => {
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="filterProducts">搜索</el-button>
+        <!-- <el-button type="primary" @click="filterProducts">搜索</el-button> -->
         <el-button @click="resetFilters">重置</el-button>
       </el-form-item>
     </el-form>
