@@ -20,6 +20,13 @@ export type ProductCate = {
     title?: string;
     status?: number;
     priority?: number;
+    delete?: number;
+};
+
+export type OptionValue = {
+    uuid: string;
+    value?: string;
+    priceAdjustment?: number;
 };
 
 export type Product = {
@@ -32,7 +39,15 @@ export type Product = {
     short_desc?: string;
     status?: number;
     delete?: number;
-    productOptionIds?: Array<ObjectId>;
+    productOptions?: {
+        [key: string]: Array<OptionValue>;
+    };
+};
+
+export type ProductOption = {
+    id?: ObjectId;
+    name?: string;
+    values?: Array<OptionValue>;
 };
 
 export type Address = {
@@ -46,17 +61,6 @@ export type Activity = {
     title?: string;
     imgURL?: string;
     describe?: string;
-};
-
-export type OptionValue = {
-    value?: string;
-    priceAdjustment?: number;
-};
-
-export type ProductOption = {
-    id?: ObjectId;
-    name?: string;
-    values?: Array<OptionValue>;
 };
 
 export type ProcessorMap = {
@@ -122,36 +126,25 @@ export type CreateUserResponse = (User);
 
 export type CreateUserError = unknown;
 
-export type GetProductCateData = {
-    path: {
-        id: string;
-    };
-};
+export type GetAllProductCatesResponse = (Array<ProductCate>);
 
-export type GetProductCateResponse = (ProductCate);
-
-export type GetProductCateError = unknown;
+export type GetAllProductCatesError = unknown;
 
 export type UpdateProductCateData = {
     body: ProductCate;
-    path: {
-        id: string;
-    };
 };
 
 export type UpdateProductCateResponse = (ProductCate);
 
 export type UpdateProductCateError = unknown;
 
-export type DeleteProductCateData = {
-    path: {
-        id: string;
-    };
+export type CreateProductCateData = {
+    body: ProductCate;
 };
 
-export type DeleteProductCateResponse = (unknown);
+export type CreateProductCateResponse = (ProductCate);
 
-export type DeleteProductCateError = unknown;
+export type CreateProductCateError = unknown;
 
 export type GetAllProductsResponse = (Array<Product>);
 
@@ -172,6 +165,26 @@ export type CreateProductData = {
 export type CreateProductResponse = (Product);
 
 export type CreateProductError = unknown;
+
+export type GetAllProductOptionsResponse = (Array<ProductOption>);
+
+export type GetAllProductOptionsError = unknown;
+
+export type UpdateProductOptionData = {
+    body: ProductOption;
+};
+
+export type UpdateProductOptionResponse = (ProductOption);
+
+export type UpdateProductOptionError = unknown;
+
+export type CreateProductOptionData = {
+    body: ProductOption;
+};
+
+export type CreateProductOptionResponse = (ProductOption);
+
+export type CreateProductOptionError = unknown;
 
 export type GetAllAddressesResponse = (Array<Address>);
 
@@ -215,30 +228,6 @@ export type CreateActivityData = {
 export type CreateActivityResponse = (Activity);
 
 export type CreateActivityError = unknown;
-
-export type GetAllProductCatesResponse = (Array<ProductCate>);
-
-export type GetAllProductCatesError = unknown;
-
-export type CreateProductCateData = {
-    body: ProductCate;
-};
-
-export type CreateProductCateResponse = (ProductCate);
-
-export type CreateProductCateError = unknown;
-
-export type GetAllProductOptionsResponse = (Array<ProductOption>);
-
-export type GetAllProductOptionsError = unknown;
-
-export type CreateProductOptionData = {
-    body: ProductOption;
-};
-
-export type CreateProductOptionResponse = (ProductOption);
-
-export type CreateProductOptionError = unknown;
 
 export type UploadImageData = {
     body?: {
@@ -291,6 +280,16 @@ export type GetUserByNameData = {
 export type GetUserByNameResponse = (User);
 
 export type GetUserByNameError = unknown;
+
+export type ExistsByCateIdData = {
+    query: {
+        cateId: string;
+    };
+};
+
+export type ExistsByCateIdResponse = (boolean);
+
+export type ExistsByCateIdError = unknown;
 
 export type GetAddressByNameData = {
     path: {

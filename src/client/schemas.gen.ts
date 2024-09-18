@@ -58,6 +58,27 @@ export const ProductCateSchema = {
         priority: {
             type: 'integer',
             format: 'int32'
+        },
+        delete: {
+            type: 'integer',
+            format: 'int32'
+        }
+    }
+} as const;
+
+export const OptionValueSchema = {
+    required: ['uuid'],
+    type: 'object',
+    properties: {
+        uuid: {
+            type: 'string'
+        },
+        value: {
+            type: 'string'
+        },
+        priceAdjustment: {
+            type: 'number',
+            format: 'double'
         }
     }
 } as const;
@@ -95,10 +116,31 @@ export const ProductSchema = {
             type: 'integer',
             format: 'int32'
         },
-        productOptionIds: {
+        productOptions: {
+            type: 'object',
+            additionalProperties: {
+                type: 'array',
+                items: {
+                    '$ref': '#/components/schemas/OptionValue'
+                }
+            }
+        }
+    }
+} as const;
+
+export const ProductOptionSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            '$ref': '#/components/schemas/ObjectId'
+        },
+        name: {
+            type: 'string'
+        },
+        values: {
             type: 'array',
             items: {
-                '$ref': '#/components/schemas/ObjectId'
+                '$ref': '#/components/schemas/OptionValue'
             }
         }
     }
@@ -133,37 +175,6 @@ export const ActivitySchema = {
         },
         describe: {
             type: 'string'
-        }
-    }
-} as const;
-
-export const OptionValueSchema = {
-    type: 'object',
-    properties: {
-        value: {
-            type: 'string'
-        },
-        priceAdjustment: {
-            type: 'number',
-            format: 'double'
-        }
-    }
-} as const;
-
-export const ProductOptionSchema = {
-    type: 'object',
-    properties: {
-        id: {
-            '$ref': '#/components/schemas/ObjectId'
-        },
-        name: {
-            type: 'string'
-        },
-        values: {
-            type: 'array',
-            items: {
-                '$ref': '#/components/schemas/OptionValue'
-            }
         }
     }
 } as const;
