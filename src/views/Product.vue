@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, Ref } from 'vue';
 import { uploadImage, getAllProducts, getAllProductCates, getAllProductOptions, updateProduct, createProduct } from '../client/services.gen';
 import type { Product, ProductOption, OptionValue } from '../client/types.gen';
 import type { ProductCate } from '../client/types.gen';
@@ -19,8 +19,9 @@ const imageFile = ref<File | null>(null);
 const imagePreview = ref<string | null>(null);
 const isCreating = ref(false);
 
+const selectedOptionValues: Ref<Record<string, OptionValue[]>> = ref({});
+// const selectedOptionValues = ref<{ [key: string]: OptionValue[] }>({});
 
-const selectedOptionValues = ref<{ [key: string]: OptionValue[] }>({});
 const newOptionId = ref('');
 
 const availableOptions = computed(() => {
@@ -494,59 +495,65 @@ const onImageChange = (file: any) => {
         <el-form-item label="可选项" class="option-container">
           <!-- Loop through each option -->
           <div
-  v-for="(values, optionId) in editableProduct.productOptions"
-  :key="optionId"
-  class="option-item"
-  style="margin-bottom: 15px;"
->
-  <!-- Wrap each option in its own el-form-item -->
-  <el-form-item>
-    <!-- Option container with flexbox -->
-    <div class="option-header" style="display: flex; justify-content: space-between; align-items: center;">
-      <!-- Display option name -->
-      <div style="font-weight: bold;">
-        {{ getOptionName(optionId) }}:
-      </div>
-      <!-- Button to remove the option, now aligned to the right -->
-      <el-button
-        type="danger"
-        size="small"
-        @click="removeOption(optionId)"
-        style="margin-left: auto;"
-      >
-        删除该选项
-      </el-button>
-    </div>
+            v-for="(values, optionId) in editableProduct.productOptions"
+            :key="optionId"
+            class="option-item"
+          >
+            <!-- Wrap each option in its own el-form-item -->
+            <el-form-item>
+              <!-- Option container with flexbox -->
+              <div class="option-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <!-- Display option name -->
+                <div style="font-weight: bold;">
+                  {{ getOptionName(optionId) }}:
+                </div>
+                <!-- Button to remove the option, now aligned to the right -->
+                <el-button
+                  type="danger"
+                  size="small"
+                  @click="removeOption(optionId)"
+                  style="margin-left: auto;"
+                >
+                  删除该选项
+                </el-button>
+              </div>
 
-    <!-- Select and add new values -->
-    <el-select
-      v-model="selectedOptionValues[optionId]"
-      multiple
-      placeholder="选择值"
-      @change="onOptionValuesChange(optionId)"
-      collapse-tags
-      style="margin-bottom: 5px; width: 100%;"
-    >
-      <template v-slot:collapse-tags="{ selected }">
-        <span v-for="(item, index) in selected" :key="item.uuid">
-          {{ item.value }}: {{ item.priceAdjustment || 0 }}
-          <span v-if="index < selected.length - 1">, </span>
-        </span>
-      </template>
+              <!-- Select and add new values -->
+              <el-select
+                v-model="selectedOptionValues[optionId]"
+                multiple
+                placeholder="选择值"
+                @change="onOptionValuesChange(optionId)"
+                collapse-tags
+                style="width: 100%;"
+              >
+                <template v-slot:collapse-tags="{ selected }">
+                  <span v-for="(item, index) in selected" :key="item.uuid">
+                    <!-- 确保 value 和 priceAdjustment 显示正确 -->
+                    {{ item.value }}: {{ item.priceAdjustment || 0 }}
+                    <span v-if="index < selected.length - 1">, </span>
+                  </span>
+                </template>
 
-      <el-option
-        v-for="availableValue in getAvailableOptionValues(optionId)"
-        :key="availableValue.uuid"
-        :label="availableValue.value + ':' + availableValue.priceAdjustment"
-        :value="availableValue"
-      />
-    </el-select>
-  </el-form-item>
-</div>
+                <el-option
+                  v-for="availableValue in getAvailableOptionValues(optionId)"
+                  :key="availableValue.uuid"
+                  :label="availableValue.value + ':' + availableValue.priceAdjustment"
+                  :value="availableValue"
+                />
+              </el-select>
+
+            </el-form-item>
+          </div>
 
           <!-- Add new options -->
-          <el-form-item style="margin-top: 20px;">
-            <div style="font-weight: bold; margin-bottom: 10px;">添加新的选项</div>
+          <el-form-item>
+            <!-- 将标题独占一行 -->
+            <div style="font-weight: bold; margin-bottom: 5px; display: block; width: 100%;">
+              添加新的选项:
+            </div>
+
+            <!-- 选项选择框 -->
             <el-form-item>
               <el-select
                 v-model="newOptionId"
@@ -561,12 +568,14 @@ const onImageChange = (file: any) => {
                 />
               </el-select>
             </el-form-item>
+
+            <!-- 添加按钮，并设置合适的 margin-left -->
             <el-form-item>
               <el-button
                 type="primary"
                 size="small"
                 @click="addOption"
-                style="margin-top: 10px;"
+                style="margin-left: 10px;"
               >
                 添加选项
               </el-button>
@@ -575,10 +584,10 @@ const onImageChange = (file: any) => {
         </el-form-item>
 
         <el-form-item label="上传图片">
+          <img :src="imagePreview" v-if="imagePreview" style="width: 100px; height: auto; margin-right: 10px;" />
         <el-upload action="" :file-list="[]" :on-change="onImageChange" :show-file-list="false">
           <el-button type="primary">选择图片</el-button>
         </el-upload>
-          <img :src="imagePreview" v-if="imagePreview" style="width: 100px; height: auto;" />
         </el-form-item>
 
       </el-form>
