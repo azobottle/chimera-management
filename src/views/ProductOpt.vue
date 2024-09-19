@@ -126,17 +126,6 @@ const removeOptionValue = (index: number) => {
   }
 };
 
-// // 表单提交
-// const submitForm = () => {
-//   optionForm.value.validate(async (valid: boolean) => {
-//     if (valid) {
-//       await saveOptionChanges();
-//     } else {
-//       ElMessage.error('表单填写不完整，请检查');
-//     }
-//   });
-// };
-
 // 取消编辑
 const cancelEdit = () => {
   isEditDialogVisible.value = false;
