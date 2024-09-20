@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, Ref } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { uploadImage, getAllProducts, getAllProductCates, getAllProductOptions, updateProduct, createProduct } from '../client/services.gen';
 import type { Product, ProductOption, OptionValue } from '../client/types.gen';
 import type { ProductCate } from '../client/types.gen';
@@ -19,8 +19,7 @@ const imageFile = ref<File | null>(null);
 const imagePreview = ref<string | null>(null);
 const isCreating = ref(false);
 
-const selectedOptionValues: Ref<Record<string, OptionValue[]>> = ref({});
-// const selectedOptionValues = ref<{ [key: string]: OptionValue[] }>({});
+const selectedOptionValues = ref<{ [key: string]: string[] }>({});
 
 const newOptionId = ref('');
 
@@ -64,23 +63,23 @@ const removeOption = (optionId: string) => {
 
 const onOptionValuesChange = (optionId: string) => {
   if (editableProduct.value?.productOptions) {
-    editableProduct.value.productOptions[optionId] = selectedOptionValues.value[optionId];
+    editableProduct.value.productOptions[optionId] = selectedOptionValues.value[optionId].map(optionString => {
+      const [value, priceAdjustmentString] = optionString.split(':');
+      const priceAdjustment = parseFloat(priceAdjustmentString.replace('￥', '')); // 去掉'￥'并转换为数字
+
+      // 在 productOptions 中查找匹配的选项
+      const existingOption = productOptions.value.get(optionId)?.values.find(option => 
+        option.value === value && option.priceAdjustment === priceAdjustment
+      );
+
+      return {
+        uuid: existingOption?.uuid, // 使用已存在的 uuid
+        value: value,
+        priceAdjustment: priceAdjustment,
+      } as OptionValue; // 断言为 OptionValue 类型
+    });
   }
 };
-
-// const selectedOptions = ref<string[]>([]);
-
-// const availableOptions = computed(() => {
-//     const selectedIds = new Set(selectedOptions.value);
-//   return Array.from(productOptions.value.values()).filter(option => !selectedIds.has(option.id));
-// });
-
-// const selectedOptionValues = ref<Map<string, OptionValue[]>>(new Map());
-
-// const availableOptionValues = computed(() => {
-//     const selectedIds = new Set(selectedOptions.value);
-//   return Array.from(productOptions.value.values()).filter(option => !selectedIds.has(option.id));
-// });
 
 
 // 分页相关的变量
@@ -95,7 +94,6 @@ const paginatedProducts = computed(() => {
 });
 
 // 搜索相关
-
 const searchQuery = ref({
   name: '',
   cateId: '',
@@ -117,20 +115,6 @@ const filteredProducts = computed(() => {
   });
 });
 
-
-// const openEditDialog = (product: Product) => {
-//   editableProduct.value = {
-//     ...product,
-//     cateId: productCategories.value.get(product.cateId) || '',
-//     productOptionIds: product.productOptionIds || []
-//   };
-//   selectedOptions.value = product.productOptionIds || [];
-//   imageFile.value = null;
-//   imagePreview.value = product.imgURL || null;
-//   isCreating.value = false;
-//   isEditDialogVisible.value = true;
-// };
-
 const openEditDialog = (product: Product) => {
   editableProduct.value = {
     ...product,
@@ -140,7 +124,8 @@ const openEditDialog = (product: Product) => {
   selectedOptionValues.value = {};
   if (product.productOptions) {
     for (const [optionId, values] of Object.entries(product.productOptions)) {
-      selectedOptionValues.value[optionId] = [...values];
+      // selectedOptionValues.value[optionId] = [...values];
+      selectedOptionValues.value[optionId] = values.map(value => `${value.value}:${value.priceAdjustment}￥`);
     }
   }
   imageFile.value = null;
@@ -157,17 +142,20 @@ const saveProductChanges = async () => {
 
   try {
     if (imageFile.value) {
-      const formData = new FormData();
-      formData.append('image', imageFile.value);
-
       try {
+        // const formData = new FormData();
+        // formData.append('image', imageFile.value);
+
         const imageResponse = await uploadImage({
-          body: formData
+          body: {
+            image: imageFile.value
+          }
         });
         imageFilename = imageResponse.data;
       } catch (error) {
         console.error('Image upload failed:', error);
       }
+
     }
 
     if (imageFilename.includes('/')) {
@@ -182,6 +170,8 @@ const saveProductChanges = async () => {
     if (cateIdEntry) {
       editableProduct.value.cateId = cateIdEntry[0];
     }
+
+    console.log('editableProduct', editableProduct.value)
 
     if (isCreating.value) {
       await createProduct({
@@ -237,7 +227,6 @@ const fetchProductCategories = async () => {
 const fetchProductOptions = async () => {
   try {
     const response = await getAllProductOptions();
-    console.log(response)
     const options: ProductOption[] = response.data;
     const optionMap = new Map<string, ProductOption>();
     options.forEach(option => {
@@ -246,7 +235,6 @@ const fetchProductOptions = async () => {
       }
     });
     productOptions.value = optionMap;
-    console.log(productOptions)
   } catch (error) {
     console.error('Error fetching product options:', error);
   }
@@ -271,13 +259,13 @@ const getStatusLabel = (status: number) => {
   return status === 1 ? '上架' : '下架';
 };
 
-const getProductOptionDisplay = (optionId: string) => {
+const getProductOptionDisplay = (optionId: string, values: OptionValue[]) => {
   const option = productOptions.value.get(optionId);
   if (option) {
-    const values = option.values
+    const show_values = values
       ?.map(value => `${value.value}:${value.priceAdjustment}￥`)
       .join(', ') || '无';
-    return `${option.name}: [${values}]`;
+    return `${option.name}: [${show_values}]`;
   }
   return '未知选项';
 };
@@ -308,23 +296,6 @@ const deleteProduct = async () => {
   }
 };
 
-// const openCreateDialog = () => {
-//   editableProduct.value = {
-//     name: '',
-//     price: 0,
-//     cateId: '',
-//     short_desc: '',
-//     describe: '',
-//     status: 1,
-//     imgURL: ''
-//   };
-//   imageFile.value = null;
-//   imagePreview.value = null;
-//   isCreating.value = true;
-//   isEditDialogVisible.value = true;
-// };
-
-
 const openCreateDialog = () => {
   editableProduct.value = {
     name: '',
@@ -343,11 +314,11 @@ const openCreateDialog = () => {
   isEditDialogVisible.value = true;
 };
 
-
 const onImageChange = (file: any) => {
   if (file && file.raw) {
     imageFile.value = file.raw;
     imagePreview.value = URL.createObjectURL(imageFile.value);
+    console.log(imageFile.value)
   } else {
     console.error('No file selected');
   }
@@ -366,7 +337,7 @@ const onImageChange = (file: any) => {
       </el-form-item>
 
       <el-form-item label="分类">
-        <el-select v-model="searchQuery.cateId" placeholder="选择分类">
+        <el-select v-model="searchQuery.cateId" placeholder="选择分类" style="width: 100pt;">
           <el-option
             v-for="(title, id) in productCategories"
             :key="id"
@@ -377,7 +348,7 @@ const onImageChange = (file: any) => {
       </el-form-item>
 
       <el-form-item label="状态">
-        <el-select v-model="searchQuery.status" placeholder="选择状态">
+        <el-select v-model="searchQuery.status" placeholder="选择状态" style="width: 100pt;">
           <el-option :label="'上架'" :value="1" />
           <el-option :label="'下架'" :value="0" />
         </el-select>
@@ -393,13 +364,13 @@ const onImageChange = (file: any) => {
     <h1>商品列表</h1>
 
     <el-table :data="paginatedProducts" stripe>
-      <el-table-column prop="imgURL" label="图片">
+      <el-table-column prop="imgURL" label="图片" width="160px">
         <template #default="{ row }">
           <img :src="row.imgURL" alt="Product Image" v-if="row.imgURL" style="width: 100px; height: auto;" />
         </template>
       </el-table-column>
 
-      <el-table-column label="名称/价格/分类">
+      <el-table-column label="名称/价格/分类" width="180px">
         <template #default="{ row }">
           <div>
             <div style="font-weight: bold;">{{ row.name }}</div>
@@ -422,22 +393,21 @@ const onImageChange = (file: any) => {
         <template #default="{ row }">
           <div v-if="row.productOptions">
             <div v-for="(values, optionId) in row.productOptions" :key="optionId">
-              {{ getProductOptionDisplay(optionId) }}
+              {{ getProductOptionDisplay(optionId, values) }}
             </div>
           </div>
         </template>
       </el-table-column>
 
-
-      <el-table-column label="状态">
+      <el-table-column label="状态" width="100px">
         <template #default="{ row }">
           <span>{{ getStatusLabel(row.status) }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column prop="" label="统计" />
+      <el-table-column prop="" label="统计" width="130px"/>
 
-      <el-table-column label="编辑">
+      <el-table-column label="编辑" width="200px">
         <template #default="{ row }">
           <el-button type="primary" @click="openEditDialog(row)">编辑</el-button>
           <el-button type="danger" @click="confirmDelete(row)">删除</el-button>
@@ -493,21 +463,16 @@ const onImageChange = (file: any) => {
         </el-form-item>
 
         <el-form-item label="可选项" class="option-container">
-          <!-- Loop through each option -->
           <div
             v-for="(values, optionId) in editableProduct.productOptions"
             :key="optionId"
             class="option-item"
           >
-            <!-- Wrap each option in its own el-form-item -->
             <el-form-item>
-              <!-- Option container with flexbox -->
               <div class="option-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                <!-- Display option name -->
                 <div style="font-weight: bold;">
                   {{ getOptionName(optionId) }}:
                 </div>
-                <!-- Button to remove the option, now aligned to the right -->
                 <el-button
                   type="danger"
                   size="small"
@@ -518,47 +483,35 @@ const onImageChange = (file: any) => {
                 </el-button>
               </div>
 
-              <!-- Select and add new values -->
               <el-select
                 v-model="selectedOptionValues[optionId]"
                 multiple
                 placeholder="选择值"
                 @change="onOptionValuesChange(optionId)"
-                collapse-tags
                 style="width: 100%;"
+                class="custom-select"
               >
-                <template v-slot:collapse-tags="{ selected }">
-                  <span v-for="(item, index) in selected" :key="item.uuid">
-                    <!-- 确保 value 和 priceAdjustment 显示正确 -->
-                    {{ item.value }}: {{ item.priceAdjustment || 0 }}
-                    <span v-if="index < selected.length - 1">, </span>
-                  </span>
-                </template>
-
                 <el-option
                   v-for="availableValue in getAvailableOptionValues(optionId)"
                   :key="availableValue.uuid"
-                  :label="availableValue.value + ':' + availableValue.priceAdjustment"
-                  :value="availableValue"
+                  :label="availableValue.value + ':' + availableValue.priceAdjustment + '￥'"
+                  :value="availableValue.value + ':' + availableValue.priceAdjustment + '￥'"
                 />
               </el-select>
 
             </el-form-item>
           </div>
 
-          <!-- Add new options -->
           <el-form-item>
-            <!-- 将标题独占一行 -->
             <div style="font-weight: bold; margin-bottom: 5px; display: block; width: 100%;">
               添加新的选项:
             </div>
 
-            <!-- 选项选择框 -->
             <el-form-item>
               <el-select
                 v-model="newOptionId"
                 placeholder="选择要添加的选项"
-                style="width: 100%;"
+                style="width: 150pt;"
               >
                 <el-option
                   v-for="option in availableOptions"
@@ -569,7 +522,6 @@ const onImageChange = (file: any) => {
               </el-select>
             </el-form-item>
 
-            <!-- 添加按钮，并设置合适的 margin-left -->
             <el-form-item>
               <el-button
                 type="primary"
@@ -585,11 +537,14 @@ const onImageChange = (file: any) => {
 
         <el-form-item label="上传图片">
           <img :src="imagePreview" v-if="imagePreview" style="width: 100px; height: auto; margin-right: 10px;" />
-        <el-upload action="" :file-list="[]" :on-change="onImageChange" :show-file-list="false">
+        <el-upload action="" :file-list="[]" :on-change="onImageChange" :show-file-list="false" :auto-upload="false">
           <el-button type="primary">选择图片</el-button>
         </el-upload>
+        <div style="color: #f56c6c; font-size: 12px; margin-top: 5px; width: 100%;">
+          图片文件名禁止使用中文
+        </div>
         </el-form-item>
-
+        
       </el-form>
 
       <template #footer>
@@ -607,5 +562,23 @@ const onImageChange = (file: any) => {
   display: block;
   width: 100%;
 }
-/* Add any additional styles here */
+
+::v-deep .el-select__tags {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+::v-deep .el-tag {
+  min-width: 120px; /* 设置每个标签的最小宽度 */
+  max-width: 200px; /* 设置最大宽度 */
+  white-space: nowrap; /* 禁止换行 */
+  overflow: hidden; /* 隐藏溢出部分 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+}
+
+::v-deep .el-tag__close {
+  margin-left: 5px; /* 增加关闭按钮的间距 */
+}
+
+
 </style>

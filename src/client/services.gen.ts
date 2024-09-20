@@ -101,6 +101,10 @@ export const createActivity = <ThrowOnError extends boolean = false>(options?: O
 
 export const uploadImage = <ThrowOnError extends boolean = false>(options?: Options<UploadImageData, ThrowOnError>) => { return (options?.client ?? client).post<UploadImageResponse, UploadImageError, ThrowOnError>({
     ...options,
+    ...formDataBodySerializer,
+    headers: {
+        'Content-Type': null
+    },
     url: '/product/uploadImage'
 }); };
 
