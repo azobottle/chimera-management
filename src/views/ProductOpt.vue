@@ -29,7 +29,7 @@
           <el-input v-model="editableOption.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="可选值">
+        <el-form-item label="可选值/价格调整">
           <el-row
             v-for="(value, index) in editableOption.values"
             :key="value.uuid"

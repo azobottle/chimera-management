@@ -10,7 +10,10 @@ export const UserSchema = {
         id: {
             '$ref': '#/components/schemas/ObjectId'
         },
-        openId: {
+        openid: {
+            type: 'string'
+        },
+        sessionKey: {
             type: 'string'
         },
         name: {
@@ -38,6 +41,10 @@ export const UserSchema = {
         },
         address: {
             type: 'string'
+        },
+        createdAt: {
+            type: 'string',
+            format: 'date-time'
         }
     }
 } as const;
@@ -156,7 +163,10 @@ export const AddressSchema = {
             type: 'string'
         },
         address: {
-            type: 'string'
+            type: 'array',
+            items: {
+                type: 'string'
+            }
         }
     }
 } as const;
@@ -246,15 +256,14 @@ export const OrderItemSchema = {
         productId: {
             '$ref': '#/components/schemas/ObjectId'
         },
-        optionIdToValue: {
+        optionValues: {
             type: 'object',
             additionalProperties: {
-                type: 'string'
+                type: 'array',
+                items: {
+                    '$ref': '#/components/schemas/OptionValue'
+                }
             }
-        },
-        quantity: {
-            type: 'integer',
-            format: 'int32'
         },
         price: {
             type: 'number',
@@ -278,6 +287,18 @@ export const ServiceResultObjectObjectSchema = {
         success: {
             type: 'boolean'
         }
+    }
+} as const;
+
+export const JSONObjectSchema = {
+    type: 'object',
+    properties: {
+        empty: {
+            type: 'boolean'
+        }
+    },
+    additionalProperties: {
+        type: 'object'
     }
 } as const;
 

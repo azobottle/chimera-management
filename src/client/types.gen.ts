@@ -4,7 +4,8 @@ export type ObjectId = string;
 
 export type User = {
     id?: ObjectId;
-    openId?: string;
+    openid?: string;
+    sessionKey?: string;
     name?: string;
     hashedPassword?: string;
     school?: string;
@@ -13,6 +14,7 @@ export type User = {
     expend?: number;
     orderNum?: number;
     address?: string;
+    createdAt?: string;
 };
 
 export type ProductCate = {
@@ -53,7 +55,7 @@ export type ProductOption = {
 export type Address = {
     id?: ObjectId;
     school?: string;
-    address?: string;
+    address?: Array<(string)>;
 };
 
 export type Activity = {
@@ -83,10 +85,9 @@ export type Order = {
 
 export type OrderItem = {
     productId?: ObjectId;
-    optionIdToValue?: {
-        [key: string]: (string);
+    optionValues?: {
+        [key: string]: Array<OptionValue>;
     };
-    quantity?: number;
     price?: number;
 };
 
@@ -99,6 +100,11 @@ export type ServiceResultObjectObject = {
     };
     msg?: string;
     success?: boolean;
+};
+
+export type JSONObject = {
+    empty?: boolean;
+    [key: string]: (unknown | boolean) | undefined;
 };
 
 export type LoginDTO = {
@@ -263,6 +269,14 @@ export type CreateOrderResponse = (ServiceResultObjectObject);
 
 export type CreateOrderError = unknown;
 
+export type WxLoginOrRegisterData = {
+    body: JSONObject;
+};
+
+export type WxLoginOrRegisterResponse = (string);
+
+export type WxLoginOrRegisterError = unknown;
+
 export type LoginData = {
     body: LoginDTO;
 };
@@ -290,13 +304,3 @@ export type ExistsByCateIdData = {
 export type ExistsByCateIdResponse = (boolean);
 
 export type ExistsByCateIdError = unknown;
-
-export type GetAddressByNameData = {
-    path: {
-        school: string;
-    };
-};
-
-export type GetAddressByNameResponse = (Array<Address>);
-
-export type GetAddressByNameError = unknown;
