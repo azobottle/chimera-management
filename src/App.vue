@@ -53,6 +53,17 @@
             <el-menu-item index="/userAddress">定时达地址</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
+
+        <!-- 优惠活动 -->
+        <el-sub-menu index="5">
+          <template #title>
+            <i class="el-icon-menu"></i>
+            <span>优惠活动</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="/coupons">优惠券</el-menu-item>
+          </el-menu-item-group>
+        </el-sub-menu>
       </el-menu>
     </el-aside>
 
