@@ -9,6 +9,7 @@ import ProductOpt from '../views/ProductOpt.vue'
 import User from '../views/User.vue'
 import UserAddress from '../views/UserAddress.vue'
 import Stats from '../views/Stats.vue'
+import Coupons from '../views/Coupons.vue'
 import Login from '../views/Login.vue'
 
 
@@ -22,6 +23,7 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/user', component: User },
   { path: '/userAddress', component: UserAddress },
   { path: '/stats', component: Stats },
+  { path: '/coupons', component: Coupons },
   { path: '/login', component: Login }
 ]
 

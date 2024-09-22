@@ -304,3 +304,13 @@ export type ExistsByCateIdData = {
 export type ExistsByCateIdResponse = (boolean);
 
 export type ExistsByCateIdError = unknown;
+
+export type DeleteAddressData = {
+    path: {
+        id: string;
+    };
+};
+
+export type DeleteAddressResponse = (unknown);
+
+export type DeleteAddressError = unknown;
