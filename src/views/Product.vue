@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { uploadImage, getAllProducts, getAllProductCates, getAllProductOptions, updateProduct, createProduct } from '../client/services.gen';
-import type { Product, ProductOption, OptionValue } from '../client/types.gen';
+import type { Product, ProductOption, OptionValue, Order } from '../client/types.gen';
 import type { ProductCate } from '../client/types.gen';
 import { ElMessage, ElTable, ElTableColumn, ElButton, ElDialog, ElForm, ElFormItem, ElInput, ElSelect, ElOption, ElPagination } from 'element-plus';
 

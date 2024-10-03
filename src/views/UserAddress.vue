@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import {
-  getAllAddresses,
-  createAddress,
-  updateAddress,
-  deleteAddress as deleteAddressAPI,
+  getAllFixDeliveryInfos,
+  createFixDeliveryInfo,
+  updateFixDeliveryInfo,
+  deleteFixDeliveryInfo as deleteAddressAPI,
 } from '../client/services.gen';
-import type { Address } from '../client/types.gen';
+import type { FixDeliveryInfo } from '../client/types.gen';
 import {
   ElMessage,
   ElButton,
