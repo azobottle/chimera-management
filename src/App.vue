@@ -64,6 +64,10 @@
             <el-menu-item index="/coupons">优惠券</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
+        <el-menu-item index="/login">
+          <i class="el-icon-menu"></i>
+          <span>登录</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
 

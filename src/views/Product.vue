@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { uploadImage, getAllProducts, getAllProductCates, getAllProductOptions, updateProduct, createProduct } from '../client/services.gen';
@@ -181,9 +182,15 @@ const saveProductChanges = async () => {
     } else {
       await updateProduct({
         body: editableProduct.value,
-        method: 'PUT'
-      });
-      ElMessage.success('Product updated successfully');
+        method: 'PUT',
+        throwOnError:true
+      }).then((result)=>{
+        console.log(result)
+        ElMessage.success('Product updated successfully');
+      }).catch((error)=>{
+        ElMessage.error('Product updated failed'+error);
+      })
+      
     }
 
     await fetchProducts();
