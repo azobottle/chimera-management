@@ -84,8 +84,8 @@ export const OptionValueSchema = {
             type: 'string'
         },
         priceAdjustment: {
-            type: 'number',
-            format: 'double'
+            type: 'integer',
+            format: 'int32'
         }
     }
 } as const;
@@ -106,8 +106,8 @@ export const ProductSchema = {
             type: 'string'
         },
         price: {
-            type: 'number',
-            format: 'double'
+            type: 'integer',
+            format: 'int32'
         },
         describe: {
             type: 'string'
@@ -153,7 +153,7 @@ export const ProductOptionSchema = {
     }
 } as const;
 
-export const AddressSchema = {
+export const FixDeliveryInfoSchema = {
     type: 'object',
     properties: {
         id: {
@@ -161,6 +161,10 @@ export const AddressSchema = {
         },
         school: {
             type: 'string'
+        },
+        time: {
+            type: 'string',
+            format: 'date-time'
         },
         address: {
             type: 'array',
@@ -223,6 +227,22 @@ export const ProcessorMapSchema = {
     }
 } as const;
 
+export const DeliveryInfoSchema = {
+    type: 'object',
+    properties: {
+        school: {
+            type: 'string'
+        },
+        address: {
+            type: 'string'
+        },
+        time: {
+            type: 'string',
+            format: 'date-time'
+        }
+    }
+} as const;
+
 export const OrderSchema = {
     type: 'object',
     properties: {
@@ -241,11 +261,26 @@ export const OrderSchema = {
         scene: {
             type: 'string'
         },
+        deliveryInfo: {
+            '$ref': '#/components/schemas/DeliveryInfo'
+        },
         items: {
             type: 'array',
             items: {
                 '$ref': '#/components/schemas/OrderItem'
             }
+        },
+        orderNum: {
+            type: 'integer',
+            format: 'int32'
+        },
+        createdAt: {
+            type: 'string',
+            format: 'date-time'
+        },
+        totalPrice: {
+            type: 'integer',
+            format: 'int32'
         }
     }
 } as const;
@@ -259,16 +294,28 @@ export const OrderItemSchema = {
         optionValues: {
             type: 'object',
             additionalProperties: {
-                type: 'array',
-                items: {
-                    '$ref': '#/components/schemas/OptionValue'
-                }
+                '$ref': '#/components/schemas/OptionValue'
             }
         },
+        name: {
+            type: 'string'
+        },
         price: {
-            type: 'number',
-            format: 'double'
+            type: 'integer',
+            format: 'int32'
         }
+    }
+} as const;
+
+export const JSONObjectSchema = {
+    type: 'object',
+    properties: {
+        empty: {
+            type: 'boolean'
+        }
+    },
+    additionalProperties: {
+        type: 'object'
     }
 } as const;
 
@@ -287,18 +334,6 @@ export const ServiceResultObjectObjectSchema = {
         success: {
             type: 'boolean'
         }
-    }
-} as const;
-
-export const JSONObjectSchema = {
-    type: 'object',
-    properties: {
-        empty: {
-            type: 'boolean'
-        }
-    },
-    additionalProperties: {
-        type: 'object'
     }
 } as const;
 

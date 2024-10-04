@@ -66,7 +66,7 @@ const onOptionValuesChange = (optionId: string) => {
   if (editableProduct.value?.productOptions) {
     editableProduct.value.productOptions[optionId] = selectedOptionValues.value[optionId].map(optionString => {
       const [value, priceAdjustmentString] = optionString.split(':');
-      const priceAdjustment = parseFloat(priceAdjustmentString.replace('￥', '')); // 去掉'￥'并转换为数字
+      const priceAdjustment = parseFloat(priceAdjustmentString.replace('分', '')); // 去掉'分'并转换为数字
 
       // 在 productOptions 中查找匹配的选项
       const existingOption = productOptions.value.get(optionId)?.values.find(option => 
@@ -126,7 +126,7 @@ const openEditDialog = (product: Product) => {
   if (product.productOptions) {
     for (const [optionId, values] of Object.entries(product.productOptions)) {
       // selectedOptionValues.value[optionId] = [...values];
-      selectedOptionValues.value[optionId] = values.map(value => `${value.value}:${value.priceAdjustment}￥`);
+      selectedOptionValues.value[optionId] = values.map(value => `${value.value}:${value.priceAdjustment}分`);
     }
   }
   imageFile.value = null;
@@ -270,7 +270,7 @@ const getProductOptionDisplay = (optionId: string, values: OptionValue[]) => {
   const option = productOptions.value.get(optionId);
   if (option) {
     const show_values = values
-      ?.map(value => `${value.value}:${value.priceAdjustment}￥`)
+      ?.map(value => `${value.value}:${value.priceAdjustment}分`)
       .join(', ') || '无';
     return `${option.name}: [${show_values}]`;
   }
@@ -381,7 +381,7 @@ const onImageChange = (file: any) => {
         <template #default="{ row }">
           <div>
             <div style="font-weight: bold;">{{ row.name }}</div>
-            <div>{{ row.price }}￥</div>
+            <div>{{ row.price }}分</div>
             <div>{{ getCategoryTitle(row.cateId) }}</div>
           </div>
         </template>
@@ -501,8 +501,8 @@ const onImageChange = (file: any) => {
                 <el-option
                   v-for="availableValue in getAvailableOptionValues(optionId)"
                   :key="availableValue.uuid"
-                  :label="availableValue.value + ':' + availableValue.priceAdjustment + '￥'"
-                  :value="availableValue.value + ':' + availableValue.priceAdjustment + '￥'"
+                  :label="availableValue.value + ':' + availableValue.priceAdjustment + '分'"
+                  :value="availableValue.value + ':' + availableValue.priceAdjustment + '分'"
                 />
               </el-select>
 

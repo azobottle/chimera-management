@@ -52,9 +52,10 @@ export type ProductOption = {
     values?: Array<OptionValue>;
 };
 
-export type Address = {
+export type FixDeliveryInfo = {
     id?: ObjectId;
     school?: string;
+    time?: string;
     address?: Array<(string)>;
 };
 
@@ -74,21 +75,37 @@ export type ProcessorMap = {
     processorIds?: Array<(number)>;
 };
 
+export type DeliveryInfo = {
+    school?: string;
+    address?: string;
+    time?: string;
+};
+
 export type Order = {
     id?: ObjectId;
     userId?: ObjectId;
     state?: string;
     customerType?: string;
     scene?: string;
+    deliveryInfo?: DeliveryInfo;
     items?: Array<OrderItem>;
+    orderNum?: number;
+    createdAt?: string;
+    totalPrice?: number;
 };
 
 export type OrderItem = {
     productId?: ObjectId;
     optionValues?: {
-        [key: string]: Array<OptionValue>;
+        [key: string]: OptionValue;
     };
+    name?: string;
     price?: number;
+};
+
+export type JSONObject = {
+    empty?: boolean;
+    [key: string]: (unknown | boolean) | undefined;
 };
 
 export type ServiceResultObjectObject = {
@@ -100,11 +117,6 @@ export type ServiceResultObjectObject = {
     };
     msg?: string;
     success?: boolean;
-};
-
-export type JSONObject = {
-    empty?: boolean;
-    [key: string]: (unknown | boolean) | undefined;
 };
 
 export type LoginDTO = {
@@ -192,25 +204,25 @@ export type CreateProductOptionResponse = (ProductOption);
 
 export type CreateProductOptionError = unknown;
 
-export type GetAllAddressesResponse = (Array<Address>);
+export type GetAllFixDeliveryInfosResponse = (Array<FixDeliveryInfo>);
 
-export type GetAllAddressesError = unknown;
+export type GetAllFixDeliveryInfosError = unknown;
 
-export type UpdateAddressData = {
-    body: Address;
+export type UpdateFixDeliveryInfoData = {
+    body: FixDeliveryInfo;
 };
 
-export type UpdateAddressResponse = (Address);
+export type UpdateFixDeliveryInfoResponse = (FixDeliveryInfo);
 
-export type UpdateAddressError = unknown;
+export type UpdateFixDeliveryInfoError = unknown;
 
-export type CreateAddressData = {
-    body: Address;
+export type CreateFixDeliveryInfoData = {
+    body: FixDeliveryInfo;
 };
 
-export type CreateAddressResponse = (Address);
+export type CreateFixDeliveryInfoResponse = (FixDeliveryInfo);
 
-export type CreateAddressError = unknown;
+export type CreateFixDeliveryInfoError = unknown;
 
 export type GetAllActivitiesResponse = (Array<Activity>);
 
@@ -257,17 +269,53 @@ export type CreateProcessorMapResponse = (ProcessorMap);
 
 export type CreateProcessorMapError = unknown;
 
-export type GetAllOrdersResponse = (Array<Order>);
+export type CallbackData = {
+    body: string;
+};
 
-export type GetAllOrdersError = unknown;
+export type CallbackResponse = (string);
 
-export type CreateOrderData = {
+export type CallbackError = unknown;
+
+export type CreateData = {
     body: Order;
 };
 
-export type CreateOrderResponse = (ServiceResultObjectObject);
+export type CreateResponse = (JSONObject);
 
-export type CreateOrderError = unknown;
+export type CreateError = unknown;
+
+export type SupplyOrderData = {
+    body: Order;
+};
+
+export type SupplyOrderResponse = (ServiceResultObjectObject);
+
+export type SupplyOrderError = unknown;
+
+export type RefundOrderData = {
+    body: Order;
+};
+
+export type RefundOrderResponse = (ServiceResultObjectObject);
+
+export type RefundOrderError = unknown;
+
+export type CreateOrderInStoreData = {
+    body: Order;
+};
+
+export type CreateOrderInStoreResponse = (ServiceResultObjectObject);
+
+export type CreateOrderInStoreError = unknown;
+
+export type AfterSaleData = {
+    body: Order;
+};
+
+export type AfterSaleResponse = (ServiceResultObjectObject);
+
+export type AfterSaleError = unknown;
 
 export type WxLoginOrRegisterData = {
     body: JSONObject;
@@ -305,12 +353,26 @@ export type ExistsByCateIdResponse = (boolean);
 
 export type ExistsByCateIdError = unknown;
 
-export type DeleteAddressData = {
+export type GetAllOrdersResponse = (Array<Order>);
+
+export type GetAllOrdersError = unknown;
+
+export type GetOrdersByUserIdData = {
+    path: {
+        userId: string;
+    };
+};
+
+export type GetOrdersByUserIdResponse = (Array<Order>);
+
+export type GetOrdersByUserIdError = unknown;
+
+export type DeleteFixDeliveryInfoData = {
     path: {
         id: string;
     };
 };
 
-export type DeleteAddressResponse = (unknown);
+export type DeleteFixDeliveryInfoResponse = (unknown);
 
-export type DeleteAddressError = unknown;
+export type DeleteFixDeliveryInfoError = unknown;

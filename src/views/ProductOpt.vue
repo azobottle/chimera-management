@@ -10,7 +10,7 @@
       <el-table-column label="可选值">
         <template #default="{ row }">
           <div v-for="value in row.values" :key="value.uuid">
-            {{ value.value }}: {{ value.priceAdjustment }} 元
+            {{ value.value }}: {{ value.priceAdjustment }} 分
           </div>
         </template>
       </el-table-column>
