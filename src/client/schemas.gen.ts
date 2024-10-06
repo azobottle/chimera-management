@@ -162,11 +162,14 @@ export const FixDeliveryInfoSchema = {
         school: {
             type: 'string'
         },
-        time: {
-            type: 'string',
-            format: 'date-time'
+        times: {
+            type: 'array',
+            items: {
+                type: 'string',
+                format: 'date-time'
+            }
         },
-        address: {
+        addresses: {
             type: 'array',
             items: {
                 type: 'string'

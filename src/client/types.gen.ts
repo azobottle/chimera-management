@@ -55,8 +55,8 @@ export type ProductOption = {
 export type FixDeliveryInfo = {
     id?: ObjectId;
     school?: string;
-    time?: string;
-    address?: Array<(string)>;
+    times?: Array<(string)>;
+    addresses?: Array<(string)>;
 };
 
 export type Activity = {
