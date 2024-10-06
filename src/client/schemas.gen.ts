@@ -274,13 +274,19 @@ export const OrderSchema = {
             type: 'integer',
             format: 'int32'
         },
-        createdAt: {
-            type: 'string',
-            format: 'date-time'
+        remark: {
+            type: 'string'
+        },
+        merchantNote: {
+            type: 'string'
         },
         totalPrice: {
             type: 'integer',
             format: 'int32'
+        },
+        createdAt: {
+            type: 'string',
+            format: 'date-time'
         }
     }
 } as const;
@@ -345,6 +351,39 @@ export const LoginDTOSchema = {
             type: 'string'
         },
         password: {
+            type: 'string'
+        }
+    }
+} as const;
+
+export const ResponseBodyDTOUserDTOSchema = {
+    type: 'object',
+    properties: {
+        msg: {
+            type: 'string'
+        },
+        data: {
+            '$ref': '#/components/schemas/UserDTO'
+        }
+    }
+} as const;
+
+export const UserDTOSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string'
+        },
+        openid: {
+            type: 'string'
+        },
+        name: {
+            type: 'string'
+        },
+        school: {
+            type: 'string'
+        },
+        role: {
             type: 'string'
         }
     }

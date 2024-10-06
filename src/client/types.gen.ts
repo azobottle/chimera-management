@@ -90,8 +90,10 @@ export type Order = {
     deliveryInfo?: DeliveryInfo;
     items?: Array<OrderItem>;
     orderNum?: number;
-    createdAt?: string;
+    remark?: string;
+    merchantNote?: string;
     totalPrice?: number;
+    createdAt?: string;
 };
 
 export type OrderItem = {
@@ -122,6 +124,19 @@ export type ServiceResultObjectObject = {
 export type LoginDTO = {
     username: string;
     password: string;
+};
+
+export type ResponseBodyDTOUserDTO = {
+    msg?: string;
+    data?: UserDTO;
+};
+
+export type UserDTO = {
+    id?: string;
+    openid?: string;
+    name?: string;
+    school?: string;
+    role?: string;
 };
 
 export type GetAllUsersResponse = (Array<User>);
@@ -317,19 +332,11 @@ export type AfterSaleResponse = (ServiceResultObjectObject);
 
 export type AfterSaleError = unknown;
 
-export type WxLoginOrRegisterData = {
-    body: JSONObject;
-};
-
-export type WxLoginOrRegisterResponse = (string);
-
-export type WxLoginOrRegisterError = unknown;
-
 export type LoginData = {
     body: LoginDTO;
 };
 
-export type LoginResponse = (string);
+export type LoginResponse = (ResponseBodyDTOUserDTO);
 
 export type LoginError = unknown;
 
@@ -353,7 +360,16 @@ export type ExistsByCateIdResponse = (boolean);
 
 export type ExistsByCateIdError = unknown;
 
-export type GetAllOrdersResponse = (Array<Order>);
+export type GetAllOrdersData = {
+    query: {
+        endTime: string;
+        startTime: string;
+    };
+};
+
+export type GetAllOrdersResponse = ({
+    [key: string]: unknown;
+});
 
 export type GetAllOrdersError = unknown;
 
@@ -366,6 +382,16 @@ export type GetOrdersByUserIdData = {
 export type GetOrdersByUserIdResponse = (Array<Order>);
 
 export type GetOrdersByUserIdError = unknown;
+
+export type WxLoginOrRegisterData = {
+    query: {
+        code: string;
+    };
+};
+
+export type WxLoginOrRegisterResponse = (ResponseBodyDTOUserDTO);
+
+export type WxLoginOrRegisterError = unknown;
 
 export type DeleteFixDeliveryInfoData = {
     path: {

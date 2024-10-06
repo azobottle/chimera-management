@@ -61,20 +61,35 @@ const sceneOptions = [
   { label: '外带', value: '外带' },
 ];
 
+const getDefaultStartTime = () => {
+  const date = new Date();
+  date.setDate(date.getDate() - 3);
+  date.setHours(0, 0, 0, 0);
+  return date;
+};
+
+const getDefaultEndTime = () => {
+  const date = new Date();
+  date.setHours(23, 59, 59, 999);
+  return date;
+};
+
+
 // 搜索相关
 const searchQuery = ref({
   orderId: '',
   userId: '',
   orderNum: '',
-  startTime: null as Date | null, // 开始时间
-  endTime: null as Date | null, // 结束时间
+  startTime: getDefaultStartTime(),
+  endTime: getDefaultEndTime(),
   state: '',
   customerType: '',
   scene: '',
-  school: '', // 定时达学校
-  address: '', // 定时达地址
-  time: '', // 定时达时间
+  school: '',
+  address: '',
+  time: '',
 });
+
 
 // 重置搜索条件
 const resetFilters = () => {
@@ -82,8 +97,8 @@ const resetFilters = () => {
     orderId: '',
     userId: '',
     orderNum: '',
-    startTime: null,
-    endTime: null,
+    startTime: getDefaultStartTime(),
+    endTime: getDefaultEndTime(),
     state: '',
     customerType: '',
     scene: '',
@@ -92,7 +107,9 @@ const resetFilters = () => {
     time: '',
   };
   currentPage.value = 1; // 重置为第一页
+  fetchOrders(); // 重新获取订单数据
 };
+
 
 // 过滤后的订单列表
 const filteredOrders = computed(() => {
@@ -107,16 +124,6 @@ const filteredOrders = computed(() => {
       searchQuery.value.userId === '' ||
       order.userId?.toString().includes(searchQuery.value.userId);
 
-    // 时间过滤
-    let matchesStartTime = true;
-    let matchesEndTime = true;
-    if (searchQuery.value.startTime) {
-      matchesStartTime = new Date(order.createdAt) >= new Date(searchQuery.value.startTime);
-    }
-    if (searchQuery.value.endTime) {
-      matchesEndTime = new Date(order.createdAt) <= new Date(searchQuery.value.endTime);
-    }
-
     const matchesState =
       searchQuery.value.state === '' || order.state === searchQuery.value.state;
     const matchesCustomerType =
@@ -129,8 +136,6 @@ const filteredOrders = computed(() => {
       matchesOrderNum &&
       matchesOrderId &&
       matchesUserId &&
-      matchesStartTime &&
-      matchesEndTime &&
       matchesState &&
       matchesCustomerType &&
       matchesScene
@@ -148,18 +153,35 @@ const paginatedOrders = computed(() => {
 // 获取订单数据
 const fetchOrders = async () => {
   try {
-    const orderResponse = await getAllOrders();
-    orders.value = orderResponse.data;
+    let startTime = searchQuery.value.startTime || getDefaultStartTime();
+    let endTime = searchQuery.value.endTime || getDefaultEndTime();
 
+    // 确保开始时间为当天的 00:00:00，结束时间为当天的 23:59:59
+    startTime = new Date(startTime);
+    startTime.setHours(0, 0, 0, 0);
+
+    endTime = new Date(endTime);
+    endTime.setHours(23, 59, 59, 999);
+
+    const response = await getAllOrders({
+      query: {
+        startTime: formatDate(startTime),
+        endTime: formatDate(endTime),
+      },
+    });
+    orders.value = response.data;
+
+    console.log("Orders:", orders.value)
+
+    // 处理订单数据（如添加商品名称等）
     orders.value.forEach((order) => {
       order.items?.forEach((item) => {
         if (item.productId) {
           const product = productOptionsList.value.find((p) => p.id === item.productId);
           if (product) {
-            // 添加 name 字段到 OrderItem
             item.name = product.name || '未知产品';
           } else {
-            item.name = '未知产品'; // 处理找不到产品的情况
+            item.name = '未知产品';
           }
         }
       });
@@ -198,10 +220,8 @@ onMounted(async () => {
 });
 
 // 日期格式化函数
-const formatDate = (row: Order, column: any, cellValue: string) => {
-  if (!cellValue) return ''; // 如果没有值，则返回空字符串
-  const date = new Date(cellValue);
-
+const formatDate = (date: Date) => {
+  // 格式化日期为 'yyyy-MM-ddTHH:mm:ss'
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从 0 开始
   const day = String(date.getDate()).padStart(2, '0');
@@ -210,8 +230,39 @@ const formatDate = (row: Order, column: any, cellValue: string) => {
   const minutes = String(date.getMinutes()).padStart(2, '0');
   const seconds = String(date.getSeconds()).padStart(2, '0');
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 };
+
+const showDate = (row: any): string => {
+    const cellValue = row.createdAt;
+    if (!cellValue) return '';
+
+    try {
+        // 解析ISO字符串到Date对象
+        const date = new Date(cellValue);
+        if (isNaN(date.getTime())) {
+            // 无效日期，返回空字符串
+            return '';
+        }
+
+        // 提取日期组件
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        // 返回格式化后的日期
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    } catch (error) {
+        // 捕获异常并返回空字符串
+        return '';
+    }
+};
+
+
+
 
 // 新建订单对话框状态
 const newOrderDialogVisible = ref(false);
@@ -421,6 +472,36 @@ const handleRefundOrder = async (order: Order) => {
     ElMessage.error('退款时出错');
   }
 };
+
+const refundDialogVisible = ref(false);
+const currentOrder = ref<Order | null>(null);
+const merchantNote = ref('');
+
+// Open the refund confirmation dialog
+const openRefundDialog = (order: Order) => {
+  currentOrder.value = order;
+  merchantNote.value = ''; // Clear the note input
+  refundDialogVisible.value = true;
+};
+
+// Confirm the refund action
+const confirmRefund = async () => {
+  if (!currentOrder.value) return;
+  
+  try {
+    currentOrder.value.merchantNote = merchantNote.value; // Add the merchant note to the order
+    await refundOrder({ body: currentOrder.value });
+    ElMessage.success('退款成功');
+    refundDialogVisible.value = false;
+    await fetchOrders(); // Refresh the order list
+  } catch (error) {
+    console.error('退款时出错:', error);
+    ElMessage.error('退款时出错');
+  }
+};
+
+
+
 </script>
 
 
@@ -556,7 +637,7 @@ const handleRefundOrder = async (order: Order) => {
       <el-table-column prop="deliveryInfo.address" label="定时达地址" width="200px" />
       <el-table-column prop="deliveryInfo.time" label="定时达时间" width="200px" />
 
-      <el-table-column prop="createdAt" label="创建时间" width="200px" :formatter="formatDate" />
+      <el-table-column prop="createdAt" label="创建时间" width="200px" :formatter="showDate" />
       <el-table-column label="操作">
         <template #default="scope">
           <el-button
@@ -567,12 +648,29 @@ const handleRefundOrder = async (order: Order) => {
           >
             供餐
           </el-button>
-          <el-button type="danger" size="small" @click="handleRefundOrder(scope.row)">
+          <!-- Show the refund button only if the order is not already refunded -->
+          <el-button 
+            v-if="scope.row.state !== '已退款'"
+            type="danger" 
+            size="small" 
+            @click="openRefundDialog(scope.row)"
+          >
             退款
           </el-button>
         </template>
-      </el-table-column>
+    </el-table-column>
+
     </el-table>
+
+    <!-- Refund Confirmation Dialog -->
+    <el-dialog title="确认退款" v-model="refundDialogVisible">
+      <span>请输入商家备注进行确认：</span>
+      <el-input type="textarea" v-model="merchantNote" placeholder="请输入商家备注"></el-input>
+      <template #footer>
+        <el-button @click="refundDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmRefund">确认</el-button>
+      </template>
+    </el-dialog>
 
     <!-- 分页组件 -->
     <el-pagination
