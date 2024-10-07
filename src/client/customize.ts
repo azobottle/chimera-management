@@ -1,11 +1,14 @@
+import { createConfig } from "@hey-api/client-fetch";
 import { client } from "./services.gen";
 
 
 const API_BASE_URL = 'http://localhost:80'
 // const API_BASE_URL = 'http://47.93.12.208:80'
-client.setConfig({
+const config = createConfig({
     baseUrl: API_BASE_URL,
-});
+    throwOnError: true
+  })
+client.setConfig(config);
 client.interceptors.request.use((request) => {
     const token = localStorage.getItem('token')
     if (token !== null) {
