@@ -188,7 +188,7 @@ const fetchOrders = async () => {
     });
   } catch (error) {
     console.error('获取订单数据时出错:', error);
-    ElMessage.error('获取订单数据时出错');
+    ElMessage.error('获取订单数据时出错'+error);
   }
 };
 
@@ -205,6 +205,7 @@ const fetchAllProductOptions = async () => {
     productOptions.value = optionMap;
   } catch (error) {
     console.error('Error fetching product options:', error);
+    ElMessage.error('Error fetching product options:'+error);
   }
 };
 
@@ -216,6 +217,7 @@ onMounted(async () => {
     await fetchAllProductOptions();
   } catch (error) {
     console.error('获取订单数据时出错:', error);
+    ElMessage.error('获取订单数据时出错:'+error);
   }
 });
 
@@ -290,7 +292,7 @@ const fetchProducts = async () => {
     productOptionsList.value = productResponse.data;
   } catch (error) {
     console.error('获取产品数据时出错:', error);
-    ElMessage.error('获取产品数据时出错');
+    ElMessage.error('获取产品数据时出错'+ error);
   }
 };
 
@@ -305,6 +307,7 @@ const openNewOrderDialog = async () => {
     newOrderDialogVisible.value = true;
   } catch (error) {
     console.error('打开新建订单对话框时出错:', error);
+    ElMessage.error('打开新建订单对话框时出错:'+ error);
   }
 };
 
@@ -446,7 +449,7 @@ const submitNewOrder = async () => {
     await fetchOrders(); // 刷新订单列表
   } catch (error) {
     console.error('创建订单时出错:', error);
-    ElMessage.error('创建订单时出错');
+    ElMessage.error('创建订单时出错'+ error);
   }
 };
 
@@ -458,7 +461,7 @@ const handleSupplyOrder = async (order: Order) => {
     await fetchOrders(); // 刷新订单列表
   } catch (error) {
     console.error('供餐时出错:', error);
-    ElMessage.error('供餐时出错');
+    ElMessage.error('供餐时出错' + error);
   }
 };
 
@@ -469,7 +472,7 @@ const handleRefundOrder = async (order: Order) => {
     await fetchOrders(); // 刷新订单列表
   } catch (error) {
     console.error('退款时出错:', error);
-    ElMessage.error('退款时出错');
+    ElMessage.error('退款时出错'+ error);
   }
 };
 
@@ -496,7 +499,7 @@ const confirmRefund = async () => {
     await fetchOrders(); // Refresh the order list
   } catch (error) {
     console.error('退款时出错:', error);
-    ElMessage.error('退款时出错');
+    ElMessage.error('退款时出错'+error);
   }
 };
 
