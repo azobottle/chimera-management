@@ -408,6 +408,10 @@ export type WxLoginOrRegisterResponse = (ResponseBodyDTOUserDTO);
 
 export type WxLoginOrRegisterError = unknown;
 
+export type ValidateResponse = (ResponseBodyDTOUserDTO);
+
+export type ValidateError = unknown;
+
 export type DeleteFixDeliveryInfoData = {
     path: {
         id: string;

@@ -11,6 +11,7 @@ import UserAddress from '../views/UserAddress.vue'
 import Stats from '../views/Stats.vue'
 import Coupons from '../views/Coupons.vue'
 import Login from '../views/Login.vue'
+import { validate } from '@/client'
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -33,13 +34,32 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token'); 
-  if (!token && to.path !== '/login') {  // 如果用户未登录，且目标路由不是登录页
+  const token = localStorage.getItem('token');
+
+  // 用户没有token且目标路径不是登录页
+  if (!token && to.path !== '/login') {
     next({
       path: '/login',
       query: { redirect: to.fullPath } // 保存要跳转的路径
     });
-  } else {    // 允许继续访问
+  } 
+  // 有token，进行校验
+  else if (token) {
+    validate().then((res) => {
+      localStorage.setItem("userDTO", JSON.stringify(res.data?.data));
+      next(); // 验证成功，允许访问目标页面
+    }).catch((err) => {
+      console.error('Token 验证失败:', err);
+      // 验证失败，清除无效token
+      localStorage.removeItem('token');
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath } // 保存要跳转的路径
+      });
+    });
+  } 
+  // 已登录或当前页面为登录页，允许继续访问
+  else {
     next();
   }
 });
