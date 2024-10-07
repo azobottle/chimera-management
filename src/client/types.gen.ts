@@ -55,8 +55,8 @@ export type ProductOption = {
 export type FixDeliveryInfo = {
     id?: ObjectId;
     school?: string;
-    times?: Array<(string)>;
-    addresses?: Array<(string)>;
+    time?: string;
+    address?: Array<(string)>;
 };
 
 export type Activity = {
@@ -75,27 +75,51 @@ export type ProcessorMap = {
     processorIds?: Array<(number)>;
 };
 
+/**
+ * 定时达配送信息，暂不用填
+ */
 export type DeliveryInfo = {
     school?: string;
     address?: string;
     time?: string;
 };
 
+/**
+ * 就是订单呀
+ */
 export type Order = {
     id?: ObjectId;
     userId?: ObjectId;
     state?: string;
+    /**
+     * 如"未认证为学生身份的用户业务"
+     */
     customerType?: string;
     scene?: string;
     deliveryInfo?: DeliveryInfo;
+    /**
+     * 订单所含商品列表
+     */
     items?: Array<OrderItem>;
     orderNum?: number;
+    /**
+     * 顾客备注
+     */
     remark?: string;
     merchantNote?: string;
+    /**
+     * 前端先计算一个，后端会check
+     */
     totalPrice?: number;
+    /**
+     * 自动填充创建时间
+     */
     createdAt?: string;
 };
 
+/**
+ * 订单其中的一个商品
+ */
 export type OrderItem = {
     productId?: ObjectId;
     optionValues?: {
@@ -360,16 +384,7 @@ export type ExistsByCateIdResponse = (boolean);
 
 export type ExistsByCateIdError = unknown;
 
-export type GetAllOrdersData = {
-    query: {
-        endTime: string;
-        startTime: string;
-    };
-};
-
-export type GetAllOrdersResponse = ({
-    [key: string]: unknown;
-});
+export type GetAllOrdersResponse = (Array<Order>);
 
 export type GetAllOrdersError = unknown;
 

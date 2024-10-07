@@ -162,14 +162,11 @@ export const FixDeliveryInfoSchema = {
         school: {
             type: 'string'
         },
-        times: {
-            type: 'array',
-            items: {
-                type: 'string',
-                format: 'date-time'
-            }
+        time: {
+            type: 'string',
+            format: 'date-time'
         },
-        addresses: {
+        address: {
             type: 'array',
             items: {
                 type: 'string'
@@ -243,7 +240,8 @@ export const DeliveryInfoSchema = {
             type: 'string',
             format: 'date-time'
         }
-    }
+    },
+    description: '定时达配送信息，暂不用填'
 } as const;
 
 export const OrderSchema = {
@@ -259,7 +257,8 @@ export const OrderSchema = {
             type: 'string'
         },
         customerType: {
-            type: 'string'
+            type: 'string',
+            description: '如"未认证为学生身份的用户业务"'
         },
         scene: {
             type: 'string'
@@ -269,6 +268,8 @@ export const OrderSchema = {
         },
         items: {
             type: 'array',
+            description: '订单所含商品列表',
+            example: '[example1,example2...]',
             items: {
                 '$ref': '#/components/schemas/OrderItem'
             }
@@ -278,20 +279,24 @@ export const OrderSchema = {
             format: 'int32'
         },
         remark: {
-            type: 'string'
+            type: 'string',
+            description: '顾客备注'
         },
         merchantNote: {
             type: 'string'
         },
         totalPrice: {
             type: 'integer',
+            description: '前端先计算一个，后端会check',
             format: 'int32'
         },
         createdAt: {
             type: 'string',
+            description: '自动填充创建时间',
             format: 'date-time'
         }
-    }
+    },
+    description: '就是订单呀'
 } as const;
 
 export const OrderItemSchema = {
@@ -313,7 +318,8 @@ export const OrderItemSchema = {
             type: 'integer',
             format: 'int32'
         }
-    }
+    },
+    description: '订单其中的一个商品'
 } as const;
 
 export const JSONObjectSchema = {
