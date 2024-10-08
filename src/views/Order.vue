@@ -36,6 +36,10 @@ const productOptions = ref<Map<string, ProductOption>>(new Map());
 const currentPage = ref(1); // 当前页码
 const pageSize = ref(5); // 每页展示的订单数量
 
+// Details dialog visibility and data
+const orderDetailsDialogVisible = ref(false);
+const selectedOrder = ref<Order | null>(null);
+
 // 定义枚举选项
 const stateOptions = [
   { label: '已支付', value: '已支付' },
@@ -311,6 +315,11 @@ const openNewOrderDialog = async () => {
   }
 };
 
+const openOrderDetailsDialog = (order: Order) => {
+  selectedOrder.value = order;
+  orderDetailsDialogVisible.value = true;
+};
+
 // 添加一个新的产品到订单中
 const addProduct = () => {
   newOrderForm.value.products.push({
@@ -407,11 +416,21 @@ const submitNewOrder = async () => {
     customerType: '未认证为学生身份的用户业务',
     items: newOrderForm.value.products.map((product) => {
       const selectedOptions: Record<string, string> = {};
-      for (const key in product.selectedOptions) {
-        if (product.selectedOptions.hasOwnProperty(key)) {
-          selectedOptions[key] = product.selectedOptions[key] as string;
+      // for (const key in product.selectedOptions) {
+      //   if (product.selectedOptions.hasOwnProperty(key)) {
+      //     selectedOptions[key] = product.selectedOptions[key] as string;
+      //   }
+      // }
+
+      for (const [name, uuid] of Object.entries(product.selectedOptions)) {
+        for (const [optionId, option] of productOptions.value) {
+          if (option.name === name) {
+            selectedOptions[optionId] = uuid as string;
+            break;
+          }
         }
       }
+
       return {
         productId: product.productId,
         optionValues: selectedOptions,
@@ -540,6 +559,11 @@ const confirmRefund = async () => {
             clearable
           ></el-date-picker>
         </el-form-item>
+      
+        <el-form-item>
+          <el-button @click="fetchOrders">搜索</el-button>
+        </el-form-item>
+      
       </div>
 
       <!-- 第二行：订单号、状态、客户类型、场景、重置、新建订单 -->
@@ -617,22 +641,16 @@ const confirmRefund = async () => {
     <el-table :data="paginatedOrders" stripe>
       <el-table-column prop="orderNum" label="订单号" width="70" />
       <el-table-column prop="state" label="状态" width="70px" />
-      <el-table-column type="expand" label="商品" width="70px">
+      <el-table-column label="商品" width="300px">
         <template #default="props">
-          <el-table :data="props.row.items" size="small" border>
-            <el-table-column prop="name" label="商品名称" width="180px" />
-            <el-table-column label="选项" width="300px">
-              <template #default="itemScope">
-                <div v-for="(option, key) in itemScope.row.optionValues" :key="option.uuid">
-                  <strong>{{ key }}:</strong> {{ option.value }}
-                  ({{ option.priceAdjustment ? '+' + option.priceAdjustment : '0' }})
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="price" label="价格" width="100px" />
-          </el-table>
+          <div>
+            <span v-for="(item, index) in props.row.items" :key="item.uuid">
+              {{ item.name }}<span v-if="index < props.row.items.length - 1">, </span>
+            </span>
+          </div>
         </template>
       </el-table-column>
+      <el-table-column prop="totalPrice" label="总价" width="60px" />
       <el-table-column prop="customerType" label="客户类型" width="210px" />
       <el-table-column prop="scene" label="场景" width="70px" />
 
@@ -660,10 +678,67 @@ const confirmRefund = async () => {
           >
             退款
           </el-button>
+          <el-button 
+            type="info" 
+            size="small" 
+            @click="openOrderDetailsDialog(scope.row)"
+          >
+            详情
+          </el-button>
         </template>
     </el-table-column>
 
     </el-table>
+
+    <!-- Order Details Dialog -->
+    <el-dialog title="订单详情" v-model="orderDetailsDialogVisible" width="50%">
+      <div v-if="selectedOrder" class="order-details">
+      
+        <!-- Basic Order Information -->
+        <div class="order-section">
+          <h4>基本信息</h4>
+          <p><strong>订单号:</strong> {{ selectedOrder.orderNum }}</p>
+          <p><strong>状态:</strong> {{ selectedOrder.state }}</p>
+          <p><strong>客户类型:</strong> {{ selectedOrder.customerType }}</p>
+          <p><strong>场景:</strong> {{ selectedOrder.scene }}</p>
+          <p><strong>顾客备注:</strong> {{ selectedOrder.remark }}</p>
+          <p><strong>商家备注:</strong> {{ selectedOrder.merchantNote }}</p>
+          <p><strong>总价格:</strong> {{ selectedOrder.totalPrice }}元</p>
+          <p><strong>创建时间:</strong> {{ showDate(selectedOrder) }}</p>
+        </div>
+
+        <!-- Delivery Information -->
+        <div v-if="selectedOrder.deliveryInfo" class="order-section">
+          <h4>定时达配送信息</h4>
+          <p><strong>学校:</strong> {{ selectedOrder.deliveryInfo.school }}</p>
+          <p><strong>地址:</strong> {{ selectedOrder.deliveryInfo.address }}</p>
+          <p><strong>时间:</strong> {{ selectedOrder.deliveryInfo.time }}</p>
+        </div>
+
+        <!-- Order Items -->
+        <div class="order-section">
+          <h4>商品列表</h4>
+          <ul>
+            <li v-for="(item, index) in selectedOrder.items" :key="index" class="order-item">
+              <p><strong>商品名称:</strong> {{ item.name }}</p>
+              <p><strong>价格:</strong> {{ item.price }}元</p>
+              <p><strong>选项:</strong></p>
+              <ul>
+                <li v-for="(optionValue, optionKey) in item.optionValues" :key="optionKey">
+                  {{ optionKey }}: {{ optionValue.value }} (调整价: {{ optionValue.priceAdjustment }}元)
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <template #footer>
+        <el-button @click="orderDetailsDialogVisible = false">关闭</el-button>
+      </template>
+    </el-dialog>  
+
+
 
     <!-- Refund Confirmation Dialog -->
     <el-dialog title="确认退款" v-model="refundDialogVisible">
@@ -795,4 +870,41 @@ const confirmRefund = async () => {
 .option-group {
   margin-bottom: 10px;
 }
+
+.order-details {
+  font-size: 14px;
+}
+
+.order-section {
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  background-color: #f5f7fa;
+  border: 1px solid #ebeef5;
+}
+
+.order-section h4 {
+  font-size: 16px;
+  color: #409EFF;
+  margin-bottom: 10px;
+}
+
+.order-item {
+  padding: 10px;
+  border-bottom: 1px solid #ebeef5;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.order-item p {
+  margin: 5px 0;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
 </style>

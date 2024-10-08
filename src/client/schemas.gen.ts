@@ -60,14 +60,17 @@ export const ProductCateSchema = {
         },
         status: {
             type: 'integer',
+            description: 'status=0为下架，前端不显示',
             format: 'int32'
         },
         priority: {
             type: 'integer',
+            description: '优先级，便于设置显示顺序，已自动排序',
             format: 'int32'
         },
         delete: {
             type: 'integer',
+            description: '对于delete=1的，后端不返回',
             format: 'int32'
         }
     }
@@ -81,13 +84,16 @@ export const OptionValueSchema = {
             type: 'string'
         },
         value: {
-            type: 'string'
+            type: 'string',
+            description: '加购商品的可选项的可选值，如对于"规格"，value可以为"中杯"'
         },
         priceAdjustment: {
             type: 'integer',
+            description: '该可选项的价格调整，>=0',
             format: 'int32'
         }
-    }
+    },
+    description: '加购商品的可选项, key=ProductOption.id'
 } as const;
 
 export const ProductSchema = {
@@ -107,30 +113,37 @@ export const ProductSchema = {
         },
         price: {
             type: 'integer',
+            description: '基础价格',
             format: 'int32'
         },
         describe: {
-            type: 'string'
+            type: 'string',
+            description: '详情页描述'
         },
         short_desc: {
-            type: 'string'
+            type: 'string',
+            description: '菜单列表中，name下面展示的简介'
         },
         status: {
             type: 'integer',
+            description: 'status=0为下架，前端过滤不显示',
             format: 'int32'
         },
         delete: {
             type: 'integer',
+            description: '对于delete=1的，后端不返回',
             format: 'int32'
         },
         productOptions: {
             type: 'object',
             additionalProperties: {
                 type: 'array',
+                description: '加购商品的可选项, key=ProductOption.id',
                 items: {
                     '$ref': '#/components/schemas/OptionValue'
                 }
-            }
+            },
+            description: '加购商品的可选项, key=ProductOption.id'
         }
     }
 } as const;
@@ -142,10 +155,12 @@ export const ProductOptionSchema = {
             '$ref': '#/components/schemas/ObjectId'
         },
         name: {
-            type: 'string'
+            type: 'string',
+            description: '商品的可选项名称，如"规格"'
         },
         values: {
             type: 'array',
+            description: '对于一个可选项，所有的可能选值，商铺管理用',
             items: {
                 '$ref': '#/components/schemas/OptionValue'
             }
@@ -160,16 +175,23 @@ export const FixDeliveryInfoSchema = {
             '$ref': '#/components/schemas/ObjectId'
         },
         school: {
-            type: 'string'
-        },
-        time: {
             type: 'string',
-            format: 'date-time'
+            description: '对应User学生认证后的学校'
         },
-        address: {
+        times: {
             type: 'array',
+            description: '可选时间',
             items: {
-                type: 'string'
+                type: 'string',
+                description: '可选时间'
+            }
+        },
+        addresses: {
+            type: 'array',
+            description: '可选地址',
+            items: {
+                type: 'string',
+                description: '可选地址'
             }
         }
     }
@@ -182,13 +204,16 @@ export const ActivitySchema = {
             '$ref': '#/components/schemas/ObjectId'
         },
         title: {
-            type: 'string'
+            type: 'string',
+            description: '活动名'
         },
         imgURL: {
-            type: 'string'
+            type: 'string',
+            description: '活动图片'
         },
         describe: {
-            type: 'string'
+            type: 'string',
+            description: '活动介绍'
         }
     }
 } as const;
@@ -234,14 +259,16 @@ export const DeliveryInfoSchema = {
             type: 'string'
         },
         address: {
-            type: 'string'
+            type: 'string',
+            description: '绑定到具体订单实例的已选地址'
         },
         time: {
             type: 'string',
+            description: '绑定到具体订单实例的已选时间',
             format: 'date-time'
         }
     },
-    description: '定时达配送信息，暂不用填'
+    description: '定时达配送信息'
 } as const;
 
 export const OrderSchema = {
@@ -254,14 +281,16 @@ export const OrderSchema = {
             '$ref': '#/components/schemas/ObjectId'
         },
         state: {
-            type: 'string'
+            type: 'string',
+            description: '自动填充状态'
         },
         customerType: {
             type: 'string',
-            description: '如"未认证为学生身份的用户业务"'
+            description: '顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"'
         },
         scene: {
-            type: 'string'
+            type: 'string',
+            description: '场景，可选："堂食"，"外带"，"定时达"'
         },
         deliveryInfo: {
             '$ref': '#/components/schemas/DeliveryInfo'
@@ -276,6 +305,7 @@ export const OrderSchema = {
         },
         orderNum: {
             type: 'integer',
+            description: '自动填充订单号',
             format: 'int32'
         },
         remark: {
@@ -283,11 +313,12 @@ export const OrderSchema = {
             description: '顾客备注'
         },
         merchantNote: {
-            type: 'string'
+            type: 'string',
+            description: '商家备注'
         },
         totalPrice: {
             type: 'integer',
-            description: '前端先计算一个，后端会check',
+            description: '前端先计算一个，根据sum(OrderItem.price)-优惠券，后端会check',
             format: 'int32'
         },
         createdAt: {
@@ -309,13 +340,16 @@ export const OrderItemSchema = {
             type: 'object',
             additionalProperties: {
                 '$ref': '#/components/schemas/OptionValue'
-            }
+            },
+            description: '商品选项，key为ProductOption.id, value为一个完整的OptionValue'
         },
         name: {
-            type: 'string'
+            type: 'string',
+            description: 'Product.name'
         },
         price: {
             type: 'integer',
+            description: '根据Product.price和目前optionValues中OptionValue.priceAdjustment计算的价格',
             format: 'int32'
         }
     },

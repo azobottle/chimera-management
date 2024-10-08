@@ -20,14 +20,32 @@ export type User = {
 export type ProductCate = {
     id?: ObjectId;
     title?: string;
+    /**
+     * status=0为下架，前端不显示
+     */
     status?: number;
+    /**
+     * 优先级，便于设置显示顺序，已自动排序
+     */
     priority?: number;
+    /**
+     * 对于delete=1的，后端不返回
+     */
     delete?: number;
 };
 
+/**
+ * 加购商品的可选项, key=ProductOption.id
+ */
 export type OptionValue = {
     uuid: string;
+    /**
+     * 加购商品的可选项的可选值，如对于"规格"，value可以为"中杯"
+     */
     value?: string;
+    /**
+     * 该可选项的价格调整，>=0
+     */
     priceAdjustment?: number;
 };
 
@@ -36,11 +54,29 @@ export type Product = {
     cateId?: ObjectId;
     name?: string;
     imgURL?: string;
+    /**
+     * 基础价格
+     */
     price?: number;
+    /**
+     * 详情页描述
+     */
     describe?: string;
+    /**
+     * 菜单列表中，name下面展示的简介
+     */
     short_desc?: string;
+    /**
+     * status=0为下架，前端过滤不显示
+     */
     status?: number;
+    /**
+     * 对于delete=1的，后端不返回
+     */
     delete?: number;
+    /**
+     * 加购商品的可选项, key=ProductOption.id
+     */
     productOptions?: {
         [key: string]: Array<OptionValue>;
     };
@@ -48,21 +84,45 @@ export type Product = {
 
 export type ProductOption = {
     id?: ObjectId;
+    /**
+     * 商品的可选项名称，如"规格"
+     */
     name?: string;
+    /**
+     * 对于一个可选项，所有的可能选值，商铺管理用
+     */
     values?: Array<OptionValue>;
 };
 
 export type FixDeliveryInfo = {
     id?: ObjectId;
+    /**
+     * 对应User学生认证后的学校
+     */
     school?: string;
-    time?: string;
-    address?: Array<(string)>;
+    /**
+     * 可选时间
+     */
+    times?: Array<(string)>;
+    /**
+     * 可选地址
+     */
+    addresses?: Array<(string)>;
 };
 
 export type Activity = {
     id?: ObjectId;
+    /**
+     * 活动名
+     */
     title?: string;
+    /**
+     * 活动图片
+     */
     imgURL?: string;
+    /**
+     * 活动介绍
+     */
     describe?: string;
 };
 
@@ -76,11 +136,17 @@ export type ProcessorMap = {
 };
 
 /**
- * 定时达配送信息，暂不用填
+ * 定时达配送信息
  */
 export type DeliveryInfo = {
     school?: string;
+    /**
+     * 绑定到具体订单实例的已选地址
+     */
     address?: string;
+    /**
+     * 绑定到具体订单实例的已选时间
+     */
     time?: string;
 };
 
@@ -90,25 +156,37 @@ export type DeliveryInfo = {
 export type Order = {
     id?: ObjectId;
     userId?: ObjectId;
+    /**
+     * 自动填充状态
+     */
     state?: string;
     /**
-     * 如"未认证为学生身份的用户业务"
+     * 顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"
      */
     customerType?: string;
+    /**
+     * 场景，可选："堂食"，"外带"，"定时达"
+     */
     scene?: string;
     deliveryInfo?: DeliveryInfo;
     /**
      * 订单所含商品列表
      */
     items?: Array<OrderItem>;
+    /**
+     * 自动填充订单号
+     */
     orderNum?: number;
     /**
      * 顾客备注
      */
     remark?: string;
+    /**
+     * 商家备注
+     */
     merchantNote?: string;
     /**
-     * 前端先计算一个，后端会check
+     * 前端先计算一个，根据sum(OrderItem.price)-优惠券，后端会check
      */
     totalPrice?: number;
     /**
@@ -122,10 +200,19 @@ export type Order = {
  */
 export type OrderItem = {
     productId?: ObjectId;
+    /**
+     * 商品选项，key为ProductOption.id, value为一个完整的OptionValue
+     */
     optionValues?: {
         [key: string]: OptionValue;
     };
+    /**
+     * Product.name
+     */
     name?: string;
+    /**
+     * 根据Product.price和目前optionValues中OptionValue.priceAdjustment计算的价格
+     */
     price?: number;
 };
 
@@ -384,7 +471,16 @@ export type ExistsByCateIdResponse = (boolean);
 
 export type ExistsByCateIdError = unknown;
 
-export type GetAllOrdersResponse = (Array<Order>);
+export type GetAllOrdersData = {
+    query: {
+        endTime: string;
+        startTime: string;
+    };
+};
+
+export type GetAllOrdersResponse = ({
+    [key: string]: unknown;
+});
 
 export type GetAllOrdersError = unknown;
 
