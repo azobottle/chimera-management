@@ -45,7 +45,7 @@ const stateOptions = [
   { label: '已支付', value: '已支付' },
   { label: '待出餐', value: '待出餐' },
   { label: '正常结束', value: '正常结束' },
-  { label: '异常结束', value: '异常结束' },
+  { label: '已退款', value: '已退款' },
 ];
 
 const customerTypeOptions = [
@@ -416,12 +416,6 @@ const submitNewOrder = async () => {
     customerType: '未认证为学生身份的用户业务',
     items: newOrderForm.value.products.map((product) => {
       const selectedOptions: Record<string, string> = {};
-      // for (const key in product.selectedOptions) {
-      //   if (product.selectedOptions.hasOwnProperty(key)) {
-      //     selectedOptions[key] = product.selectedOptions[key] as string;
-      //   }
-      // }
-
       for (const [name, uuid] of Object.entries(product.selectedOptions)) {
         for (const [optionId, option] of productOptions.value) {
           if (option.name === name) {
@@ -439,9 +433,45 @@ const submitNewOrder = async () => {
     }),
   };
 
-  // 替换 optionValues 中的 uuid 为 OptionValue 对象
+  // // 替换 optionValues 中的 uuid 为 OptionValue 对象
+  // for (const item of orderData.items || []) {
+  //   const optionValuesWithDetails: Record<string, OptionValue> = {};
+  //   for (const optionKey in item.optionValues) {
+  //     if (item.optionValues.hasOwnProperty(optionKey)) {
+  //       const uuid = item.optionValues[optionKey];
+  //       // 在 productOptions 中找到对应的 OptionValue 对象
+  //       for (const [optionId, option] of productOptions.value) {
+  //         const optionValue = option.values.find((v) => v.uuid === uuid);
+  //         if (optionValue) {
+  //           optionValuesWithDetails[optionKey] = optionValue;
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   }
+  //   // 将 optionValues 替换为完整的 OptionValue 对象
+  //   item.optionValues = optionValuesWithDetails;
+  // }
+
+  // 替换 optionValues 中的 uuid 为 OptionValue 对象，并计算价格
+  let totalOrderPrice = 0; // Initialize total order price
+
   for (const item of orderData.items || []) {
     const optionValuesWithDetails: Record<string, OptionValue> = {};
+    let totalAdjustments = 0; // Initialize total adjustments for this item
+
+    // Find the corresponding Product
+    const product = productOptionsList.value.find(
+      (p) => p.id === item.productId
+    );
+
+    if (!product) {
+      ElMessage.error(`未找到商品 ${item.productId}`);
+      return;
+    }
+
+    const basePrice = product.price || 0; // Get the base price of the product
+
     for (const optionKey in item.optionValues) {
       if (item.optionValues.hasOwnProperty(optionKey)) {
         const uuid = item.optionValues[optionKey];
@@ -450,14 +480,25 @@ const submitNewOrder = async () => {
           const optionValue = option.values.find((v) => v.uuid === uuid);
           if (optionValue) {
             optionValuesWithDetails[optionKey] = optionValue;
+            totalAdjustments += optionValue.priceAdjustment || 0; // Add price adjustment
             break;
           }
         }
       }
     }
+
     // 将 optionValues 替换为完整的 OptionValue 对象
     item.optionValues = optionValuesWithDetails;
+
+    // Calculate the price for this item
+    item.price = basePrice + totalAdjustments;
+
+    // Add to total order price
+    totalOrderPrice += item.price;
   }
+
+  // Set the total price for the order
+  orderData.totalPrice = totalOrderPrice;
 
   try {
     await createOrderInStore({
