@@ -7,14 +7,34 @@ export type User = {
     openid?: string;
     sessionKey?: string;
     name?: string;
-    hashedPassword?: string;
+    /**
+     * 学生认证结果
+     */
     school?: string;
+    /**
+     * 学生认证后设为True
+     */
+    studentCert?: boolean;
+    /**
+     * 总消费金额
+     */
+    expend?: number;
+    /**
+     * 下单次数
+     */
+    orderNum?: number;
+    /**
+     * 持有积分
+     */
+    points?: number;
+    /**
+     * 用户持有的优惠券，对应Coupon.id
+     */
+    coupons?: Array<(string)>;
+    createdAt?: string;
+    hashedPassword?: string;
     role?: string;
     jwt?: string;
-    expend?: number;
-    orderNum?: number;
-    address?: string;
-    createdAt?: string;
 };
 
 export type ProductCate = {
@@ -58,6 +78,10 @@ export type Product = {
      * 基础价格
      */
     price?: number;
+    /**
+     * 学生优惠价。若用户为已认证学生，展示基础价格，然后划掉，再展示学生优惠价。若未认证则正常展示基础价格。
+     */
+    stuPrice?: number;
     /**
      * 详情页描述
      */
@@ -110,6 +134,47 @@ export type FixDeliveryInfo = {
     addresses?: Array<(string)>;
 };
 
+export type Coupon = {
+    id?: ObjectId;
+    cateId?: ObjectId;
+    /**
+     * 名称
+     */
+    name?: number;
+    /**
+     * 抵扣金额
+     */
+    dePrice?: number;
+    /**
+     * 0：下线，1：上线。对于status=0的，不再允许发放、兑换
+     */
+    status?: number;
+    /**
+     * 消耗积分
+     */
+    costPoints?: number;
+    /**
+     * 是否可用积分兑换
+     */
+    convertible?: boolean;
+    /**
+     * 截至有效期
+     */
+    validity?: string;
+    /**
+     * 发放数量
+     */
+    issueNum?: number;
+    /**
+     * 领取、积分兑换数量
+     */
+    receiveNum?: number;
+    /**
+     * 使用数量
+     */
+    useNum?: number;
+};
+
 export type Activity = {
     id?: ObjectId;
     /**
@@ -117,13 +182,37 @@ export type Activity = {
      */
     title?: string;
     /**
-     * 活动图片
+     * 活动图片URL
      */
     imgURL?: string;
     /**
      * 活动介绍
      */
     describe?: string;
+    /**
+     * 活动开始时间
+     */
+    startTime?: string;
+    /**
+     * 活动结束时间
+     */
+    endTime?: string;
+    /**
+     * 活动优惠抵扣价格
+     */
+    dePrice?: number;
+    /**
+     * 适用商品类，对应ProductCate.id
+     */
+    cateIds?: Array<(string)>;
+    /**
+     * 0为下架，1为上架。=0时小程序不展示
+     */
+    status?: number;
+    /**
+     * 伪删除，=1时后端不返回
+     */
+    delete?: number;
 };
 
 export type ProcessorMap = {
@@ -155,7 +244,7 @@ export type DeliveryInfo = {
  */
 export type Order = {
     id?: ObjectId;
-    userId?: ObjectId;
+    userId: ObjectId;
     /**
      * 自动填充状态
      */
@@ -163,16 +252,16 @@ export type Order = {
     /**
      * 顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"
      */
-    customerType?: string;
+    customerType: string;
     /**
      * 场景，可选："堂食"，"外带"，"定时达"
      */
-    scene?: string;
+    scene: string;
     deliveryInfo?: DeliveryInfo;
     /**
      * 订单所含商品列表
      */
-    items?: Array<OrderItem>;
+    items: Array<OrderItem>;
     /**
      * 自动填充订单号
      */
@@ -188,7 +277,7 @@ export type Order = {
     /**
      * 前端先计算一个，根据sum(OrderItem.price)-优惠券，后端会check
      */
-    totalPrice?: number;
+    totalPrice: number;
     /**
      * 自动填充创建时间
      */
@@ -216,9 +305,8 @@ export type OrderItem = {
     price?: number;
 };
 
-export type JSONObject = {
-    empty?: boolean;
-    [key: string]: (unknown | boolean) | undefined;
+export type PrePaidDTO = {
+    prepay_id?: string;
 };
 
 export type ServiceResultObjectObject = {
@@ -350,6 +438,26 @@ export type CreateFixDeliveryInfoResponse = (FixDeliveryInfo);
 
 export type CreateFixDeliveryInfoError = unknown;
 
+export type GetAllCouponsResponse = (Array<Coupon>);
+
+export type GetAllCouponsError = unknown;
+
+export type UpdateCouponData = {
+    body: Coupon;
+};
+
+export type UpdateCouponResponse = (Coupon);
+
+export type UpdateCouponError = unknown;
+
+export type CreateCouponData = {
+    body: Coupon;
+};
+
+export type CreateCouponResponse = (Coupon);
+
+export type CreateCouponError = unknown;
+
 export type GetAllActivitiesResponse = (Array<Activity>);
 
 export type GetAllActivitiesError = unknown;
@@ -362,16 +470,13 @@ export type UpdateActivityResponse = (Activity);
 
 export type UpdateActivityError = unknown;
 
-export type CreateActivityData = {
-    body?: {
-        activity: Activity;
-        image: (Blob | File);
-    };
+export type CreateEntityData = {
+    body: Activity;
 };
 
-export type CreateActivityResponse = (Activity);
+export type CreateEntityResponse = (Activity);
 
-export type CreateActivityError = unknown;
+export type CreateEntityError = unknown;
 
 export type UploadImageData = {
     body?: {
@@ -407,7 +512,7 @@ export type CreateData = {
     body: Order;
 };
 
-export type CreateResponse = (JSONObject);
+export type CreateResponse = (PrePaidDTO);
 
 export type CreateError = unknown;
 
@@ -435,14 +540,6 @@ export type CreateOrderInStoreResponse = (ServiceResultObjectObject);
 
 export type CreateOrderInStoreError = unknown;
 
-export type AfterSaleData = {
-    body: Order;
-};
-
-export type AfterSaleResponse = (ServiceResultObjectObject);
-
-export type AfterSaleError = unknown;
-
 export type LoginData = {
     body: LoginDTO;
 };
@@ -450,6 +547,16 @@ export type LoginData = {
 export type LoginResponse = (ResponseBodyDTOUserDTO);
 
 export type LoginError = unknown;
+
+export type UploadImage1Data = {
+    body?: {
+        image: (Blob | File);
+    };
+};
+
+export type UploadImage1Response = (string);
+
+export type UploadImage1Error = unknown;
 
 export type GetUserByNameData = {
     path: {
@@ -488,6 +595,9 @@ export type GetOrdersByUserIdData = {
     path: {
         userId: string;
     };
+    query?: {
+        all?: boolean;
+    };
 };
 
 export type GetOrdersByUserIdResponse = (Array<Order>);
@@ -517,3 +627,13 @@ export type DeleteFixDeliveryInfoData = {
 export type DeleteFixDeliveryInfoResponse = (unknown);
 
 export type DeleteFixDeliveryInfoError = unknown;
+
+export type DeleteCouponData = {
+    path: {
+        id: string;
+    };
+};
+
+export type DeleteCouponResponse = (unknown);
+
+export type DeleteCouponError = unknown;

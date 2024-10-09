@@ -19,10 +19,42 @@ export const UserSchema = {
         name: {
             type: 'string'
         },
-        hashedPassword: {
-            type: 'string'
-        },
         school: {
+            type: 'string',
+            description: '学生认证结果'
+        },
+        studentCert: {
+            type: 'boolean',
+            description: '学生认证后设为True'
+        },
+        expend: {
+            type: 'number',
+            description: '总消费金额',
+            format: 'double'
+        },
+        orderNum: {
+            type: 'integer',
+            description: '下单次数',
+            format: 'int32'
+        },
+        points: {
+            type: 'integer',
+            description: '持有积分',
+            format: 'int32'
+        },
+        coupons: {
+            type: 'array',
+            description: '用户持有的优惠券，对应Coupon.id',
+            items: {
+                type: 'string',
+                description: '用户持有的优惠券，对应Coupon.id'
+            }
+        },
+        createdAt: {
+            type: 'string',
+            format: 'date-time'
+        },
+        hashedPassword: {
             type: 'string'
         },
         role: {
@@ -30,21 +62,6 @@ export const UserSchema = {
         },
         jwt: {
             type: 'string'
-        },
-        expend: {
-            type: 'number',
-            format: 'double'
-        },
-        orderNum: {
-            type: 'integer',
-            format: 'int32'
-        },
-        address: {
-            type: 'string'
-        },
-        createdAt: {
-            type: 'string',
-            format: 'date-time'
         }
     }
 } as const;
@@ -114,6 +131,11 @@ export const ProductSchema = {
         price: {
             type: 'integer',
             description: '基础价格',
+            format: 'int32'
+        },
+        stuPrice: {
+            type: 'integer',
+            description: '学生优惠价。若用户为已认证学生，展示基础价格，然后划掉，再展示学生优惠价。若未认证则正常展示基础价格。',
             format: 'int32'
         },
         describe: {
@@ -197,6 +219,62 @@ export const FixDeliveryInfoSchema = {
     }
 } as const;
 
+export const CouponSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            '$ref': '#/components/schemas/ObjectId'
+        },
+        cateId: {
+            '$ref': '#/components/schemas/ObjectId'
+        },
+        name: {
+            type: 'integer',
+            description: '名称',
+            format: 'int32'
+        },
+        dePrice: {
+            type: 'integer',
+            description: '抵扣金额',
+            format: 'int32'
+        },
+        status: {
+            type: 'integer',
+            description: '0：下线，1：上线。对于status=0的，不再允许发放、兑换',
+            format: 'int32'
+        },
+        costPoints: {
+            type: 'integer',
+            description: '消耗积分',
+            format: 'int32'
+        },
+        convertible: {
+            type: 'boolean',
+            description: '是否可用积分兑换'
+        },
+        validity: {
+            type: 'string',
+            description: '截至有效期',
+            format: 'date-time'
+        },
+        issueNum: {
+            type: 'integer',
+            description: '发放数量',
+            format: 'int32'
+        },
+        receiveNum: {
+            type: 'integer',
+            description: '领取、积分兑换数量',
+            format: 'int32'
+        },
+        useNum: {
+            type: 'integer',
+            description: '使用数量',
+            format: 'int32'
+        }
+    }
+} as const;
+
 export const ActivitySchema = {
     type: 'object',
     properties: {
@@ -209,11 +287,44 @@ export const ActivitySchema = {
         },
         imgURL: {
             type: 'string',
-            description: '活动图片'
+            description: '活动图片URL'
         },
         describe: {
             type: 'string',
             description: '活动介绍'
+        },
+        startTime: {
+            type: 'string',
+            description: '活动开始时间',
+            format: 'date-time'
+        },
+        endTime: {
+            type: 'string',
+            description: '活动结束时间',
+            format: 'date-time'
+        },
+        dePrice: {
+            type: 'integer',
+            description: '活动优惠抵扣价格',
+            format: 'int32'
+        },
+        cateIds: {
+            type: 'array',
+            description: '适用商品类，对应ProductCate.id',
+            items: {
+                type: 'string',
+                description: '适用商品类，对应ProductCate.id'
+            }
+        },
+        status: {
+            type: 'integer',
+            description: '0为下架，1为上架。=0时小程序不展示',
+            format: 'int32'
+        },
+        delete: {
+            type: 'integer',
+            description: '伪删除，=1时后端不返回',
+            format: 'int32'
         }
     }
 } as const;
@@ -272,6 +383,7 @@ export const DeliveryInfoSchema = {
 } as const;
 
 export const OrderSchema = {
+    required: ['customerType', 'items', 'scene', 'totalPrice', 'userId'],
     type: 'object',
     properties: {
         id: {
@@ -356,15 +468,12 @@ export const OrderItemSchema = {
     description: '订单其中的一个商品'
 } as const;
 
-export const JSONObjectSchema = {
+export const PrePaidDTOSchema = {
     type: 'object',
     properties: {
-        empty: {
-            type: 'boolean'
+        prepay_id: {
+            type: 'string'
         }
-    },
-    additionalProperties: {
-        type: 'object'
     }
 } as const;
 
