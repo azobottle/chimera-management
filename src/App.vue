@@ -11,6 +11,11 @@
         class="custom-menu"
       >
         <!-- 一级菜单项：经营统计 -->
+        <el-menu-item index="/login">
+          <i class="el-icon-menu"></i>
+          <span>登录</span>
+        </el-menu-item>
+
         <el-menu-item index="/stats">
           <i class="el-icon-menu"></i>
           <span>经营统计</span>
@@ -37,7 +42,6 @@
           </template>
           <el-menu-item-group>
             <el-menu-item index="/order">订单列表</el-menu-item>
-            <el-menu-item index="/orderRefund">退款订单</el-menu-item>
             <el-menu-item index="/orderPrint">打印设置</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
@@ -50,7 +54,7 @@
           </template>
           <el-menu-item-group>
             <el-menu-item index="/user">用户列表</el-menu-item>
-            <el-menu-item index="/userAddress">定时达地址</el-menu-item>
+            <el-menu-item index="/userAddress">定时达信息</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
 
@@ -61,13 +65,11 @@
             <span>优惠活动</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="/coupons">优惠券</el-menu-item>
+            <el-menu-item index="/coupon">优惠券</el-menu-item>
+            <el-menu-item index="/pointMall">积分商城</el-menu-item>
+            <el-menu-item index="/activity">活动管理</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
-        <el-menu-item index="/login">
-          <i class="el-icon-menu"></i>
-          <span>登录</span>
-        </el-menu-item>
       </el-menu>
     </el-aside>
 
