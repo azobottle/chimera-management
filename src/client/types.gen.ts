@@ -258,6 +258,52 @@ export type DeliveryInfo = {
     time?: string;
 };
 
+export type OrderApiParams = {
+    userId: ObjectId;
+    /**
+     * 顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"
+     */
+    customerType: string;
+    /**
+     * 场景，可选："堂食"，"外带"，"定时达"
+     */
+    scene: string;
+    deliveryInfo?: DeliveryInfo;
+    /**
+     * 订单所含商品列表
+     */
+    items: Array<OrderItemApiParams>;
+    /**
+     * 顾客备注
+     */
+    remark?: string;
+    /**
+     * 商家备注
+     */
+    merchantNote?: string;
+    /**
+     * 本订单使用的优惠券uuid，可为空
+     */
+    couponInsUUID?: string;
+};
+
+/**
+ * 订单其中的一个商品
+ */
+export type OrderItemApiParams = {
+    productId: ObjectId;
+    /**
+     * 商品选项，key为ProductOption.id, value为OptionValue.uuid
+     */
+    optionValues?: {
+        [key: string]: (string);
+    };
+};
+
+export type PrePaidDTO = {
+    prepay_id?: string;
+};
+
 /**
  * 就是订单呀
  */
@@ -294,7 +340,7 @@ export type Order = {
      */
     merchantNote?: string;
     /**
-     * 前端先计算一个，根据sum(OrderItem.price)-coupon.dePrice，后端会check。单位为分。
+     * 后端根据sum(OrderItem.price)-coupon.dePrice计算，单位为分。
      */
     totalPrice: number;
     coupon?: CouponIns;
@@ -327,10 +373,6 @@ export type OrderItem = {
      * Product.imgURL
      */
     imgURL?: string;
-};
-
-export type PrePaidDTO = {
-    prepay_id?: string;
 };
 
 export type ServiceResultObjectObject = {
@@ -533,7 +575,7 @@ export type CallbackResponse = (string);
 export type CallbackError = unknown;
 
 export type CreateData = {
-    body: Order;
+    body: OrderApiParams;
 };
 
 export type CreateResponse = (PrePaidDTO);
@@ -557,7 +599,7 @@ export type RefundOrderResponse = (ServiceResultObjectObject);
 export type RefundOrderError = unknown;
 
 export type CreateOrderInStoreData = {
-    body: Order;
+    body: OrderApiParams;
 };
 
 export type CreateOrderInStoreResponse = (ServiceResultObjectObject);

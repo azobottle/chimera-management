@@ -406,6 +406,75 @@ export const DeliveryInfoSchema = {
     description: '定时达配送信息'
 } as const;
 
+export const OrderApiParamsSchema = {
+    required: ['customerType', 'items', 'scene', 'userId'],
+    type: 'object',
+    properties: {
+        userId: {
+            '$ref': '#/components/schemas/ObjectId'
+        },
+        customerType: {
+            type: 'string',
+            description: '顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"'
+        },
+        scene: {
+            type: 'string',
+            description: '场景，可选："堂食"，"外带"，"定时达"'
+        },
+        deliveryInfo: {
+            '$ref': '#/components/schemas/DeliveryInfo'
+        },
+        items: {
+            type: 'array',
+            description: '订单所含商品列表',
+            example: '[example1,example2...]',
+            items: {
+                '$ref': '#/components/schemas/OrderItemApiParams'
+            }
+        },
+        remark: {
+            type: 'string',
+            description: '顾客备注'
+        },
+        merchantNote: {
+            type: 'string',
+            description: '商家备注'
+        },
+        couponInsUUID: {
+            type: 'string',
+            description: '本订单使用的优惠券uuid，可为空'
+        }
+    }
+} as const;
+
+export const OrderItemApiParamsSchema = {
+    required: ['productId'],
+    type: 'object',
+    properties: {
+        productId: {
+            '$ref': '#/components/schemas/ObjectId'
+        },
+        optionValues: {
+            type: 'object',
+            additionalProperties: {
+                type: 'string',
+                description: '商品选项，key为ProductOption.id, value为OptionValue.uuid'
+            },
+            description: '商品选项，key为ProductOption.id, value为OptionValue.uuid'
+        }
+    },
+    description: '订单其中的一个商品'
+} as const;
+
+export const PrePaidDTOSchema = {
+    type: 'object',
+    properties: {
+        prepay_id: {
+            type: 'string'
+        }
+    }
+} as const;
+
 export const OrderSchema = {
     required: ['customerType', 'items', 'scene', 'totalPrice', 'userId'],
     type: 'object',
@@ -454,7 +523,7 @@ export const OrderSchema = {
         },
         totalPrice: {
             type: 'integer',
-            description: '前端先计算一个，根据sum(OrderItem.price)-coupon.dePrice，后端会check。单位为分。',
+            description: '后端根据sum(OrderItem.price)-coupon.dePrice计算，单位为分。',
             format: 'int32'
         },
         coupon: {
@@ -497,15 +566,6 @@ export const OrderItemSchema = {
         }
     },
     description: '订单其中的一个商品'
-} as const;
-
-export const PrePaidDTOSchema = {
-    type: 'object',
-    properties: {
-        prepay_id: {
-            type: 'string'
-        }
-    }
 } as const;
 
 export const ServiceResultObjectObjectSchema = {

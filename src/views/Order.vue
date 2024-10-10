@@ -8,7 +8,7 @@ import {
   supplyOrder,
   refundOrder,
 } from '../client/services.gen';
-import type { Order, Product, OptionValue, ProductOption } from '../client/types.gen';
+import type { Order, Product, OptionValue, ProductOption, OrderApiParams } from '../client/types.gen';
 import {
   ElMessage,
   ElTable,
@@ -413,7 +413,7 @@ const submitNewOrder = async () => {
   }
 
   // 构建符合 Order 类型的订单数据
-  const orderData: Order = {
+  const orderData: OrderApiParams = {
     userId: '66f157e249b56d25d48bf329', // 设置固定的用户ID
     scene: newOrderForm.value.scene,
     customerType: '未认证为学生身份的用户业务',
@@ -429,10 +429,8 @@ const submitNewOrder = async () => {
       }
 
       return {
-        productId: product.productId,
+        productId: product.productId as string,
         optionValues: selectedOptions,
-        name: product.name, // 添加 name 字段
-        imgURL: product.imgURL, // 添加 name 字段
       };
     }),
   };
@@ -457,52 +455,6 @@ const submitNewOrder = async () => {
   //   item.optionValues = optionValuesWithDetails;
   // }
 
-  // 替换 optionValues 中的 uuid 为 OptionValue 对象，并计算价格
-  let totalOrderPrice = 0; // Initialize total order price
-
-  for (const item of orderData.items || []) {
-    const optionValuesWithDetails: Record<string, OptionValue> = {};
-    let totalAdjustments = 0; // Initialize total adjustments for this item
-
-    // Find the corresponding Product
-    const product = productOptionsList.value.find(
-      (p) => p.id === item.productId
-    );
-
-    if (!product) {
-      ElMessage.error(`未找到商品 ${item.productId}`);
-      return;
-    }
-
-    const basePrice = product.price || 0; // Get the base price of the product
-
-    for (const optionKey in item.optionValues) {
-      if (item.optionValues.hasOwnProperty(optionKey)) {
-        const uuid = item.optionValues[optionKey];
-        // 在 productOptions 中找到对应的 OptionValue 对象
-        for (const [optionId, option] of productOptions.value) {
-          const optionValue = option.values.find((v) => v.uuid === uuid);
-          if (optionValue) {
-            optionValuesWithDetails[optionKey] = optionValue;
-            totalAdjustments += optionValue.priceAdjustment || 0; // Add price adjustment
-            break;
-          }
-        }
-      }
-    }
-
-    // 将 optionValues 替换为完整的 OptionValue 对象
-    item.optionValues = optionValuesWithDetails;
-
-    // Calculate the price for this item
-    item.price = basePrice + totalAdjustments;
-
-    // Add to total order price
-    totalOrderPrice += item.price;
-  }
-
-  // Set the total price for the order
-  orderData.totalPrice = totalOrderPrice;
 
   console.log(orderData)
 
