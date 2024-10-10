@@ -22,7 +22,7 @@ export const CouponInsSchema = {
         },
         dePrice: {
             type: 'integer',
-            description: '抵扣金额，与对应Coupon.dePrice对应',
+            description: '抵扣金额，与对应Coupon.dePrice对应。单位为分',
             format: 'int32'
         }
     },
@@ -130,7 +130,7 @@ export const OptionValueSchema = {
         },
         priceAdjustment: {
             type: 'integer',
-            description: '该可选项的价格调整，>=0',
+            description: '该可选项的价格调整，>=0。单位也为分。',
             format: 'int32'
         }
     },
@@ -154,12 +154,12 @@ export const ProductSchema = {
         },
         price: {
             type: 'integer',
-            description: '基础价格',
+            description: '基础价格，单位为分',
             format: 'int32'
         },
         stuPrice: {
             type: 'integer',
-            description: '学生优惠价。若用户为已认证学生，展示基础价格，然后划掉，再展示学生优惠价。若未认证则正常展示基础价格。',
+            description: '学生优惠价。若用户为已认证学生，展示基础价格，然后划掉，再展示学生优惠价。若未认证则正常展示基础价格。单位为分。',
             format: 'int32'
         },
         describe: {
@@ -259,7 +259,7 @@ export const CouponSchema = {
         },
         dePrice: {
             type: 'integer',
-            description: '抵扣金额',
+            description: '抵扣金额。单位为分。',
             format: 'int32'
         },
         status: {
@@ -329,7 +329,7 @@ export const ActivitySchema = {
         },
         dePrice: {
             type: 'integer',
-            description: '活动优惠抵扣价格，对于cateIds对应类的所有商品，减去这个价格。',
+            description: '活动优惠抵扣价格，对于cateIds对应类的所有商品，减去这个价格。单位为分。',
             format: 'int32'
         },
         cateIds: {
@@ -454,7 +454,7 @@ export const OrderSchema = {
         },
         totalPrice: {
             type: 'integer',
-            description: '前端先计算一个，根据sum(OrderItem.price)-coupon.dePrice，后端会check',
+            description: '前端先计算一个，根据sum(OrderItem.price)-coupon.dePrice，后端会check。单位为分。',
             format: 'int32'
         },
         coupon: {
@@ -488,8 +488,12 @@ export const OrderItemSchema = {
         },
         price: {
             type: 'integer',
-            description: '根据Product.price和目前optionValues中OptionValue.priceAdjustment计算的价格',
+            description: '根据Product.price和目前optionValues中OptionValue.priceAdjustment计算的价格。单位为分',
             format: 'int32'
+        },
+        imgURL: {
+            type: 'string',
+            description: 'Product.imgURL'
         }
     },
     description: '订单其中的一个商品'

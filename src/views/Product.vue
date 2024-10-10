@@ -1,10 +1,31 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import { uploadImage, getAllProductsShop, getAllProductCatesShop, getAllProductOptions, updateProduct, createProduct } from '../client/services.gen';
+import {
+  uploadImage,
+  getAllProductsShop,
+  getAllProductCatesShop,
+  getAllProductOptions,
+  updateProduct,
+  createProduct
+} from '../client/services.gen';
 import type { Product, ProductOption, OptionValue, Order } from '../client/types.gen';
 import type { ProductCate } from '../client/types.gen';
-import { ElMessage, ElTable, ElTableColumn, ElButton, ElDialog, ElForm, ElFormItem, ElInput, ElSelect, ElOption, ElPagination } from 'element-plus';
+import {
+  ElMessage,
+  ElTable,
+  ElTableColumn,
+  ElButton,
+  ElDialog,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElSelect,
+  ElOption,
+  ElPagination,
+  ElInputNumber,
+  ElRadioGroup,
+  ElRadio
+} from 'element-plus';
 
 const products = ref<Product[]>([]);
 const productCategories = ref<Map<string, string>>(new Map());
@@ -66,7 +87,7 @@ const onOptionValuesChange = (optionId: string) => {
   if (editableProduct.value?.productOptions) {
     editableProduct.value.productOptions[optionId] = selectedOptionValues.value[optionId].map(optionString => {
       const [value, priceAdjustmentString] = optionString.split(':');
-      const priceAdjustment = parseFloat(priceAdjustmentString.replace('分', '')); // 去掉'分'并转换为数字
+      const priceAdjustment = parseFloat(priceAdjustmentString.replace('元', '')); // 去掉'元'并转换为数字
 
       // 在 productOptions 中查找匹配的选项
       const existingOption = productOptions.value.get(optionId)?.values.find(option => 
@@ -81,7 +102,6 @@ const onOptionValuesChange = (optionId: string) => {
     });
   }
 };
-
 
 // 分页相关的变量
 const currentPage = ref(1);   // 当前页码
@@ -125,8 +145,7 @@ const openEditDialog = (product: Product) => {
   selectedOptionValues.value = {};
   if (product.productOptions) {
     for (const [optionId, values] of Object.entries(product.productOptions)) {
-      // selectedOptionValues.value[optionId] = [...values];
-      selectedOptionValues.value[optionId] = values.map(value => `${value.value}:${value.priceAdjustment}分`);
+      selectedOptionValues.value[optionId] = values.map(value => `${value.value}:${value.priceAdjustment.toFixed(1)}元`);
     }
   }
   imageFile.value = null;
@@ -144,9 +163,6 @@ const saveProductChanges = async () => {
   try {
     if (imageFile.value) {
       try {
-        // const formData = new FormData();
-        // formData.append('image', imageFile.value);
-
         const imageResponse = await uploadImage({
           body: {
             image: imageFile.value
@@ -156,7 +172,6 @@ const saveProductChanges = async () => {
       } catch (error) {
         console.error('Image upload failed:', error);
       }
-
     }
 
     if (imageFilename.includes('/')) {
@@ -172,25 +187,44 @@ const saveProductChanges = async () => {
       editableProduct.value.cateId = cateIdEntry[0];
     }
 
-    console.log('editableProduct', editableProduct.value)
+    console.log('editableProduct', editableProduct.value);
+
+    // Before sending data to backend, convert prices from yuan to fen
+    const productToSend = {
+      ...editableProduct.value,
+      price: Math.round(editableProduct.value.price * 100)
+    };
+
+    // Adjust OptionValue.priceAdjustment
+    if (productToSend.productOptions) {
+      const adjustedProductOptions = {};
+      for (const [optionId, values] of Object.entries(productToSend.productOptions)) {
+        adjustedProductOptions[optionId] = values.map(value => ({
+          ...value,
+          priceAdjustment: Math.round(value.priceAdjustment * 100)
+        }));
+      }
+      productToSend.productOptions = adjustedProductOptions;
+    }
 
     if (isCreating.value) {
       await createProduct({
-        body: editableProduct.value
+        body: productToSend
       });
       ElMessage.success('Product created successfully');
     } else {
       await updateProduct({
-        body: editableProduct.value,
+        body: productToSend,
         method: 'PUT',
-        throwOnError:true
-      }).then((result)=>{
-        console.log(result)
-        ElMessage.success('Product updated successfully');
-      }).catch((error)=>{
-        ElMessage.error('Product updated failed'+error);
+        throwOnError: true
       })
-      
+        .then((result) => {
+          console.log(result);
+          ElMessage.success('Product updated successfully');
+        })
+        .catch((error) => {
+          ElMessage.error('Product updated failed' + error);
+        });
     }
 
     await fetchProducts();
@@ -206,8 +240,26 @@ const saveProductChanges = async () => {
 const fetchProducts = async () => {
   try {
     const productResponse = await getAllProductsShop();
-    products.value = productResponse.data;
-    console.log("products:", products.value)
+    products.value = productResponse.data.map(product => {
+      // Adjust price from 'fen' to 'yuan'
+      const adjustedProduct = {
+        ...product,
+        price: product.price / 100
+      };
+      // Adjust OptionValue.priceAdjustment
+      if (adjustedProduct.productOptions) {
+        const adjustedProductOptions = {};
+        for (const [optionId, values] of Object.entries(adjustedProduct.productOptions)) {
+          adjustedProductOptions[optionId] = values.map(value => ({
+            ...value,
+            priceAdjustment: value.priceAdjustment / 100
+          }));
+        }
+        adjustedProduct.productOptions = adjustedProductOptions;
+      }
+      return adjustedProduct;
+    });
+    console.log('products:', products.value);
   } catch (error) {
     console.error('Error fetching products:', error);
   }
@@ -234,7 +286,13 @@ const fetchProductCategories = async () => {
 const fetchProductOptions = async () => {
   try {
     const response = await getAllProductOptions();
-    const options: ProductOption[] = response.data;
+    const options: ProductOption[] = response.data.map(option => ({
+      ...option,
+      values: option.values?.map(value => ({
+        ...value,
+        priceAdjustment: value.priceAdjustment / 100
+      })) || []
+    }));
     const optionMap = new Map<string, ProductOption>();
     options.forEach(option => {
       if (option.id) {
@@ -257,7 +315,6 @@ onMounted(async () => {
   }
 });
 
-
 const getCategoryTitle = (cateId: string) => {
   return productCategories.value.get(cateId) || '未知分类';
 };
@@ -269,14 +326,14 @@ const getStatusLabel = (status: number) => {
 const getProductOptionDisplay = (optionId: string, values: OptionValue[]) => {
   const option = productOptions.value.get(optionId);
   if (option) {
-    const show_values = values
-      ?.map(value => `${value.value}:${value.priceAdjustment}分`)
-      .join(', ') || '无';
+    const show_values =
+      values
+        ?.map(value => `${value.value}:${value.priceAdjustment.toFixed(1)}元`)
+        .join(', ') || '无';
     return `${option.name}: [${show_values}]`;
   }
   return '未知选项';
 };
-
 
 const confirmDelete = (product: Product) => {
   productToDelete.value = product;
@@ -292,7 +349,12 @@ const deleteProduct = async () => {
     if (imageFilename.includes('/')) {
       imageFilename = imageFilename.split('/').pop();
     }
-    const updatedProduct = { ...productToDelete.value, delete: 1 , imgURL: imageFilename};
+    const updatedProduct = {
+      ...productToDelete.value,
+      delete: 1,
+      imgURL: imageFilename,
+      price: Math.round(productToDelete.value.price * 100)
+    };
     await updateProduct({ body: updatedProduct });
     await fetchProducts();
     isDeleteDialogVisible.value = false;
@@ -325,14 +387,12 @@ const onImageChange = (file: any) => {
   if (file && file.raw) {
     imageFile.value = file.raw;
     imagePreview.value = URL.createObjectURL(imageFile.value);
-    console.log(imageFile.value)
+    console.log(imageFile.value);
   } else {
     console.error('No file selected');
   }
 };
-
 </script>
-
 
 <template>
   <div>
@@ -365,7 +425,7 @@ const onImageChange = (file: any) => {
         <el-button @click="resetFilters">重置</el-button>
       </el-form-item>
     </el-form>
-    
+
     <el-button type="primary" @click="openCreateDialog">创建商品</el-button>
 
     <h1>商品列表</h1>
@@ -373,7 +433,12 @@ const onImageChange = (file: any) => {
     <el-table :data="paginatedProducts" stripe>
       <el-table-column prop="imgURL" label="图片" width="160px">
         <template #default="{ row }">
-          <img :src="row.imgURL" alt="Product Image" v-if="row.imgURL" style="width: 100px; height: auto;" />
+          <img
+            :src="row.imgURL"
+            alt="Product Image"
+            v-if="row.imgURL"
+            style="width: 100px; height: auto;"
+          />
         </template>
       </el-table-column>
 
@@ -381,7 +446,7 @@ const onImageChange = (file: any) => {
         <template #default="{ row }">
           <div>
             <div style="font-weight: bold;">{{ row.name }}</div>
-            <div>{{ row.price }}分</div>
+            <div>{{ row.price.toFixed(1) }}元</div>
             <div>{{ getCategoryTitle(row.cateId) }}</div>
           </div>
         </template>
@@ -412,7 +477,7 @@ const onImageChange = (file: any) => {
         </template>
       </el-table-column>
 
-      <el-table-column prop="" label="统计" width="130px"/>
+      <el-table-column prop="" label="统计" width="130px" />
 
       <el-table-column label="编辑" width="200px">
         <template #default="{ row }">
@@ -446,12 +511,17 @@ const onImageChange = (file: any) => {
           <el-input v-model="editableProduct.name"></el-input>
         </el-form-item>
         <el-form-item label="价格">
-          <el-input type="number" v-model.number="editableProduct.price" />
+          <el-input-number v-model.number="editableProduct.price" :precision="1" :step="0.1" />
         </el-form-item>
 
         <el-form-item label="分类">
           <el-select v-model="editableProduct.cateId" placeholder="请选择分类">
-            <el-option v-for="(title, id) in productCategories" :key="id" :label="title[1]" :value="title[1]" />
+            <el-option
+              v-for="(title, id) in productCategories"
+              :key="id"
+              :label="title[1]"
+              :value="title[1]"
+            />
           </el-select>
         </el-form-item>
 
@@ -476,7 +546,10 @@ const onImageChange = (file: any) => {
             class="option-item"
           >
             <el-form-item>
-              <div class="option-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+              <div
+                class="option-header"
+                style="display: flex; justify-content: space-between; align-items: center; width: 100%;"
+              >
                 <div style="font-weight: bold;">
                   {{ getOptionName(optionId) }}:
                 </div>
@@ -501,11 +574,10 @@ const onImageChange = (file: any) => {
                 <el-option
                   v-for="availableValue in getAvailableOptionValues(optionId)"
                   :key="availableValue.uuid"
-                  :label="availableValue.value + ':' + availableValue.priceAdjustment + '分'"
-                  :value="availableValue.value + ':' + availableValue.priceAdjustment + '分'"
+                  :label="availableValue.value + ':' + availableValue.priceAdjustment.toFixed(1) + '元'"
+                  :value="availableValue.value + ':' + availableValue.priceAdjustment.toFixed(1) + '元'"
                 />
               </el-select>
-
             </el-form-item>
           </div>
 
@@ -543,15 +615,24 @@ const onImageChange = (file: any) => {
         </el-form-item>
 
         <el-form-item label="上传图片">
-          <img :src="imagePreview" v-if="imagePreview" style="width: 100px; height: auto; margin-right: 10px;" />
-        <el-upload action="" :file-list="[]" :on-change="onImageChange" :show-file-list="false" :auto-upload="false">
-          <el-button type="primary">选择图片</el-button>
-        </el-upload>
-        <div style="color: #f56c6c; font-size: 12px; margin-top: 5px; width: 100%;">
-          图片文件名禁止使用中文
-        </div>
+          <img
+            :src="imagePreview"
+            v-if="imagePreview"
+            style="width: 100px; height: auto; margin-right: 10px;"
+          />
+          <el-upload
+            action=""
+            :file-list="[]"
+            :on-change="onImageChange"
+            :show-file-list="false"
+            :auto-upload="false"
+          >
+            <el-button type="primary">选择图片</el-button>
+          </el-upload>
+          <div style="color: #f56c6c; font-size: 12px; margin-top: 5px; width: 100%;">
+            图片文件名禁止使用中文
+          </div>
         </el-form-item>
-        
       </el-form>
 
       <template #footer>
@@ -561,8 +642,6 @@ const onImageChange = (file: any) => {
     </el-dialog>
   </div>
 </template>
-
-
 
 <style scoped>
 .option-item {
@@ -576,16 +655,14 @@ const onImageChange = (file: any) => {
 }
 
 ::v-deep .el-tag {
-  min-width: 120px; /* 设置每个标签的最小宽度 */
-  max-width: 200px; /* 设置最大宽度 */
-  white-space: nowrap; /* 禁止换行 */
-  overflow: hidden; /* 隐藏溢出部分 */
-  text-overflow: ellipsis; /* 超出部分显示省略号 */
+  min-width: 120px;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 ::v-deep .el-tag__close {
-  margin-left: 5px; /* 增加关闭按钮的间距 */
+  margin-left: 5px;
 }
-
-
 </style>

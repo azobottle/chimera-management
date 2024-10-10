@@ -279,6 +279,7 @@ interface NewOrderProduct {
   selectedOptions: Record<string, string | null>;
   availableOptions: Record<string, OptionValue[]>;
   name: string | null;
+  imgURL: string | null;
 }
 
 const newOrderForm = ref({
@@ -327,6 +328,7 @@ const addProduct = () => {
     selectedOptions: {},
     availableOptions: {},
     name: null,
+    imgURL: null,
   });
 };
 
@@ -340,6 +342,7 @@ const handleProductChange = (product: NewOrderProduct) => {
   const selectedProduct = productOptionsList.value.find((p) => p.id === product.productId);
   if (selectedProduct) {
     product.name = selectedProduct.name || '未知产品';
+    product.imgURL = selectedProduct.imgURL || '未知产品';
   }
 
   if (selectedProduct && selectedProduct.productOptions) {
@@ -429,6 +432,7 @@ const submitNewOrder = async () => {
         productId: product.productId,
         optionValues: selectedOptions,
         name: product.name, // 添加 name 字段
+        imgURL: product.imgURL, // 添加 name 字段
       };
     }),
   };
@@ -499,6 +503,8 @@ const submitNewOrder = async () => {
 
   // Set the total price for the order
   orderData.totalPrice = totalOrderPrice;
+
+  console.log(orderData)
 
   try {
     await createOrderInStore({
@@ -681,7 +687,7 @@ const confirmRefund = async () => {
 
     <el-table :data="paginatedOrders" stripe>
       <el-table-column prop="orderNum" label="订单号" width="70" />
-      <el-table-column prop="state" label="状态" width="70px" />
+      <el-table-column prop="state" label="状态" width="80px" />
       <el-table-column label="商品" width="300px">
         <template #default="props">
           <div>
@@ -691,7 +697,13 @@ const confirmRefund = async () => {
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="totalPrice" label="总价" width="60px" />
+      <el-table-column label="总价" width="100px" >
+        <template #default="{ row }">
+          <div>
+            <div>{{ row.totalPrice / 100 }}元</div>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="customerType" label="客户类型" width="210px" />
       <el-table-column prop="scene" label="场景" width="70px" />
 
@@ -744,7 +756,7 @@ const confirmRefund = async () => {
           <p><strong>场景:</strong> {{ selectedOrder.scene }}</p>
           <p><strong>顾客备注:</strong> {{ selectedOrder.remark }}</p>
           <p><strong>商家备注:</strong> {{ selectedOrder.merchantNote }}</p>
-          <p><strong>总价格:</strong> {{ selectedOrder.totalPrice }}元</p>
+          <p><strong>总价格:</strong> {{ selectedOrder.totalPrice / 100 }}元</p>
           <p><strong>创建时间:</strong> {{ showDate(selectedOrder) }}</p>
         </div>
 
@@ -762,11 +774,11 @@ const confirmRefund = async () => {
           <ul>
             <li v-for="(item, index) in selectedOrder.items" :key="index" class="order-item">
               <p><strong>商品名称:</strong> {{ item.name }}</p>
-              <p><strong>价格:</strong> {{ item.price }}元</p>
+              <p><strong>价格:</strong> {{ item.price / 100 }}元</p>
               <p><strong>选项:</strong></p>
               <ul>
                 <li v-for="(optionValue, optionKey) in item.optionValues" :key="optionKey">
-                  {{ optionKey }}: {{ optionValue.value }} (调整价: {{ optionValue.priceAdjustment }}元)
+                  {{ optionKey }}: {{ optionValue.value }} (调整价: {{ optionValue.priceAdjustment / 100 }}元)
                 </li>
               </ul>
             </li>
@@ -847,7 +859,7 @@ const confirmRefund = async () => {
                   <el-radio-group v-model="product.selectedOptions[key]">
                     <el-radio v-for="option in options" :key="option.value" :label="option.uuid">
                       {{ option.value }}
-                      ({{ option.priceAdjustment ? '+' + option.priceAdjustment + '￥' : '0' }})
+                      ({{ option.priceAdjustment ? '+' + option.priceAdjustment + '元' : '+0元' }})
                     </el-radio>
                   </el-radio-group>
                 </div>

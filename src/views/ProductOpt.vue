@@ -10,7 +10,8 @@
       <el-table-column label="可选值">
         <template #default="{ row }">
           <div v-for="value in row.values" :key="value.uuid">
-            {{ value.value }}: {{ value.priceAdjustment }} 分
+            <!-- Display priceAdjustment in yuan with two decimal places -->
+            {{ value.value }}: {{ value.priceAdjustment.toFixed(1) }} 元
           </div>
         </template>
       </el-table-column>
@@ -25,25 +26,38 @@
     <!-- 创建/编辑商品选项对话框 -->
     <el-dialog v-model="isEditDialogVisible" width="50%" title="编辑商品选项">
       <el-form v-if="editableOption" :model="editableOption" ref="optionForm">
-        <el-form-item label="名称" :rules="[{ required: true, message: '请输入名称', trigger: 'blur' }]">
+        <el-form-item
+          label="名称"
+          :rules="[{ required: true, message: '请输入名称', trigger: 'blur' }]"
+        >
           <el-input v-model="editableOption.name"></el-input>
         </el-form-item>
 
         <el-form-item label="可选值/价格调整">
           <el-row
             v-for="(value, index) in editableOption.values"
-            :key="value.uuid"
+            :key="value.uuid || index"
             class="option-value-row"
             :gutter="20"
             style="margin-bottom: 10px"
           >
             <el-col :span="9">
-              <el-form-item :prop="'values.' + index + '.value'" :rules="[{ required: true, message: '请输入值名称', trigger: 'blur' }]">
+              <el-form-item
+                :prop="'values.' + index + '.value'"
+                :rules="[{ required: true, message: '请输入值名称', trigger: 'blur' }]"
+              >
                 <el-input v-model="value.value" placeholder="值名称"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-input-number v-model="value.priceAdjustment" :min="0" placeholder="价格调整" />
+              <!-- Use el-input-number with precision and step for yuan input -->
+              <el-input-number
+                v-model.number="value.priceAdjustment"
+                :min="0"
+                placeholder="价格调整"
+                :precision="1"
+                :step="0.1"
+              />
             </el-col>
             <el-col :span="5">
               <el-button type="danger" @click="removeOptionValue(index)">删除</el-button>
@@ -51,11 +65,9 @@
           </el-row>
         </el-form-item>
 
-
         <el-form-item>
           <el-button type="primary" @click="addOptionValue">添加可选值</el-button>
         </el-form-item>
-
       </el-form>
 
       <template #footer>
@@ -69,8 +81,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
-import { getAllProductOptions, createProductOption, updateProductOption } from '../client/services.gen'; // 更新服务路径
-import type { ProductOption } from '../client/types.gen';
+import {
+  getAllProductOptions,
+  createProductOption,
+  updateProductOption
+} from '../client/services.gen'; // 更新服务路径
+import type { ProductOption, OptionValue } from '../client/types.gen';
 
 const options = ref<ProductOption[]>([]);
 const isEditDialogVisible = ref(false);
@@ -83,7 +99,14 @@ const optionForm = ref(null);
 const fetchOptions = async () => {
   try {
     const response = await getAllProductOptions();
-    options.value = response.data;
+    // Convert priceAdjustment from fen to yuan when receiving data
+    options.value = response.data.map(option => ({
+      ...option,
+      values: option.values.map(value => ({
+        ...value,
+        priceAdjustment: value.priceAdjustment / 100
+      }))
+    }));
   } catch (error) {
     console.error('获取商品选项时出错:', error);
   }
@@ -91,7 +114,12 @@ const fetchOptions = async () => {
 
 // 打开编辑对话框
 const openEditDialog = (option: ProductOption) => {
-  editableOption.value = { ...option };
+  // Deep clone the option to avoid mutating the original data
+  editableOption.value = JSON.parse(JSON.stringify(option));
+
+  // No need to convert priceAdjustment again
+  // Since it was already converted in fetchOptions
+
   isCreating.value = false;
   isEditDialogVisible.value = true;
 };
@@ -100,7 +128,13 @@ const openEditDialog = (option: ProductOption) => {
 const openCreateDialog = () => {
   editableOption.value = {
     name: '',
-    values: [{ uuid: Date.now().toString(), value: '', priceAdjustment: 0 }] // 初始化一个可选值
+    values: [
+      {
+        uuid: Date.now().toString(),
+        value: '',
+        priceAdjustment: 0 // Initialize in yuan
+      }
+    ]
   };
   isCreating.value = true;
   isEditDialogVisible.value = true;
@@ -112,7 +146,7 @@ const addOptionValue = () => {
     editableOption.value.values.push({
       uuid: Date.now().toString(), // 唯一标识符
       value: '',
-      priceAdjustment: 0
+      priceAdjustment: 0 // Initialize in yuan
     });
   }
 };
@@ -138,17 +172,26 @@ const saveOptionChanges = async () => {
 
   isSaving.value = true;
   try {
+    // Before sending data, convert priceAdjustment back to fen
+    const optionToSend = {
+      ...editableOption.value,
+      values: editableOption.value.values.map(value => ({
+        ...value,
+        priceAdjustment: Math.round(value.priceAdjustment * 100)
+      }))
+    };
+
     if (isCreating.value) {
       // 创建新的商品选项
       await createProductOption({
-        body: editableOption.value,
+        body: optionToSend,
         method: 'POST'
       });
       ElMessage.success('商品选项创建成功');
     } else {
       // 更新已有的商品选项
       await updateProductOption({
-        body: editableOption.value,
+        body: optionToSend,
         method: 'PUT'
       });
       ElMessage.success('商品选项修改成功');

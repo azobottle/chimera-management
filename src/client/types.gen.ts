@@ -16,7 +16,7 @@ export type CouponIns = {
      */
     status?: number;
     /**
-     * 抵扣金额，与对应Coupon.dePrice对应
+     * 抵扣金额，与对应Coupon.dePrice对应。单位为分
      */
     dePrice?: number;
 };
@@ -83,7 +83,7 @@ export type OptionValue = {
      */
     value?: string;
     /**
-     * 该可选项的价格调整，>=0
+     * 该可选项的价格调整，>=0。单位也为分。
      */
     priceAdjustment?: number;
 };
@@ -94,11 +94,11 @@ export type Product = {
     name?: string;
     imgURL?: string;
     /**
-     * 基础价格
+     * 基础价格，单位为分
      */
     price?: number;
     /**
-     * 学生优惠价。若用户为已认证学生，展示基础价格，然后划掉，再展示学生优惠价。若未认证则正常展示基础价格。
+     * 学生优惠价。若用户为已认证学生，展示基础价格，然后划掉，再展示学生优惠价。若未认证则正常展示基础价格。单位为分。
      */
     stuPrice?: number;
     /**
@@ -161,7 +161,7 @@ export type Coupon = {
      */
     name?: number;
     /**
-     * 抵扣金额
+     * 抵扣金额。单位为分。
      */
     dePrice?: number;
     /**
@@ -217,7 +217,7 @@ export type Activity = {
      */
     endTime?: string;
     /**
-     * 活动优惠抵扣价格，对于cateIds对应类的所有商品，减去这个价格。
+     * 活动优惠抵扣价格，对于cateIds对应类的所有商品，减去这个价格。单位为分。
      */
     dePrice?: number;
     /**
@@ -294,7 +294,7 @@ export type Order = {
      */
     merchantNote?: string;
     /**
-     * 前端先计算一个，根据sum(OrderItem.price)-coupon.dePrice，后端会check
+     * 前端先计算一个，根据sum(OrderItem.price)-coupon.dePrice，后端会check。单位为分。
      */
     totalPrice: number;
     coupon?: CouponIns;
@@ -320,9 +320,13 @@ export type OrderItem = {
      */
     name?: string;
     /**
-     * 根据Product.price和目前optionValues中OptionValue.priceAdjustment计算的价格
+     * 根据Product.price和目前optionValues中OptionValue.priceAdjustment计算的价格。单位为分
      */
     price?: number;
+    /**
+     * Product.imgURL
+     */
+    imgURL?: string;
 };
 
 export type PrePaidDTO = {
