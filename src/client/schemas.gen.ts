@@ -4,6 +4,31 @@ export const ObjectIdSchema = {
     type: 'string'
 } as const;
 
+export const CouponInsSchema = {
+    required: ['uuid'],
+    type: 'object',
+    properties: {
+        uuid: {
+            type: 'string'
+        },
+        couponId: {
+            type: 'string',
+            description: '对应Coupon.id'
+        },
+        status: {
+            type: 'integer',
+            description: '0=未使用，1=已使用，-1=已过期',
+            format: 'int32'
+        },
+        dePrice: {
+            type: 'integer',
+            description: '抵扣金额，与对应Coupon.dePrice对应',
+            format: 'int32'
+        }
+    },
+    description: '用户持有的优惠券实例'
+} as const;
+
 export const UserSchema = {
     type: 'object',
     properties: {
@@ -44,10 +69,9 @@ export const UserSchema = {
         },
         coupons: {
             type: 'array',
-            description: '用户持有的优惠券，对应Coupon.id',
+            description: '用户持有的优惠券实例',
             items: {
-                type: 'string',
-                description: '用户持有的优惠券，对应Coupon.id'
+                '$ref': '#/components/schemas/CouponIns'
             }
         },
         createdAt: {
@@ -77,7 +101,7 @@ export const ProductCateSchema = {
         },
         status: {
             type: 'integer',
-            description: 'status=0为下架，前端不显示',
+            description: 'status=0为下架，后端不返回给前端',
             format: 'int32'
         },
         priority: {
@@ -148,7 +172,7 @@ export const ProductSchema = {
         },
         status: {
             type: 'integer',
-            description: 'status=0为下架，前端过滤不显示',
+            description: 'status=0为下架，后端不返回给前端',
             format: 'int32'
         },
         delete: {
@@ -300,25 +324,25 @@ export const ActivitySchema = {
         },
         endTime: {
             type: 'string',
-            description: '活动结束时间',
+            description: '活动结束时间，到时自动下架',
             format: 'date-time'
         },
         dePrice: {
             type: 'integer',
-            description: '活动优惠抵扣价格',
+            description: '活动优惠抵扣价格，对于cateIds对应类的所有商品，减去这个价格。',
             format: 'int32'
         },
         cateIds: {
             type: 'array',
-            description: '适用商品类，对应ProductCate.id',
+            description: '适用商品类，对应ProductCate.id，当用户点击活动时，跳转到cateIds[0]对应的侧边栏',
             items: {
                 type: 'string',
-                description: '适用商品类，对应ProductCate.id'
+                description: '适用商品类，对应ProductCate.id，当用户点击活动时，跳转到cateIds[0]对应的侧边栏'
             }
         },
         status: {
             type: 'integer',
-            description: '0为下架，1为上架。=0时小程序不展示',
+            description: '0为下架，1为上架。=0时不返回给小程序',
             format: 'int32'
         },
         delete: {
@@ -430,8 +454,11 @@ export const OrderSchema = {
         },
         totalPrice: {
             type: 'integer',
-            description: '前端先计算一个，根据sum(OrderItem.price)-优惠券，后端会check',
+            description: '前端先计算一个，根据sum(OrderItem.price)-coupon.dePrice，后端会check',
             format: 'int32'
+        },
+        coupon: {
+            '$ref': '#/components/schemas/CouponIns'
         },
         createdAt: {
             type: 'string',

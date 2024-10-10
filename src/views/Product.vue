@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import { uploadImage, getAllProducts, getAllProductCates, getAllProductOptions, updateProduct, createProduct } from '../client/services.gen';
+import { uploadImage, getAllProductsShop, getAllProductCatesShop, getAllProductOptions, updateProduct, createProduct } from '../client/services.gen';
 import type { Product, ProductOption, OptionValue, Order } from '../client/types.gen';
 import type { ProductCate } from '../client/types.gen';
 import { ElMessage, ElTable, ElTableColumn, ElButton, ElDialog, ElForm, ElFormItem, ElInput, ElSelect, ElOption, ElPagination } from 'element-plus';
@@ -205,7 +205,7 @@ const saveProductChanges = async () => {
 
 const fetchProducts = async () => {
   try {
-    const productResponse = await getAllProducts();
+    const productResponse = await getAllProductsShop();
     products.value = productResponse.data;
     console.log("products:", products.value)
   } catch (error) {
@@ -215,7 +215,7 @@ const fetchProducts = async () => {
 
 const fetchProductCategories = async () => {
   try {
-    const response = await getAllProductCates();
+    const response = await getAllProductCatesShop();
     const categories: ProductCate[] = response.data
       .filter((category: ProductCate) => category.delete === 0) // Filter out deleted categories
       .sort((a: ProductCate, b: ProductCate) => b.priority - a.priority); // Sort by priority

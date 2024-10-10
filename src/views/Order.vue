@@ -2,7 +2,7 @@
 import { ref, onMounted, computed } from 'vue';
 import {
   getAllOrders,
-  getAllProducts,
+  getAllProductsShop,
   createOrderInStore,
   getAllProductOptions,
   supplyOrder,
@@ -292,7 +292,7 @@ const productOptionsList = ref<Product[]>([]);
 // 获取所有产品
 const fetchProducts = async () => {
   try {
-    const productResponse = await getAllProducts();
+    const productResponse = await getAllProductsShop();
     productOptionsList.value = productResponse.data;
   } catch (error) {
     console.error('获取产品数据时出错:', error);

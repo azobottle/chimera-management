@@ -2,6 +2,25 @@
 
 export type ObjectId = string;
 
+/**
+ * 用户持有的优惠券实例
+ */
+export type CouponIns = {
+    uuid: string;
+    /**
+     * 对应Coupon.id
+     */
+    couponId?: string;
+    /**
+     * 0=未使用，1=已使用，-1=已过期
+     */
+    status?: number;
+    /**
+     * 抵扣金额，与对应Coupon.dePrice对应
+     */
+    dePrice?: number;
+};
+
 export type User = {
     id?: ObjectId;
     openid?: string;
@@ -28,9 +47,9 @@ export type User = {
      */
     points?: number;
     /**
-     * 用户持有的优惠券，对应Coupon.id
+     * 用户持有的优惠券实例
      */
-    coupons?: Array<(string)>;
+    coupons?: Array<CouponIns>;
     createdAt?: string;
     hashedPassword?: string;
     role?: string;
@@ -41,7 +60,7 @@ export type ProductCate = {
     id?: ObjectId;
     title?: string;
     /**
-     * status=0为下架，前端不显示
+     * status=0为下架，后端不返回给前端
      */
     status?: number;
     /**
@@ -91,7 +110,7 @@ export type Product = {
      */
     short_desc?: string;
     /**
-     * status=0为下架，前端过滤不显示
+     * status=0为下架，后端不返回给前端
      */
     status?: number;
     /**
@@ -194,19 +213,19 @@ export type Activity = {
      */
     startTime?: string;
     /**
-     * 活动结束时间
+     * 活动结束时间，到时自动下架
      */
     endTime?: string;
     /**
-     * 活动优惠抵扣价格
+     * 活动优惠抵扣价格，对于cateIds对应类的所有商品，减去这个价格。
      */
     dePrice?: number;
     /**
-     * 适用商品类，对应ProductCate.id
+     * 适用商品类，对应ProductCate.id，当用户点击活动时，跳转到cateIds[0]对应的侧边栏
      */
     cateIds?: Array<(string)>;
     /**
-     * 0为下架，1为上架。=0时小程序不展示
+     * 0为下架，1为上架。=0时不返回给小程序
      */
     status?: number;
     /**
@@ -275,9 +294,10 @@ export type Order = {
      */
     merchantNote?: string;
     /**
-     * 前端先计算一个，根据sum(OrderItem.price)-优惠券，后端会check
+     * 前端先计算一个，根据sum(OrderItem.price)-coupon.dePrice，后端会check
      */
     totalPrice: number;
+    coupon?: CouponIns;
     /**
      * 自动填充创建时间
      */
@@ -568,6 +588,14 @@ export type GetUserByNameResponse = (User);
 
 export type GetUserByNameError = unknown;
 
+export type GetAllProductCatesShopResponse = (Array<ProductCate>);
+
+export type GetAllProductCatesShopError = unknown;
+
+export type GetAllProductsShopResponse = (Array<Product>);
+
+export type GetAllProductsShopError = unknown;
+
 export type ExistsByCateIdData = {
     query: {
         cateId: string;
@@ -617,6 +645,10 @@ export type WxLoginOrRegisterError = unknown;
 export type ValidateResponse = (ResponseBodyDTOUserDTO);
 
 export type ValidateError = unknown;
+
+export type GetAllActivitiesShopResponse = (Array<Activity>);
+
+export type GetAllActivitiesShopError = unknown;
 
 export type DeleteFixDeliveryInfoData = {
     path: {

@@ -3,10 +3,10 @@
 import { ref, onMounted, computed } from 'vue';
 import {
   uploadImage1,
-  getAllActivities,
+  getAllActivitiesShop,
   updateActivity,
   createEntity,
-  getAllProductCates,
+  getAllProductCatesShop,
 } from '../client/services.gen';
 import type { Activity, ProductCate } from '../client/types.gen';
 import {
@@ -142,7 +142,7 @@ const saveActivityChanges = async () => {
 
 const fetchActivities = async () => {
   try {
-    const response = await getAllActivities();
+    const response = await getAllActivitiesShop();
     activities.value = response.data;
     console.log('activities:', activities.value);
   } catch (error) {
@@ -152,7 +152,7 @@ const fetchActivities = async () => {
 
 const fetchProductCategories = async () => {
   try {
-    const response = await getAllProductCates();
+    const response = await getAllProductCatesShop();
     const categories: ProductCate[] = response.data
       .filter(
         (category: ProductCate) => category.delete === 0 && category.status !== 0

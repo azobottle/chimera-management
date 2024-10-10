@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import { getAllProductCates, updateProductCate, createProductCate, existsByCateId } from '../client/services.gen'; // Update services as needed
+import { getAllProductCatesShop, updateProductCate, createProductCate, existsByCateId } from '../client/services.gen'; // Update services as needed
 import type { ProductCate } from '../client/types.gen';
 import { ElMessage, ElTable, ElTableColumn, ElButton, ElDialog, ElForm, ElFormItem, ElInput, ElPagination } from 'element-plus';
 
@@ -15,7 +15,7 @@ const isCreating = ref(false);
 
 const fetchCategories = async () => {
   try {
-    const response = await getAllProductCates();
+    const response = await getAllProductCatesShop();
     categories.value = response.data
       .filter((category: ProductCate) => category.delete === 0) // Filter out deleted categories
       .sort((a: ProductCate, b: ProductCate) => b.priority - a.priority); // Sort by priority
