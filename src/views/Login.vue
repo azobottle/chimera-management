@@ -60,6 +60,7 @@
               },
               throwOnError:true
             })
+              
               // 获取 redirect 参数，默认跳转到 '/stats'
               const redirect = router.currentRoute.value.query.redirect || '/stats';
               // 登录成功，跳转到目标页面

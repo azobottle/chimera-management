@@ -397,7 +397,7 @@ export type ResponseBodyDTOUserDTO = {
 };
 
 export type UserDTO = {
-    id?: string;
+    id: string;
     openid?: string;
     name?: string;
     school?: string;

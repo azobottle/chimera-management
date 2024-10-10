@@ -612,6 +612,7 @@ export const ResponseBodyDTOUserDTOSchema = {
 } as const;
 
 export const UserDTOSchema = {
+    required: ['id'],
     type: 'object',
     properties: {
         id: {

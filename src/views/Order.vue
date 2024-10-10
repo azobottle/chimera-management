@@ -8,7 +8,7 @@ import {
   supplyOrder,
   refundOrder,
 } from '../client/services.gen';
-import type { Order, Product, OptionValue, ProductOption, OrderApiParams } from '../client/types.gen';
+import type { Order, Product, OptionValue, ProductOption, OrderApiParams, UserDTO } from '../client/types.gen';
 import {
   ElMessage,
   ElTable,
@@ -411,10 +411,11 @@ const submitNewOrder = async () => {
       }
     }
   }
-
+  const str=localStorage.getItem("userDTO")
+  const userDTO=JSON.parse(str as string) as UserDTO
   // 构建符合 Order 类型的订单数据
   const orderData: OrderApiParams = {
-    userId: '66f157e249b56d25d48bf329', // 设置固定的用户ID
+    userId: userDTO.id, // 设置固定的用户ID
     scene: newOrderForm.value.scene,
     customerType: '未认证为学生身份的用户业务',
     items: newOrderForm.value.products.map((product) => {
