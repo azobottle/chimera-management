@@ -15,10 +15,18 @@ export const CouponInsSchema = {
             type: 'string',
             description: '对应Coupon.id'
         },
+        name: {
+            type: 'string',
+            description: 'Coupon.name'
+        },
         status: {
             type: 'integer',
             description: '0=未使用，1=已使用，-1=已过期',
             format: 'int32'
+        },
+        cateId: {
+            type: 'string',
+            description: '适用商品类，对应ProductCate.id，为空时适用所有商品类'
         },
         dePrice: {
             type: 'integer',
@@ -250,12 +258,16 @@ export const CouponSchema = {
             '$ref': '#/components/schemas/ObjectId'
         },
         cateId: {
-            '$ref': '#/components/schemas/ObjectId'
+            type: 'string',
+            description: '适用商品类，对应ProductCate.id，为空时适用所有商品类'
         },
         name: {
-            type: 'integer',
-            description: '名称',
-            format: 'int32'
+            type: 'string',
+            description: '名称'
+        },
+        type: {
+            type: 'string',
+            description: '类型，可选："新客"，"兑换"，"活动"，"临时"'
         },
         dePrice: {
             type: 'integer',
@@ -267,14 +279,19 @@ export const CouponSchema = {
             description: '0：下线，1：上线。对于status=0的，不再允许发放、兑换',
             format: 'int32'
         },
+        convertible: {
+            type: 'boolean',
+            description: '是否可用积分兑换'
+        },
         costPoints: {
             type: 'integer',
             description: '消耗积分',
             format: 'int32'
         },
-        convertible: {
-            type: 'boolean',
-            description: '是否可用积分兑换'
+        exchangeNum: {
+            type: 'integer',
+            description: '积分兑换数量',
+            format: 'int32'
         },
         validity: {
             type: 'string',
@@ -286,14 +303,14 @@ export const CouponSchema = {
             description: '发放数量',
             format: 'int32'
         },
-        receiveNum: {
-            type: 'integer',
-            description: '领取、积分兑换数量',
-            format: 'int32'
-        },
         useNum: {
             type: 'integer',
             description: '使用数量',
+            format: 'int32'
+        },
+        delete: {
+            type: 'integer',
+            description: '伪删除，为1时后端不返回',
             format: 'int32'
         }
     }
@@ -554,6 +571,9 @@ export const OrderItemSchema = {
         name: {
             type: 'string',
             description: 'Product.name'
+        },
+        cateId: {
+            '$ref': '#/components/schemas/ObjectId'
         },
         price: {
             type: 'integer',

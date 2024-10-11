@@ -12,9 +12,17 @@ export type CouponIns = {
      */
     couponId?: string;
     /**
+     * Coupon.name
+     */
+    name?: string;
+    /**
      * 0=未使用，1=已使用，-1=已过期
      */
     status?: number;
+    /**
+     * 适用商品类，对应ProductCate.id，为空时适用所有商品类
+     */
+    cateId?: string;
     /**
      * 抵扣金额，与对应Coupon.dePrice对应。单位为分
      */
@@ -155,11 +163,18 @@ export type FixDeliveryInfo = {
 
 export type Coupon = {
     id?: ObjectId;
-    cateId?: ObjectId;
+    /**
+     * 适用商品类，对应ProductCate.id，为空时适用所有商品类
+     */
+    cateId?: string;
     /**
      * 名称
      */
-    name?: number;
+    name?: string;
+    /**
+     * 类型，可选："新客"，"兑换"，"活动"，"临时"
+     */
+    type?: string;
     /**
      * 抵扣金额。单位为分。
      */
@@ -169,13 +184,17 @@ export type Coupon = {
      */
     status?: number;
     /**
+     * 是否可用积分兑换
+     */
+    convertible?: boolean;
+    /**
      * 消耗积分
      */
     costPoints?: number;
     /**
-     * 是否可用积分兑换
+     * 积分兑换数量
      */
-    convertible?: boolean;
+    exchangeNum?: number;
     /**
      * 截至有效期
      */
@@ -185,13 +204,13 @@ export type Coupon = {
      */
     issueNum?: number;
     /**
-     * 领取、积分兑换数量
-     */
-    receiveNum?: number;
-    /**
      * 使用数量
      */
     useNum?: number;
+    /**
+     * 伪删除，为1时后端不返回
+     */
+    delete?: number;
 };
 
 export type Activity = {
@@ -365,6 +384,7 @@ export type OrderItem = {
      * Product.name
      */
     name?: string;
+    cateId?: ObjectId;
     /**
      * 根据Product.price和目前optionValues中OptionValue.priceAdjustment计算的价格。单位为分
      */
@@ -606,6 +626,19 @@ export type CreateOrderInStoreResponse = (ServiceResultObjectObject);
 
 export type CreateOrderInStoreError = unknown;
 
+export type AddCouponToUserData = {
+    query: {
+        couponId: string;
+        userId: string;
+    };
+};
+
+export type AddCouponToUserResponse = ({
+    [key: string]: unknown;
+});
+
+export type AddCouponToUserError = unknown;
+
 export type LoginData = {
     body: LoginDTO;
 };
@@ -678,6 +711,10 @@ export type GetOrdersByUserIdResponse = (Array<Order>);
 
 export type GetOrdersByUserIdError = unknown;
 
+export type GetAllCouponsForPointsResponse = (Array<Coupon>);
+
+export type GetAllCouponsForPointsError = unknown;
+
 export type WxLoginOrRegisterData = {
     query: {
         code: string;
@@ -705,13 +742,3 @@ export type DeleteFixDeliveryInfoData = {
 export type DeleteFixDeliveryInfoResponse = (unknown);
 
 export type DeleteFixDeliveryInfoError = unknown;
-
-export type DeleteCouponData = {
-    path: {
-        id: string;
-    };
-};
-
-export type DeleteCouponResponse = (unknown);
-
-export type DeleteCouponError = unknown;
