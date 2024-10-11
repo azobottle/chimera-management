@@ -44,7 +44,8 @@ const selectedOrder = ref<Order | null>(null);
 const stateOptions = [
   { label: '已支付', value: '已支付' },
   { label: '待出餐', value: '待出餐' },
-  { label: '正常结束', value: '正常结束' },
+  { label: '待配送', value: '待配送' },
+  { label: '已完成', value: '已完成' },
   { label: '已退款', value: '已退款' },
 ];
 
@@ -703,6 +704,8 @@ const confirmRefund = async () => {
         <!-- Basic Order Information -->
         <div class="order-section">
           <h4>基本信息</h4>
+          <p><strong>订单Id:</strong> {{ selectedOrder.id }}</p>
+          <p><strong>用户Id:</strong> {{ selectedOrder.userId }}</p>
           <p><strong>订单号:</strong> {{ selectedOrder.orderNum }}</p>
           <p><strong>状态:</strong> {{ selectedOrder.state }}</p>
           <p><strong>客户类型:</strong> {{ selectedOrder.customerType }}</p>
