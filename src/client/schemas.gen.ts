@@ -21,7 +21,7 @@ export const CouponInsSchema = {
         },
         status: {
             type: 'integer',
-            description: '0=未使用，1=已使用，-1=已过期',
+            description: '0=未使用，1=已使用',
             format: 'int32'
         },
         cateId: {
@@ -32,9 +32,59 @@ export const CouponInsSchema = {
             type: 'integer',
             description: '抵扣金额，与对应Coupon.dePrice对应。单位为分',
             format: 'int32'
+        },
+        validity: {
+            type: 'string',
+            description: 'Coupon.validity',
+            format: 'date-time'
         }
     },
     description: '用户持有的优惠券实例'
+} as const;
+
+export const PointsProductInsSchema = {
+    required: ['uuid'],
+    type: 'object',
+    properties: {
+        uuid: {
+            type: 'string'
+        },
+        userId: {
+            type: 'string',
+            description: '对应User.id'
+        },
+        pointsProductId: {
+            type: 'string',
+            description: '对应PointsProduct.id'
+        },
+        name: {
+            type: 'string',
+            description: 'PointsProduct.name'
+        },
+        sendType: {
+            type: 'integer',
+            description: '领取方式，0为自提，1为填信息邮递',
+            format: 'int32'
+        },
+        sendName: {
+            type: 'string',
+            description: '邮递人姓名'
+        },
+        sendAddr: {
+            type: 'string',
+            description: '邮递人地址'
+        },
+        sendNum: {
+            type: 'string',
+            description: '邮递人号码'
+        },
+        received: {
+            type: 'integer',
+            description: '是否已领取，0为未领取，1为已领取',
+            format: 'int32'
+        }
+    },
+    description: '用户兑换过的积分商品列表'
 } as const;
 
 export const UserSchema = {
@@ -52,13 +102,13 @@ export const UserSchema = {
         name: {
             type: 'string'
         },
-        school: {
-            type: 'string',
-            description: '学生认证结果'
-        },
         studentCert: {
             type: 'boolean',
             description: '学生认证后设为True'
+        },
+        school: {
+            type: 'string',
+            description: '学生认证结果'
         },
         expend: {
             type: 'number',
@@ -80,6 +130,13 @@ export const UserSchema = {
             description: '用户持有的优惠券实例',
             items: {
                 '$ref': '#/components/schemas/CouponIns'
+            }
+        },
+        pointsProducts: {
+            type: 'array',
+            description: '用户兑换过的积分商品列表',
+            items: {
+                '$ref': '#/components/schemas/PointsProductIns'
             }
         },
         createdAt: {
@@ -146,6 +203,7 @@ export const OptionValueSchema = {
 } as const;
 
 export const ProductSchema = {
+    required: ['cateId'],
     type: 'object',
     properties: {
         id: {
@@ -222,6 +280,45 @@ export const ProductOptionSchema = {
     }
 } as const;
 
+export const PointsProductSchema = {
+    type: 'object',
+    properties: {
+        id: {
+            '$ref': '#/components/schemas/ObjectId'
+        },
+        name: {
+            type: 'string'
+        },
+        imgURL: {
+            type: 'string'
+        },
+        costPoints: {
+            type: 'integer',
+            description: '所需积分',
+            format: 'int32'
+        },
+        describe: {
+            type: 'string',
+            description: '描述'
+        },
+        status: {
+            type: 'integer',
+            description: 'status=0为下架，后端不返回给前端',
+            format: 'int32'
+        },
+        delete: {
+            type: 'integer',
+            description: '对于delete=1的，后端不返回',
+            format: 'int32'
+        },
+        redeemedNum: {
+            type: 'integer',
+            description: '已兑换数量',
+            format: 'int32'
+        }
+    }
+} as const;
+
 export const FixDeliveryInfoSchema = {
     type: 'object',
     properties: {
@@ -286,11 +383,6 @@ export const CouponSchema = {
         costPoints: {
             type: 'integer',
             description: '消耗积分',
-            format: 'int32'
-        },
-        exchangeNum: {
-            type: 'integer',
-            description: '积分兑换数量',
             format: 'int32'
         },
         validity: {
@@ -457,6 +549,11 @@ export const OrderApiParamsSchema = {
             type: 'string',
             description: '商家备注'
         },
+        disPrice: {
+            type: 'integer',
+            description: '只给商品端使用的，线下优惠，小程序端传了也不处理。',
+            format: 'int32'
+        },
         couponInsUUID: {
             type: 'string',
             description: '本订单使用的优惠券uuid，可为空'
@@ -546,6 +643,11 @@ export const OrderSchema = {
         coupon: {
             '$ref': '#/components/schemas/CouponIns'
         },
+        disPrice: {
+            type: 'integer',
+            description: '只给商品端使用的，线下优惠，小程序端传了也不处理。',
+            format: 'int32'
+        },
         createdAt: {
             type: 'string',
             description: '自动填充创建时间',
@@ -606,6 +708,30 @@ export const ServiceResultObjectObjectSchema = {
     }
 } as const;
 
+export const CheckStudentIdentityApiParamsSchema = {
+    type: 'object'
+} as const;
+
+export const WxStudentCheckDTOSchema = {
+    type: 'object',
+    properties: {
+        errcode: {
+            type: 'integer',
+            format: 'int32'
+        },
+        errmsg: {
+            type: 'string'
+        },
+        bind_status: {
+            type: 'integer',
+            format: 'int32'
+        },
+        is_student: {
+            type: 'boolean'
+        }
+    }
+} as const;
+
 export const LoginDTOSchema = {
     required: ['password', 'username'],
     type: 'object',
@@ -644,11 +770,30 @@ export const UserDTOSchema = {
         name: {
             type: 'string'
         },
+        studentCert: {
+            type: 'boolean'
+        },
         school: {
             type: 'string'
         },
         role: {
             type: 'string'
+        },
+        points: {
+            type: 'integer',
+            format: 'int32'
+        },
+        coupons: {
+            type: 'array',
+            items: {
+                '$ref': '#/components/schemas/CouponIns'
+            }
+        },
+        pointsProducts: {
+            type: 'array',
+            items: {
+                '$ref': '#/components/schemas/PointsProductIns'
+            }
         }
     }
 } as const;

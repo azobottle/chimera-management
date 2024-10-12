@@ -203,7 +203,7 @@ const deleteCoupon = async () => {
   isDeleting.value = true;
   try {
     // 将 delete 字段设置为 1，进行伪删除
-    const updatedCoupon = { ...couponToDelete.value, delete: 1 };
+    const updatedCoupon = { ...couponToDelete.value, delete: 1, status:0 };
     await updateCoupon({
       body: updatedCoupon,
     });

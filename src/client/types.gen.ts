@@ -16,7 +16,7 @@ export type CouponIns = {
      */
     name?: string;
     /**
-     * 0=未使用，1=已使用，-1=已过期
+     * 0=未使用，1=已使用
      */
     status?: number;
     /**
@@ -27,6 +27,49 @@ export type CouponIns = {
      * 抵扣金额，与对应Coupon.dePrice对应。单位为分
      */
     dePrice?: number;
+    /**
+     * Coupon.validity
+     */
+    validity?: string;
+};
+
+/**
+ * 用户兑换过的积分商品列表
+ */
+export type PointsProductIns = {
+    uuid: string;
+    /**
+     * 对应User.id
+     */
+    userId?: string;
+    /**
+     * 对应PointsProduct.id
+     */
+    pointsProductId?: string;
+    /**
+     * PointsProduct.name
+     */
+    name?: string;
+    /**
+     * 领取方式，0为自提，1为填信息邮递
+     */
+    sendType?: number;
+    /**
+     * 邮递人姓名
+     */
+    sendName?: string;
+    /**
+     * 邮递人地址
+     */
+    sendAddr?: string;
+    /**
+     * 邮递人号码
+     */
+    sendNum?: string;
+    /**
+     * 是否已领取，0为未领取，1为已领取
+     */
+    received?: number;
 };
 
 export type User = {
@@ -35,13 +78,13 @@ export type User = {
     sessionKey?: string;
     name?: string;
     /**
-     * 学生认证结果
-     */
-    school?: string;
-    /**
      * 学生认证后设为True
      */
     studentCert?: boolean;
+    /**
+     * 学生认证结果
+     */
+    school?: string;
     /**
      * 总消费金额
      */
@@ -58,6 +101,10 @@ export type User = {
      * 用户持有的优惠券实例
      */
     coupons?: Array<CouponIns>;
+    /**
+     * 用户兑换过的积分商品列表
+     */
+    pointsProducts?: Array<PointsProductIns>;
     createdAt?: string;
     hashedPassword?: string;
     role?: string;
@@ -98,7 +145,7 @@ export type OptionValue = {
 
 export type Product = {
     id?: ObjectId;
-    cateId?: ObjectId;
+    cateId: ObjectId;
     name?: string;
     imgURL?: string;
     /**
@@ -143,6 +190,32 @@ export type ProductOption = {
      * 对于一个可选项，所有的可能选值，商铺管理用
      */
     values?: Array<OptionValue>;
+};
+
+export type PointsProduct = {
+    id?: ObjectId;
+    name?: string;
+    imgURL?: string;
+    /**
+     * 所需积分
+     */
+    costPoints?: number;
+    /**
+     * 描述
+     */
+    describe?: string;
+    /**
+     * status=0为下架，后端不返回给前端
+     */
+    status?: number;
+    /**
+     * 对于delete=1的，后端不返回
+     */
+    delete?: number;
+    /**
+     * 已兑换数量
+     */
+    redeemedNum?: number;
 };
 
 export type FixDeliveryInfo = {
@@ -191,10 +264,6 @@ export type Coupon = {
      * 消耗积分
      */
     costPoints?: number;
-    /**
-     * 积分兑换数量
-     */
-    exchangeNum?: number;
     /**
      * 截至有效期
      */
@@ -301,6 +370,10 @@ export type OrderApiParams = {
      */
     merchantNote?: string;
     /**
+     * 只给商品端使用的，线下优惠，小程序端传了也不处理。
+     */
+    disPrice?: number;
+    /**
      * 本订单使用的优惠券uuid，可为空
      */
     couponInsUUID?: string;
@@ -364,6 +437,10 @@ export type Order = {
     totalPrice: number;
     coupon?: CouponIns;
     /**
+     * 只给商品端使用的，线下优惠，小程序端传了也不处理。
+     */
+    disPrice?: number;
+    /**
      * 自动填充创建时间
      */
     createdAt?: string;
@@ -406,6 +483,17 @@ export type ServiceResultObjectObject = {
     success?: boolean;
 };
 
+export type CheckStudentIdentityApiParams = {
+    [key: string]: unknown;
+};
+
+export type WxStudentCheckDTO = {
+    errcode?: number;
+    errmsg?: string;
+    bind_status?: number;
+    is_student?: boolean;
+};
+
 export type LoginDTO = {
     username: string;
     password: string;
@@ -420,8 +508,12 @@ export type UserDTO = {
     id: string;
     openid?: string;
     name?: string;
+    studentCert?: boolean;
     school?: string;
     role?: string;
+    points?: number;
+    coupons?: Array<CouponIns>;
+    pointsProducts?: Array<PointsProductIns>;
 };
 
 export type GetAllUsersResponse = (Array<User>);
@@ -503,6 +595,26 @@ export type CreateProductOptionData = {
 export type CreateProductOptionResponse = (ProductOption);
 
 export type CreateProductOptionError = unknown;
+
+export type GetAllPointsProductsResponse = (Array<PointsProduct>);
+
+export type GetAllPointsProductsError = unknown;
+
+export type UpdatePointsProductData = {
+    body: PointsProduct;
+};
+
+export type UpdatePointsProductResponse = (PointsProduct);
+
+export type UpdatePointsProductError = unknown;
+
+export type CreatePointsProductData = {
+    body: PointsProduct;
+};
+
+export type CreatePointsProductResponse = (PointsProduct);
+
+export type CreatePointsProductError = unknown;
 
 export type GetAllFixDeliveryInfosResponse = (Array<FixDeliveryInfo>);
 
@@ -586,6 +698,53 @@ export type CreateProcessorMapResponse = (ProcessorMap);
 
 export type CreateProcessorMapError = unknown;
 
+export type UploadImagePointsProductData = {
+    body?: {
+        image: (Blob | File);
+    };
+};
+
+export type UploadImagePointsProductResponse = (string);
+
+export type UploadImagePointsProductError = unknown;
+
+export type RedeemPointsProductData = {
+    query: {
+        productId: string;
+        sendAddr?: string;
+        sendName?: string;
+        sendNum?: string;
+        sendType: number;
+        userId: string;
+    };
+};
+
+export type RedeemPointsProductResponse = (string);
+
+export type RedeemPointsProductError = unknown;
+
+export type SetPointsProductAsReceivedData = {
+    query: {
+        userId: string;
+        uuid: string;
+    };
+};
+
+export type SetPointsProductAsReceivedResponse = (string);
+
+export type SetPointsProductAsReceivedError = unknown;
+
+export type ExchangeCouponData = {
+    query: {
+        couponId: string;
+        userId: string;
+    };
+};
+
+export type ExchangeCouponResponse = (string);
+
+export type ExchangeCouponError = unknown;
+
 export type CallbackData = {
     body: string;
 };
@@ -639,6 +798,16 @@ export type AddCouponToUserResponse = ({
 
 export type AddCouponToUserError = unknown;
 
+export type CheckStudentIdentityData = {
+    query: {
+        apiParams: CheckStudentIdentityApiParams;
+    };
+};
+
+export type CheckStudentIdentityResponse = (WxStudentCheckDTO);
+
+export type CheckStudentIdentityError = unknown;
+
 export type LoginData = {
     body: LoginDTO;
 };
@@ -684,6 +853,14 @@ export type ExistsByCateIdData = {
 export type ExistsByCateIdResponse = (boolean);
 
 export type ExistsByCateIdError = unknown;
+
+export type GetAllPointsProductsShopResponse = (Array<PointsProduct>);
+
+export type GetAllPointsProductsShopError = unknown;
+
+export type GetAllPointsProductInsResponse = (Array<PointsProductIns>);
+
+export type GetAllPointsProductInsError = unknown;
 
 export type GetAllOrdersData = {
     query: {
