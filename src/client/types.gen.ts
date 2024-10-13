@@ -836,6 +836,17 @@ export type GetUserByNameResponse = (User);
 
 export type GetUserByNameError = unknown;
 
+export type GetNewUsersData = {
+    query: {
+        endTime: string;
+        startTime: string;
+    };
+};
+
+export type GetNewUsersResponse = (Array<User>);
+
+export type GetNewUsersError = unknown;
+
 export type GetAllProductCatesShopResponse = (Array<ProductCate>);
 
 export type GetAllProductCatesShopError = unknown;
