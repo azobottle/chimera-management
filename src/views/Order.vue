@@ -281,11 +281,13 @@ interface NewOrderProduct {
   availableOptions: Record<string, OptionValue[]>;
   name: string | null;
   imgURL: string | null;
+  price: number | null;
 }
 
 const newOrderForm = ref({
   products: [] as NewOrderProduct[],
   scene: '',
+  disPrice: 0,
 });
 
 // 所有产品列表
@@ -344,6 +346,7 @@ const handleProductChange = (product: NewOrderProduct) => {
   if (selectedProduct) {
     product.name = selectedProduct.name || '未知产品';
     product.imgURL = selectedProduct.imgURL || '未知产品';
+    product.price = selectedProduct.price || 0;
   }
 
   if (selectedProduct && selectedProduct.productOptions) {
@@ -415,10 +418,12 @@ const submitNewOrder = async () => {
   const str=localStorage.getItem("userDTO")
   const userDTO=JSON.parse(str as string) as UserDTO
   // 构建符合 Order 类型的订单数据
+  const disPriceInCents = Math.round((newOrderForm.value.disPrice || 0) * 100);
   const orderData: OrderApiParams = {
     userId: userDTO.id, // 设置固定的用户ID
     scene: newOrderForm.value.scene,
     customerType: '未认证为学生身份的用户业务',
+    disPrice: disPriceInCents,
     items: newOrderForm.value.products.map((product) => {
       const selectedOptions: Record<string, string> = {};
       for (const [name, uuid] of Object.entries(product.selectedOptions)) {
@@ -712,6 +717,7 @@ const confirmRefund = async () => {
           <p><strong>场景:</strong> {{ selectedOrder.scene }}</p>
           <p><strong>顾客备注:</strong> {{ selectedOrder.remark }}</p>
           <p><strong>商家备注:</strong> {{ selectedOrder.merchantNote }}</p>
+          <p><strong>线下优惠:</strong> {{ selectedOrder.disPrice / 100 }}元</p>
           <p><strong>总价格:</strong> {{ selectedOrder.totalPrice / 100 }}元</p>
           <p><strong>创建时间:</strong> {{ showDate(selectedOrder) }}</p>
         </div>
@@ -802,6 +808,9 @@ const confirmRefund = async () => {
                   />
                 </el-select>
               </el-form-item>
+              <el-form-item v-if="product.price !== null" label="商品基础价格">
+                <span>{{ product.price / 100 }} 元</span>
+              </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="选择选项">
@@ -815,7 +824,7 @@ const confirmRefund = async () => {
                   <el-radio-group v-model="product.selectedOptions[key]">
                     <el-radio v-for="option in options" :key="option.value" :label="option.uuid">
                       {{ option.value }}
-                      ({{ option.priceAdjustment ? '+' + option.priceAdjustment + '元' : '+0元' }})
+                      ({{ option.priceAdjustment ? '+' + option.priceAdjustment / 100 + '元' : '+0元' }})
                     </el-radio>
                   </el-radio-group>
                 </div>
@@ -839,6 +848,9 @@ const confirmRefund = async () => {
               :value="option.value"
             />
           </el-select>
+        </el-form-item>
+        <el-form-item label="优惠金额">
+          <el-input-number v-model="newOrderForm.disPrice" :min="0" placeholder="输入优惠金额（元）"></el-input-number>
         </el-form-item>
       </el-form>
 
