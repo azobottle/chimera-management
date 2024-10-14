@@ -21,6 +21,11 @@
           <span>经营统计</span>
         </el-menu-item>
 
+        <el-menu-item index="/appConfiguration">
+          <i class="el-icon-menu"></i>
+          <span>配置表</span>
+        </el-menu-item>
+
         <!-- 商品 -->
         <el-sub-menu index="2">
           <template #title>

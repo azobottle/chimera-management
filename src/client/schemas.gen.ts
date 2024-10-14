@@ -408,6 +408,33 @@ export const CouponSchema = {
     }
 } as const;
 
+export const AppConfigurationSchema = {
+    required: ['id', 'key', 'value'],
+    type: 'object',
+    properties: {
+        id: {
+            '$ref': '#/components/schemas/ObjectId'
+        },
+        key: {
+            type: 'string',
+            description: '配置项的键名，例如 "api.url"'
+        },
+        value: {
+            type: 'string',
+            description: '配置项的值，例如 "https://api.example.com"'
+        },
+        description: {
+            type: 'string',
+            description: '配置项的描述'
+        },
+        category: {
+            type: 'string',
+            description: '配置类别（用于分组管理）'
+        }
+    },
+    description: '配置document，给一些变化频繁的配置用'
+} as const;
+
 export const ActivitySchema = {
     type: 'object',
     properties: {
@@ -794,6 +821,29 @@ export const UserDTOSchema = {
             items: {
                 '$ref': '#/components/schemas/PointsProductIns'
             }
+        }
+    }
+} as const;
+
+export const AppConfigurationApiParamsSchema = {
+    required: ['key', 'value'],
+    type: 'object',
+    properties: {
+        key: {
+            type: 'string',
+            description: '配置项的键名，例如 "api.url"'
+        },
+        value: {
+            type: 'string',
+            description: '配置项的值，例如 "https://api.example.com"'
+        },
+        description: {
+            type: 'string',
+            description: '配置项的描述'
+        },
+        category: {
+            type: 'string',
+            description: '配置类别（用于分组管理）'
         }
     }
 } as const;

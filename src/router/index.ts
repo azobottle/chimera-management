@@ -13,6 +13,7 @@ import Activity from '../views/Activity.vue'
 import PointMall from '../views/PointMall.vue'
 import Login from '../views/Login.vue'
 import { validate } from '@/client'
+import AppConfiguration from '@/views/AppConfiguration.vue'
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -27,7 +28,8 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/coupon', component: Coupon },
   { path: '/pointMall', component: PointMall },
   { path: '/activity', component: Activity },
-  { path: '/login', component: Login }
+  { path: '/login', component: Login },
+  { path: '/appConfiguration', component: AppConfiguration }
 ]
 
 const router = createRouter({

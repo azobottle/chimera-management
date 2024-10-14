@@ -282,6 +282,29 @@ export type Coupon = {
     delete?: number;
 };
 
+/**
+ * 配置document，给一些变化频繁的配置用
+ */
+export type AppConfiguration = {
+    id: ObjectId;
+    /**
+     * 配置项的键名，例如 "api.url"
+     */
+    key: string;
+    /**
+     * 配置项的值，例如 "https://api.example.com"
+     */
+    value: string;
+    /**
+     * 配置项的描述
+     */
+    description?: string;
+    /**
+     * 配置类别（用于分组管理）
+     */
+    category?: string;
+};
+
 export type Activity = {
     id?: ObjectId;
     /**
@@ -516,6 +539,25 @@ export type UserDTO = {
     pointsProducts?: Array<PointsProductIns>;
 };
 
+export type AppConfigurationApiParams = {
+    /**
+     * 配置项的键名，例如 "api.url"
+     */
+    key: string;
+    /**
+     * 配置项的值，例如 "https://api.example.com"
+     */
+    value: string;
+    /**
+     * 配置项的描述
+     */
+    description?: string;
+    /**
+     * 配置类别（用于分组管理）
+     */
+    category?: string;
+};
+
 export type GetAllUsersResponse = (Array<User>);
 
 export type GetAllUsersError = unknown;
@@ -655,6 +697,26 @@ export type CreateCouponData = {
 export type CreateCouponResponse = (Coupon);
 
 export type CreateCouponError = unknown;
+
+export type GetAllAppConfigurationsResponse = (Array<AppConfiguration>);
+
+export type GetAllAppConfigurationsError = unknown;
+
+export type UpdateConfigurationData = {
+    body: AppConfiguration;
+};
+
+export type UpdateConfigurationResponse = (AppConfiguration);
+
+export type UpdateConfigurationError = unknown;
+
+export type AddConfigurationData = {
+    body: AppConfigurationApiParams;
+};
+
+export type AddConfigurationResponse = (AppConfiguration);
+
+export type AddConfigurationError = unknown;
 
 export type GetAllActivitiesResponse = (Array<Activity>);
 
@@ -930,3 +992,13 @@ export type DeleteFixDeliveryInfoData = {
 export type DeleteFixDeliveryInfoResponse = (unknown);
 
 export type DeleteFixDeliveryInfoError = unknown;
+
+export type DeleteConfigurationData = {
+    path: {
+        id: string;
+    };
+};
+
+export type DeleteConfigurationResponse = (unknown);
+
+export type DeleteConfigurationError = unknown;
