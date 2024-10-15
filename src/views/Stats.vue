@@ -1,56 +1,75 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, watch, nextTick } from 'vue';
-import { getAllOrders, getAllProductsShop, getNewUsers } from '../client/services.gen';
-import type { Order, Product, UserDTO } from '../client/types.gen';
-import {
-  ElMessage,
-  ElRow,
-  ElCol,
-  ElRadioGroup,
-  ElRadioButton,
-  ElDatePicker,
-} from 'element-plus';
+import { ref, onMounted, watch, nextTick } from 'vue';
+import { getAllOrders, getNewUsers } from '../client/services.gen';
+import type { Order, UserDTO } from '../client/types.gen';
+import { ElMessage } from 'element-plus';
 import * as echarts from 'echarts';
 
-// Selected view type: 'daily', 'weekly', 'monthly', 'custom'
+// 选择的视图类型：'daily'、'weekly'、'monthly'、'custom'
 const selectedViewType = ref('daily');
+
+// 日期选择器的值
+const dateValue = ref<Date | null>(new Date());
 const dateRange = ref<[Date | null, Date | null]>([null, null]);
 
-// Statistics data
+// 统计数据
 const orderCount = ref(0);
 const turnover = ref(0);
 const newUserCount = ref(0);
 
-// Product sales data
+// 商品销售数据
 const productSalesData = ref<{ name: string; sales: number }[]>([]);
 
-// Order statistics by scene and customer type
+// 订单统计数据
 const sceneOrderStats = ref<{ scene: string; count: number }[]>([]);
 const customerTypeOrderStats = ref<{ customerType: string; count: number }[]>([]);
 
-// Fetch data based on selected view type and date range
+// 获取数据
 const fetchData = async () => {
   let startDate: Date;
-  let endDate: Date = new Date();
+  let endDate: Date;
 
   if (selectedViewType.value === 'daily') {
-    // Today
-    startDate = new Date();
-    startDate.setHours(0, 0, 0, 0);
+    if (dateValue.value) {
+      startDate = new Date(dateValue.value);
+      startDate.setHours(0, 0, 0, 0);
+      endDate = new Date(dateValue.value);
+      endDate.setHours(23, 59, 59, 999);
+    } else {
+      ElMessage.error('请选择日期');
+      return;
+    }
   } else if (selectedViewType.value === 'weekly') {
-    // Last 7 days
-    startDate = new Date();
-    startDate.setDate(startDate.getDate() - 6);
-    startDate.setHours(0, 0, 0, 0);
+    if (dateValue.value) {
+      const selectedDate = new Date(dateValue.value);
+      const day = selectedDate.getDay() || 7;
+      startDate = new Date(selectedDate);
+      startDate.setDate(selectedDate.getDate() - day + 1);
+      startDate.setHours(0, 0, 0, 0);
+      endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 6);
+      endDate.setHours(23, 59, 59, 999);
+    } else {
+      ElMessage.error('请选择周');
+      return;
+    }
   } else if (selectedViewType.value === 'monthly') {
-    // Last 30 days
-    startDate = new Date();
-    startDate.setDate(startDate.getDate() - 29);
-    startDate.setHours(0, 0, 0, 0);
+    if (dateValue.value) {
+      const selectedDate = new Date(dateValue.value);
+      const year = selectedDate.getFullYear();
+      const month = selectedDate.getMonth();
+      startDate = new Date(year, month, 1);
+      endDate = new Date(year, month + 1, 0, 23, 59, 59, 999);
+    } else {
+      ElMessage.error('请选择月份');
+      return;
+    }
   } else if (selectedViewType.value === 'custom') {
     if (dateRange.value[0] && dateRange.value[1]) {
-      startDate = dateRange.value[0];
-      endDate = dateRange.value[1];
+      startDate = new Date(dateRange.value[0]);
+      startDate.setHours(0, 0, 0, 0);
+      endDate = new Date(dateRange.value[1]);
+      endDate.setHours(23, 59, 59, 999);
     } else {
       ElMessage.error('请选择有效的日期范围');
       return;
@@ -61,7 +80,7 @@ const fetchData = async () => {
   }
 
   try {
-    // Fetch orders
+    // 获取订单数据
     const orderResponse = await getAllOrders({
       query: {
         startTime: formatDate(startDate),
@@ -70,11 +89,11 @@ const fetchData = async () => {
     });
     const orders: Order[] = orderResponse.data;
 
-    // Calculate order count and turnover
+    // 计算订单量和营业额
     orderCount.value = orders.length;
     turnover.value = orders.reduce((sum, order) => sum + (order.totalPrice || 0), 0) / 100;
 
-    // Fetch new users
+    // 获取新用户数据
     const userResponse = await getNewUsers({
       query: {
         startTime: formatDate(startDate),
@@ -84,35 +103,27 @@ const fetchData = async () => {
     const users: UserDTO[] = userResponse.data;
     newUserCount.value = users.length;
 
-    // Fetch product sales data
+    // 获取商品销售数据
     fetchProductSalesData(orders);
 
-    // Fetch order statistics
+    // 获取订单统计数据
     fetchOrderStats(orders);
 
-    // Initialize charts after data is ready
-    await nextTick();
-    initCharts();
+    // 等待 DOM 更新后初始化图表
+    await nextTick(); // 确保 DOM 更新完成
+    initCharts(); // 在 DOM 更新后初始化图表
   } catch (error) {
     console.error('获取数据时出错:', error);
     ElMessage.error('获取数据时出错:' + error);
   }
 };
 
-// Format date to 'yyyy-MM-ddTHH:mm:ss'
+// 格式化日期
 const formatDate = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const day = String(date.getDate()).padStart(2, '0');
-
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-
-  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  return date.toISOString();
 };
 
-// Fetch product sales data
+// 获取商品销售数据
 const fetchProductSalesData = (orders: Order[]) => {
   const productSalesMap: Record<string, { name: string; sales: number }> = {};
 
@@ -123,21 +134,22 @@ const fetchProductSalesData = (orders: Order[]) => {
         if (!productSalesMap[key]) {
           productSalesMap[key] = {
             name: item.name || '未知商品',
-            sales: 1,
+            sales: item.quantity || 1, // 确保统计正确的销售量
           };
         } else {
-          productSalesMap[key].sales += 1;
+          productSalesMap[key].sales += item.quantity || 1;
         }
       }
     });
   });
 
-  productSalesData.value = Object.values(productSalesMap);
+  // 对商品销售数据按照销售量从高到低排序
+  productSalesData.value = Object.values(productSalesMap).sort((a, b) => b.sales - a.sales);
 };
 
-// Fetch order statistics
+// 获取订单统计数据
 const fetchOrderStats = (orders: Order[]) => {
-  // Statistics by scene
+  // 场景统计
   const sceneStatsMap: Record<string, number> = {};
 
   orders.forEach((order) => {
@@ -154,7 +166,7 @@ const fetchOrderStats = (orders: Order[]) => {
     count,
   }));
 
-  // Statistics by customer type
+  // 客户类型统计
   const customerTypeStatsMap: Record<string, number> = {};
 
   orders.forEach((order) => {
@@ -174,109 +186,174 @@ const fetchOrderStats = (orders: Order[]) => {
   );
 };
 
-// Initialize charts
+// 初始化图表
 const initCharts = () => {
-  // Product sales chart
-  const productSalesChart = echarts.init(
-    document.getElementById('product-sales-chart') as HTMLDivElement
-  );
+  // 商品售卖情况图表
+  const productSalesElement = document.getElementById('product-sales-chart');
+  if (productSalesElement) {
+    const productSalesChart = echarts.init(productSalesElement);
 
-  const productSalesOption = {
-    title: {
-      text: '商品售卖情况',
-      left: 'center',
-    },
-    tooltip: {
-      trigger: 'axis',
-    },
-    xAxis: {
-      type: 'category',
-      data: productSalesData.value.map((item) => item.name),
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        data: productSalesData.value.map((item) => item.sales),
-        type: 'bar',
-      },
-    ],
-  };
-  productSalesChart.setOption(productSalesOption);
-
-  // Scene order statistics chart
-  const sceneOrderStatsChart = echarts.init(
-    document.getElementById('scene-order-stats-chart') as HTMLDivElement
-  );
-
-  const sceneOrderOption = {
-    title: {
-      text: '不同场景订单统计',
-      left: 'center',
-    },
-    tooltip: {
-      trigger: 'item',
-    },
-    series: [
-      {
-        name: '订单数',
-        type: 'pie',
-        radius: '50%',
-        data: sceneOrderStats.value.map((item) => ({
-          value: item.count,
-          name: item.scene,
-        })),
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-          },
+    const productSalesOption = {
+      title: {
+        text: '商品售卖情况',
+        left: 'center',
+        textStyle: {
+          color: '#333',
+          fontSize: 16,
         },
       },
-    ],
-  };
-  sceneOrderStatsChart.setOption(sceneOrderOption);
-
-  // Customer type order statistics chart
-  const customerTypeOrderStatsChart = echarts.init(
-    document.getElementById('customer-type-order-stats-chart') as HTMLDivElement
-  );
-
-  const customerTypeOrderOption = {
-    title: {
-      text: '不同客户类型订单统计',
-      left: 'center',
-    },
-    tooltip: {
-      trigger: 'item',
-    },
-    series: [
-      {
-        name: '订单数',
-        type: 'pie',
-        radius: '50%',
-        data: customerTypeOrderStats.value.map((item) => ({
-          value: item.count,
-          name: item.customerType,
-        })),
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-          },
+      color: ['#409EFF'],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow',
         },
       },
-    ],
-  };
-  customerTypeOrderStatsChart.setOption(customerTypeOrderOption);
+      grid: {
+        left: '3%',
+        right: '6%',
+        bottom: '3%',
+        containLabel: true,
+      },
+      xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01],
+      },
+      yAxis: {
+        type: 'category',
+        inverse: true,
+        data: productSalesData.value.map((item) => item.name),
+        axisLabel: {
+          interval: 0,
+          fontSize: 16,
+          fontWeight: 'bold',
+        },
+      },
+      dataZoom: [
+        {
+          type: 'slider',
+          yAxisIndex: 0,
+          start: 0,
+          end:
+            productSalesData.value.length > 10
+              ? (10 / productSalesData.value.length) * 100
+              : 100,
+          zoomLock: false,
+        },
+      ],
+      series: [
+        {
+          name: '销售量',
+          type: 'bar',
+          data: productSalesData.value.map((item) => item.sales),
+          itemStyle: {
+            color: '#409EFF',
+          },
+          barWidth: '50%',
+        },
+      ],
+    };
+    productSalesChart.setOption(productSalesOption);
+  } else {
+    console.warn('商品售卖情况图表的 DOM 元素未找到');
+  }
+
+  // 场景订单统计图表
+  const sceneOrderStatsElement = document.getElementById('scene-order-stats-chart');
+  if (sceneOrderStatsElement) {
+    const sceneOrderStatsChart = echarts.init(sceneOrderStatsElement);
+    const sceneOrderOption = {
+      title: {
+        text: '不同场景订单统计',
+        left: 'center',
+        textStyle: {
+          color: '#333',
+          fontSize: 16,
+        },
+      },
+      color: ['#67C23A', '#E6A23C', '#F56C6C', '#909399'],
+      tooltip: {
+        trigger: 'item',
+      },
+      series: [
+        {
+          name: '订单数',
+          type: 'pie',
+          radius: '50%',
+          data: sceneOrderStats.value.map((item) => ({
+            value: item.count,
+            name: item.scene,
+          })),
+          label: {
+            formatter: '{b}: {d}%',
+            fontSize: 14,
+            fontWeight: 'bold',
+          },
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+        },
+      ],
+    };
+    sceneOrderStatsChart.setOption(sceneOrderOption);
+  } else {
+    console.warn('场景订单统计图表的 DOM 元素未找到');
+  }
+
+  // 客户类型订单统计图表
+  const customerTypeOrderStatsElement = document.getElementById('customer-type-order-stats-chart');
+  if (customerTypeOrderStatsElement) {
+    const customerTypeOrderStatsChart = echarts.init(customerTypeOrderStatsElement);
+    const customerTypeOrderOption = {
+      title: {
+        text: '不同客户类型订单统计',
+        left: 'center',
+        textStyle: {
+          color: '#333',
+          fontSize: 16,
+        },
+      },
+      color: ['#67C23A', '#E6A23C', '#F56C6C', '#909399'],
+      tooltip: {
+        trigger: 'item',
+      },
+      series: [
+        {
+          name: '订单数',
+          type: 'pie',
+          radius: '50%',
+          data: customerTypeOrderStats.value.map((item) => ({
+            value: item.count,
+            name: item.customerType,
+          })),
+          label: {
+            formatter: '{b}: {d}%',
+            fontSize: 14,
+            fontWeight: 'bold',
+          },
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+        },
+      ],
+    };
+    customerTypeOrderStatsChart.setOption(customerTypeOrderOption);
+  } else {
+    console.warn('客户类型订单统计图表的 DOM 元素未找到');
+  }
 };
 
-// Watch for changes in selected view type and date range
+// 监听视图类型和日期的变化
 watch(
-  [selectedViewType, dateRange],
+  [selectedViewType, dateValue, dateRange],
   () => {
     fetchData();
   },
@@ -290,7 +367,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <!-- View type selection -->
+    <!-- 视图类型选择 -->
     <el-row :gutter="20" style="margin-bottom: 20px;">
       <el-col :span="12">
         <el-radio-group v-model="selectedViewType">
@@ -301,19 +378,41 @@ onMounted(() => {
         </el-radio-group>
       </el-col>
       <el-col :span="12">
-        <!-- Date range picker for custom date range -->
+        <!-- 日期选择器 -->
         <el-date-picker
-          v-if="selectedViewType === 'custom'"
+          v-if="selectedViewType === 'daily'"
+          v-model="dateValue"
+          type="date"
+          placeholder="选择日期"
+          @change="fetchData"
+        ></el-date-picker>
+        <el-date-picker
+          v-else-if="selectedViewType === 'weekly'"
+          v-model="dateValue"
+          type="week"
+          placeholder="选择周"
+          @change="fetchData"
+        ></el-date-picker>
+        <el-date-picker
+          v-else-if="selectedViewType === 'monthly'"
+          v-model="dateValue"
+          type="month"
+          placeholder="选择月"
+          @change="fetchData"
+        ></el-date-picker>
+        <el-date-picker
+          v-else-if="selectedViewType === 'custom'"
           v-model="dateRange"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
+          @change="fetchData"
         ></el-date-picker>
       </el-col>
     </el-row>
 
-    <!-- Display statistics -->
+    <!-- 显示统计数据 -->
     <el-row :gutter="20">
       <el-col :span="8">
         <div class="stat-card">
@@ -335,20 +434,17 @@ onMounted(() => {
       </el-col>
     </el-row>
 
-    <!-- Product sales and scene order charts -->
+    <!-- 图表展示 -->
     <el-row :gutter="20" style="margin-top: 20px;">
-      <el-col :span="12">
-        <div id="product-sales-chart" style="width: 100%; height: 400px;"></div>
-      </el-col>
       <el-col :span="12">
         <div id="scene-order-stats-chart" style="width: 100%; height: 400px;"></div>
+        <div
+          id="customer-type-order-stats-chart"
+          style="width: 100%; height: 400px; margin-top: 20px;"
+        ></div>
       </el-col>
-    </el-row>
-
-    <!-- Customer type order stats chart -->
-    <el-row :gutter="20" style="margin-top: 20px;">
       <el-col :span="12">
-        <div id="customer-type-order-stats-chart" style="width: 100%; height: 400px;"></div>
+        <div id="product-sales-chart" style="width: 100%; height: 820px;"></div>
       </el-col>
     </el-row>
   </div>

@@ -537,18 +537,18 @@ const confirmRefund = async () => {
   <div>
     <h3>搜索订单</h3>
 
-    <el-form :inline="false" :model="searchQuery" class="search-form">
-      <!-- 第一行：订单ID、用户ID、开始时间、结束时间 -->
+    <el-form :inline="false" :model="searchQuery" class="search-form" label-width="100px">
+      <!-- 第一行 -->
       <div class="form-row">
-        <el-form-item label="订单ID">
+        <el-form-item label="订单ID" class="form-item">
           <el-input v-model="searchQuery.orderId" placeholder="输入订单ID"></el-input>
         </el-form-item>
 
-        <el-form-item label="用户ID">
+        <el-form-item label="用户ID" class="form-item">
           <el-input v-model="searchQuery.userId" placeholder="输入用户ID"></el-input>
         </el-form-item>
 
-        <el-form-item label="开始时间">
+        <el-form-item label="开始时间" class="form-item">
           <el-date-picker
             v-model="searchQuery.startTime"
             type="date"
@@ -557,7 +557,7 @@ const confirmRefund = async () => {
           ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="结束时间">
+        <el-form-item label="结束时间" class="form-item">
           <el-date-picker
             v-model="searchQuery.endTime"
             type="date"
@@ -565,21 +565,20 @@ const confirmRefund = async () => {
             clearable
           ></el-date-picker>
         </el-form-item>
-      
-        <el-form-item>
+
+        <el-form-item class="button-item">
           <el-button @click="fetchOrders">搜索</el-button>
         </el-form-item>
-      
       </div>
 
-      <!-- 第二行：订单号、状态、客户类型、场景、重置、新建订单 -->
+      <!-- 第二行 -->
       <div class="form-row">
-        <el-form-item label="订单号">
+        <el-form-item label="订单号" class="form-item">
           <el-input v-model="searchQuery.orderNum" placeholder="输入订单号"></el-input>
         </el-form-item>
 
-        <el-form-item label="状态">
-          <el-select v-model="searchQuery.state" placeholder="选择状态" clearable style="width: 150px;">
+        <el-form-item label="状态" class="form-item">
+          <el-select v-model="searchQuery.state" placeholder="选择状态" clearable>
             <el-option
               v-for="option in stateOptions"
               :key="option.value"
@@ -589,12 +588,11 @@ const confirmRefund = async () => {
           </el-select>
         </el-form-item>
 
-        <el-form-item label="客户类型">
+        <el-form-item label="客户类型" class="form-item">
           <el-select
             v-model="searchQuery.customerType"
             placeholder="选择客户类型"
             clearable
-            style="width: 200px;"
           >
             <el-option
               v-for="option in customerTypeOptions"
@@ -605,8 +603,8 @@ const confirmRefund = async () => {
           </el-select>
         </el-form-item>
 
-        <el-form-item label="场景">
-          <el-select v-model="searchQuery.scene" placeholder="选择场景" clearable style="width: 150px;">
+        <el-form-item label="场景" class="form-item">
+          <el-select v-model="searchQuery.scene" placeholder="选择场景" clearable>
             <el-option
               v-for="option in sceneOptionsSearch"
               :key="option.value"
@@ -616,31 +614,37 @@ const confirmRefund = async () => {
           </el-select>
         </el-form-item>
 
-        <el-form-item>
+        <el-form-item class="button-item">
           <el-button @click="resetFilters">重置</el-button>
-        </el-form-item>
-
-        <!-- 新增“新建订单”按钮 -->
-        <el-form-item>
-          <el-button type="primary" @click="openNewOrderDialog">新建订单</el-button>
         </el-form-item>
       </div>
 
-      <!-- 第三行：定时达学校、地址、时间 -->
+      <!-- 第三行 -->
       <div class="form-row">
-        <el-form-item label="定时达学校">
+        <el-form-item label="定时达学校" class="form-item">
           <el-input v-model="searchQuery.school" placeholder="输入定时达学校"></el-input>
         </el-form-item>
 
-        <el-form-item label="定时达地址">
+        <el-form-item label="定时达地址" class="form-item">
           <el-input v-model="searchQuery.address" placeholder="输入定时达地址"></el-input>
         </el-form-item>
 
-        <el-form-item label="定时达时间">
+        <el-form-item label="定时达时间" class="form-item">
           <el-input v-model="searchQuery.time" placeholder="输入定时达时间"></el-input>
+        </el-form-item>
+
+        <!-- 占位的空白表单项，用于对齐 -->
+        <el-form-item class="form-item" style="visibility: hidden;">
+          <el-input></el-input>
+        </el-form-item>
+
+        <el-form-item class="button-item">
+          <el-button type="primary" @click="openNewOrderDialog">新建订单</el-button>
         </el-form-item>
       </div>
     </el-form>
+
+
 
     <h1>订单列表</h1>
 
@@ -705,55 +709,75 @@ const confirmRefund = async () => {
     <!-- Order Details Dialog -->
     <el-dialog title="订单详情" v-model="orderDetailsDialogVisible" width="50%">
       <div v-if="selectedOrder" class="order-details">
-      
+
         <!-- Basic Order Information -->
         <div class="order-section">
           <h4>基本信息</h4>
-          <p><strong>订单Id:</strong> {{ selectedOrder.id }}</p>
-          <p><strong>用户Id:</strong> {{ selectedOrder.userId }}</p>
-          <p><strong>订单号:</strong> {{ selectedOrder.orderNum }}</p>
-          <p><strong>状态:</strong> {{ selectedOrder.state }}</p>
-          <p><strong>客户类型:</strong> {{ selectedOrder.customerType }}</p>
-          <p><strong>场景:</strong> {{ selectedOrder.scene }}</p>
-          <p><strong>顾客备注:</strong> {{ selectedOrder.remark }}</p>
-          <p><strong>商家备注:</strong> {{ selectedOrder.merchantNote }}</p>
-          <p><strong>线下优惠:</strong> {{ selectedOrder.disPrice / 100 }}元</p>
-          <p><strong>总价格:</strong> {{ selectedOrder.totalPrice / 100 }}元</p>
-          <p><strong>创建时间:</strong> {{ showDate(selectedOrder) }}</p>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <p><strong>订单Id:</strong> {{ selectedOrder.id }}</p>
+              <p><strong>订单号:</strong> {{ selectedOrder.orderNum }}</p>
+              <p><strong>状态:</strong> {{ selectedOrder.state }}</p>
+              <p><strong>场景:</strong> {{ selectedOrder.scene }}</p>
+              <p><strong>线下优惠:</strong> {{ selectedOrder.disPrice / 100 }}元</p>
+              <p><strong>总价格:</strong> {{ selectedOrder.totalPrice / 100 }}元</p>
+              <p v-if="selectedOrder.coupon">
+                <strong>优惠券名称:</strong> {{ selectedOrder.coupon.name }}
+              </p>
+              <p v-if="selectedOrder.coupon">
+                <strong>优惠券抵扣金额:</strong> {{ selectedOrder.coupon.dePrice / 100 }}元
+              </p>
+            </el-col>
+            <el-col :span="12">
+              <p><strong>用户Id:</strong> {{ selectedOrder.userId }}</p>
+              <p><strong>客户类型:</strong> {{ selectedOrder.customerType }}</p>
+              <p><strong>顾客备注:</strong> {{ selectedOrder.remark }}</p>
+              <p><strong>商家备注:</strong> {{ selectedOrder.merchantNote }}</p>
+              <p><strong>创建时间:</strong> {{ showDate(selectedOrder) }}</p>
+            </el-col>
+          </el-row>
         </div>
 
         <!-- Delivery Information -->
         <div v-if="selectedOrder.deliveryInfo" class="order-section">
           <h4>定时达配送信息</h4>
-          <p><strong>学校:</strong> {{ selectedOrder.deliveryInfo.school }}</p>
-          <p><strong>地址:</strong> {{ selectedOrder.deliveryInfo.address }}</p>
-          <p><strong>时间:</strong> {{ selectedOrder.deliveryInfo.time }}</p>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <p><strong>学校:</strong> {{ selectedOrder.deliveryInfo.school }}</p>
+            </el-col>
+            <el-col :span="12">
+              <p><strong>地址:</strong> {{ selectedOrder.deliveryInfo.address }}</p>
+            </el-col>
+            <el-col :span="12">
+              <p><strong>时间:</strong> {{ selectedOrder.deliveryInfo.time }}</p>
+            </el-col>
+          </el-row>
         </div>
 
         <!-- Order Items -->
         <div class="order-section">
           <h4>商品列表</h4>
-          <ul>
-            <li v-for="(item, index) in selectedOrder.items" :key="index" class="order-item">
+          <el-row :gutter="20" v-for="(item, index) in selectedOrder.items" :key="index" class="order-item">
+            <el-col :span="12">
               <p><strong>商品名称:</strong> {{ item.name }}</p>
               <p><strong>价格:</strong> {{ item.price / 100 }}元</p>
+            </el-col>
+            <el-col :span="12">
               <p><strong>选项:</strong></p>
               <ul>
                 <li v-for="(optionValue, optionKey) in item.optionValues" :key="optionKey">
                   {{ optionKey }}: {{ optionValue.value }} (调整价: {{ optionValue.priceAdjustment / 100 }}元)
                 </li>
               </ul>
-            </li>
-          </ul>
+            </el-col>
+          </el-row>
         </div>
       </div>
 
       <template #footer>
         <el-button @click="orderDetailsDialogVisible = false">关闭</el-button>
       </template>
-    </el-dialog>  
-
-
+    </el-dialog>
 
     <!-- Refund Confirmation Dialog -->
     <el-dialog title="确认退款" v-model="refundDialogVisible">
@@ -898,7 +922,7 @@ const confirmRefund = async () => {
 
 .order-section {
   padding: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   border-radius: 8px;
   background-color: #f5f7fa;
   border: 1px solid #ebeef5;
@@ -907,11 +931,11 @@ const confirmRefund = async () => {
 .order-section h4 {
   font-size: 16px;
   color: #409EFF;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .order-item {
-  padding: 10px;
+  padding: 5px;
   border-bottom: 1px solid #ebeef5;
 }
 
@@ -927,5 +951,28 @@ ul {
   list-style-type: none;
   padding-left: 0;
 }
+
+.order-section .el-col {
+  padding-bottom: 5px;
+}
+
+.search-form {
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  align-items: flex-end; /* 使元素底部对齐 */
+  gap: 20px;
+}
+
+.form-item {
+  width: 250px; /* 设置统一的宽度 */
+}
+
+.button-item {
+  margin-left: auto; /* 将按钮推到最右边 */
+}
+
 
 </style>
