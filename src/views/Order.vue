@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import {
   getAllOrders,
   getAllProductsShop,
@@ -27,6 +27,7 @@ import {
   ElRow,
   ElCol,
 } from 'element-plus';
+import { API_BASE_URL } from '@/client/customize';
 
 // 订单数据
 const orders = ref<Order[]>([]);
@@ -214,17 +215,31 @@ const fetchAllProductOptions = async () => {
   }
 };
 
+let ws:WebSocket|null=null
 // 页面挂载时获取订单数据
 onMounted(async () => {
   try {
     await fetchProducts();
     await fetchOrders();
     await fetchAllProductOptions();
+    ws = new WebSocket(API_BASE_URL+"/ws/order_create");
+    ws.onmessage=async (event:MessageEvent)=>{
+      console.info("websocket接收到数据",event)
+      await fetchOrders()
+      ElMessage.info("有新单辣!")
+      //todo 或许可以连个音响
+    }
   } catch (error) {
     console.error('获取订单数据时出错:', error);
     ElMessage.error('获取订单数据时出错:'+error);
   }
 });
+
+onBeforeUnmount(()=>{
+  if(ws){
+    ws.close()
+  }
+})
 
 // 日期格式化函数
 const formatDate = (date: Date) => {

@@ -2,7 +2,7 @@ import { createConfig } from "@hey-api/client-fetch";
 import { client } from "./services.gen";
 
 
-const API_BASE_URL = 'http://localhost:80'
+export const API_BASE_URL = 'http://localhost:80'
 const config = createConfig({
     baseUrl: API_BASE_URL,
     throwOnError: true
