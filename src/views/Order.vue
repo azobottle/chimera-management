@@ -26,6 +26,7 @@ import {
   ElRadio,
   ElRow,
   ElCol,
+  ElMessageBox,
 } from 'element-plus';
 import { API_BASE_URL } from '@/client/customize';
 
@@ -215,20 +216,80 @@ const fetchAllProductOptions = async () => {
   }
 };
 
-let ws:WebSocket|null=null
-// 页面挂载时获取订单数据
+let ws: WebSocket | null = null;
+    let reconnectAttempts = 0; // 记录重连次数
+    const maxReconnectAttempts = 5; // 最大重连次数
+    const reconnectInterval = 3000; // 每次重连的时间间隔，单位：毫秒
+    let isManuallyClosed = false; // 标志位：标记是否手动关闭 WebSocket
+
+
+    const connectWebSocket = () => {
+      ws = new WebSocket(API_BASE_URL+"/ws/order_create");
+
+      ws.onopen = () => {
+        console.log('WebSocket connected');
+        reconnectAttempts = 0; // 连接成功后重置重连次数
+      };
+
+      ws.onmessage = async (event: MessageEvent) => {
+        ElMessageBox.alert(
+        '来新单辣！',
+        event.data,
+        {
+          confirmButtonText: '确定',
+          type: 'success',
+        }
+      );
+        await fetchOrders()
+      };
+
+      ws.onclose = () => {
+        if (isManuallyClosed){
+          console.log("WebSocket disconnected,isManuallyClosed,no reconnect")
+          return;
+        }
+        console.log('WebSocket disconnected'+reconnectAttempts+","+maxReconnectAttempts);
+        if (reconnectAttempts < maxReconnectAttempts) {
+          reconnectAttempts++;
+          reconnectWebSocket(); // 尝试重连
+        } else {
+          console.error('Max reconnect attempts reached');
+          showReconnectAlert(); // 耗尽重连次数后显示弹窗
+        }
+      };
+
+      ws.onerror = (error: Event) => {
+        console.error('WebSocket error:', error);
+        ws?.close(); // 发生错误时关闭连接，触发 onclose
+      };
+    };
+
+    const reconnectWebSocket = () => {
+      // if (reconnectTimer) return; // 如果已经有定时器，不重复设置
+
+      console.log(`Reconnecting in ${reconnectInterval / 1000} seconds...`);
+      // reconnectTimer = 
+      window.setTimeout(() => {
+        connectWebSocket();
+      }, reconnectInterval);
+    };
+// 显示重连失败弹窗
+const showReconnectAlert = () => {
+      ElMessageBox.alert(
+        'WebSocket 重连失败，已达到最大重试次数，请检查网络或稍后再试。',
+        '重连失败',
+        {
+          confirmButtonText: '确定',
+          type: 'error',
+        }
+      );
+    };
 onMounted(async () => {
   try {
     await fetchProducts();
     await fetchOrders();
     await fetchAllProductOptions();
-    ws = new WebSocket(API_BASE_URL+"/ws/order_create");
-    ws.onmessage=async (event:MessageEvent)=>{
-      console.info("websocket接收到数据",event)
-      await fetchOrders()
-      ElMessage.info("有新单辣!")
-      //todo 或许可以连个音响
-    }
+    connectWebSocket();
   } catch (error) {
     console.error('获取订单数据时出错:', error);
     ElMessage.error('获取订单数据时出错:'+error);
@@ -236,6 +297,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(()=>{
+  isManuallyClosed = true; // 设置为手动关闭标志，避免重连
   if(ws){
     ws.close()
   }
