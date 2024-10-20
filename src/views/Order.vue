@@ -28,7 +28,8 @@ import {
   ElCol,
   ElMessageBox,
 } from 'element-plus';
-import { API_BASE_URL } from '@/client/customize';
+import { API_BASE_URL, LOCAL_AUTH_NAME } from '@/client/customize';
+import { USER_DTO } from '@/router';
 
 // 订单数据
 const orders = ref<Order[]>([]);
@@ -221,25 +222,32 @@ let ws: WebSocket | null = null;
     const maxReconnectAttempts = 5; // 最大重连次数
     const reconnectInterval = 3000; // 每次重连的时间间隔，单位：毫秒
     let isManuallyClosed = false; // 标志位：标记是否手动关闭 WebSocket
-
+    const AUTHENTICATE="authenticate"
 
     const connectWebSocket = () => {
+      const auth=localStorage.getItem(LOCAL_AUTH_NAME)
+      if(auth===null){
+        ElMessage.error("localStorage中auth对应的值为空");
+      }
       ws = new WebSocket(API_BASE_URL+"/ws/order_create");
 
       ws.onopen = () => {
         console.log('WebSocket connected');
+        ws?.send(AUTHENTICATE+":"+auth)
         reconnectAttempts = 0; // 连接成功后重置重连次数
       };
 
       ws.onmessage = async (event: MessageEvent) => {
-        ElMessageBox.alert(
-        '来新单辣！',
-        event.data,
-        {
-          confirmButtonText: '确定',
-          type: 'success',
+        const msg=event.data as string;
+        if(!msg.startsWith(AUTHENTICATE)){
+            ElMessageBox.alert(
+            event.data,
+            '来新单辣！',
+            {
+              confirmButtonText: '确定',
+              type: 'success',
+            })
         }
-      );
         await fetchOrders()
       };
 
@@ -492,7 +500,7 @@ const submitNewOrder = async () => {
       }
     }
   }
-  const str=localStorage.getItem("userDTO")
+  const str=localStorage.getItem(USER_DTO)
   const userDTO=JSON.parse(str as string) as UserDTO
   // 构建符合 Order 类型的订单数据
   const disPriceInCents = Math.round((newOrderForm.value.disPrice || 0) * 100);
