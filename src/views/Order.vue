@@ -223,7 +223,22 @@ let ws: WebSocket | null = null;
     const reconnectInterval = 3000; // 每次重连的时间间隔，单位：毫秒
     let isManuallyClosed = false; // 标志位：标记是否手动关闭 WebSocket
     const AUTHENTICATE="authenticate"
-
+    const heartbeatIntervalTime =25000// 每25秒发送心跳
+    let heartbeatInterval: number | undefined;
+    function startHeartbeat() {
+    heartbeatInterval = setInterval(() => {
+        if (ws?.readyState === WebSocket.OPEN) {
+            console.log("Sending heartbeat...");
+            ws.send("ping");  // 发送心跳消息
+        }
+    }, heartbeatIntervalTime);
+}
+    function stopHeartbeat() {
+    if (heartbeatInterval) {
+        clearInterval(heartbeatInterval);
+        heartbeatInterval = undefined;
+    }
+}
     const connectWebSocket = () => {
       const auth=localStorage.getItem(LOCAL_AUTH_NAME)
       if(auth===null){
@@ -235,11 +250,13 @@ let ws: WebSocket | null = null;
         console.log('WebSocket connected');
         ws?.send(AUTHENTICATE+":"+auth)
         reconnectAttempts = 0; // 连接成功后重置重连次数
+        startHeartbeat();
       };
 
       ws.onmessage = async (event: MessageEvent) => {
         const msg=event.data as string;
-        if(!msg.startsWith(AUTHENTICATE)){
+        if(msg.startsWith("order")){
+          await fetchOrders()
             ElMessageBox.alert(
             event.data,
             '来新单辣！',
@@ -247,13 +264,15 @@ let ws: WebSocket | null = null;
               confirmButtonText: '确定',
               type: 'success',
             })
+        }else{
+          console.log("收到消息",msg)
         }
-        await fetchOrders()
       };
 
       ws.onclose = () => {
         if (isManuallyClosed){
           console.log("WebSocket disconnected,isManuallyClosed,no reconnect")
+          stopHeartbeat();
           return;
         }
         console.log('WebSocket disconnected'+reconnectAttempts+","+maxReconnectAttempts);
@@ -262,6 +281,7 @@ let ws: WebSocket | null = null;
           reconnectWebSocket(); // 尝试重连
         } else {
           console.error('Max reconnect attempts reached');
+          stopHeartbeat();
           showReconnectAlert(); // 耗尽重连次数后显示弹窗
         }
       };
