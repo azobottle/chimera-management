@@ -66,17 +66,18 @@ export const PointsProductInsSchema = {
             description: '领取方式，0为自提，1为填信息邮递',
             format: 'int32'
         },
-        sendName: {
+        number: {
             type: 'string',
-            description: '邮递人姓名'
+            description: '号码'
         },
         sendAddr: {
             type: 'string',
             description: '邮递人地址'
         },
-        sendNum: {
+        getDate: {
             type: 'string',
-            description: '邮递人号码'
+            description: '自提时间',
+            format: 'date-time'
         },
         received: {
             type: 'integer',
@@ -731,6 +732,18 @@ export const ServiceResultObjectObjectSchema = {
         },
         success: {
             type: 'boolean'
+        }
+    }
+} as const;
+
+export const BatchSupplyOrderDTOSchema = {
+    type: 'object',
+    properties: {
+        orderIds: {
+            type: 'array',
+            items: {
+                type: 'string'
+            }
         }
     }
 } as const;

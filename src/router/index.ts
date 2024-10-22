@@ -14,6 +14,7 @@ import PointMall from '../views/PointMall.vue'
 import Login from '../views/Login.vue'
 import { validate } from '@/client'
 import AppConfiguration from '@/views/AppConfiguration.vue'
+import Delivery from '@/views/Delivery.vue'
 import { LOCAL_AUTH_NAME } from '@/client/customize'
 
 
@@ -30,7 +31,10 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/pointMall', component: PointMall },
   { path: '/activity', component: Activity },
   { path: '/login', component: Login },
-  { path: '/appConfiguration', component: AppConfiguration }
+  { path: '/appConfiguration', component: AppConfiguration },
+  { path: '/delivery', component: Delivery }
+
+  
 ]
 
 const router = createRouter({

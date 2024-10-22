@@ -55,17 +55,17 @@ export type PointsProductIns = {
      */
     sendType?: number;
     /**
-     * 邮递人姓名
+     * 号码
      */
-    sendName?: string;
+    number?: string;
     /**
      * 邮递人地址
      */
     sendAddr?: string;
     /**
-     * 邮递人号码
+     * 自提时间
      */
-    sendNum?: string;
+    getDate?: string;
     /**
      * 是否已领取，0为未领取，1为已领取
      */
@@ -506,6 +506,10 @@ export type ServiceResultObjectObject = {
     success?: boolean;
 };
 
+export type BatchSupplyOrderDTO = {
+    orderIds?: Array<(string)>;
+};
+
 export type CheckStudentIdentityApiParams = {
     [key: string]: unknown;
 };
@@ -772,16 +776,21 @@ export type UploadImagePointsProductError = unknown;
 
 export type RedeemPointsProductData = {
     query: {
+        getDate?: string;
+        name: string;
+        number: string;
         productId: string;
         sendAddr?: string;
-        sendName?: string;
-        sendNum?: string;
         sendType: number;
         userId: string;
     };
 };
 
-export type RedeemPointsProductResponse = (string);
+export type RedeemPointsProductResponse = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type RedeemPointsProductError = unknown;
 
@@ -803,7 +812,11 @@ export type ExchangeCouponData = {
     };
 };
 
-export type ExchangeCouponResponse = (string);
+export type ExchangeCouponResponse = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type ExchangeCouponError = unknown;
 
@@ -846,6 +859,18 @@ export type CreateOrderInStoreData = {
 export type CreateOrderInStoreResponse = (ServiceResultObjectObject);
 
 export type CreateOrderInStoreError = unknown;
+
+export type BatchSupplyOrdersData = {
+    body: BatchSupplyOrderDTO;
+};
+
+export type BatchSupplyOrdersResponse = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
+export type BatchSupplyOrdersError = unknown;
 
 export type AddCouponToUserData = {
     query: {
@@ -961,9 +986,28 @@ export type GetOrdersByUserIdResponse = (Array<Order>);
 
 export type GetOrdersByUserIdError = unknown;
 
+export type GetOrdersByDeliveryInfoData = {
+    query: {
+        address: string;
+        date: string;
+        school: string;
+        time: string;
+    };
+};
+
+export type GetOrdersByDeliveryInfoResponse = ({
+    [key: string]: unknown;
+});
+
+export type GetOrdersByDeliveryInfoError = unknown;
+
 export type GetAllCouponsForPointsResponse = (Array<Coupon>);
 
 export type GetAllCouponsForPointsError = unknown;
+
+export type GetCouponInsOfAuserResponse = (Array<CouponIns>);
+
+export type GetCouponInsOfAuserError = unknown;
 
 export type WxLoginOrRegisterData = {
     query: {

@@ -75,6 +75,12 @@
             <el-menu-item index="/activity">活动管理</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
+
+        <el-menu-item index="/delivery">
+          <i class="el-icon-menu"></i>
+          <span>送达通知</span>
+        </el-menu-item>
+
       </el-menu>
     </el-aside>
 
