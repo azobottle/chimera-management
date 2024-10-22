@@ -19,6 +19,7 @@
       <el-table-column label="">
         <template #default="{ row }">
           <el-button type="primary" @click="openEditDialog(row)">编辑</el-button>
+          <el-button type="danger" @click="deleteOption(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -84,7 +85,8 @@ import { ElMessage } from 'element-plus';
 import {
   getAllProductOptions,
   createProductOption,
-  updateProductOption
+  updateProductOption,
+  deleteProductOption
 } from '../client/services.gen'; // 更新服务路径
 import type { ProductOption, OptionValue } from '../client/types.gen';
 
@@ -109,6 +111,22 @@ const fetchOptions = async () => {
     }));
   } catch (error) {
     console.error('获取商品选项时出错:', error);
+  }
+};
+
+// 删除商品选项
+const deleteOption = async (option: ProductOption) => {
+  try {
+    await deleteProductOption({
+      path: {
+        id: option.id,
+      }
+    });
+    ElMessage.success('商品选项删除成功');
+    await fetchOptions();
+  } catch (error) {
+    console.error('删除商品选项时出错:', error);
+    ElMessage.error('商品选项删除失败，可能正在被使用');
   }
 };
 

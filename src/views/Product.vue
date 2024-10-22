@@ -105,7 +105,7 @@ const onOptionValuesChange = (optionId: string) => {
 
 // 分页相关的变量
 const currentPage = ref(1);   // 当前页码
-const pageSize = ref(2);      // 每页展示的商品数量
+const pageSize = ref(6);      // 每页展示的商品数量
 
 // 计算分页后的商品列表
 const paginatedProducts = computed(() => {

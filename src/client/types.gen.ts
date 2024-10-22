@@ -1027,6 +1027,16 @@ export type GetAllActivitiesShopResponse = (Array<Activity>);
 
 export type GetAllActivitiesShopError = unknown;
 
+export type DeleteProductOptionData = {
+    path: {
+        id: string;
+    };
+};
+
+export type DeleteProductOptionResponse = (string);
+
+export type DeleteProductOptionError = unknown;
+
 export type DeleteFixDeliveryInfoData = {
     path: {
         id: string;
