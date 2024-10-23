@@ -9,7 +9,7 @@ const users = ref<User[]>([]);
 
 // 分页相关的变量
 const currentPage = ref(1);   // 当前页码
-const pageSize = ref(2);      // 每页展示的用户数量
+const pageSize = ref(10);      // 每页展示的用户数量
 
 // 计算分页后的用户列表
 const paginatedUsers = computed(() => {
