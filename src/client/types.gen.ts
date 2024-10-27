@@ -419,11 +419,27 @@ export type PrePaidDTO = {
     prepay_id?: string;
 };
 
+export type ResponseBodyDTOServiceResultObjectObject = {
+    msg?: string;
+    data?: ServiceResultObjectObject;
+};
+
+export type ServiceResultObjectObject = {
+    data?: {
+        [key: string]: unknown;
+    };
+    context?: {
+        [key: string]: unknown;
+    };
+    msg?: string;
+    success?: boolean;
+};
+
 /**
  * 就是订单呀
  */
 export type Order = {
-    id?: ObjectId;
+    id: ObjectId;
     userId: ObjectId;
     /**
      * 自动填充状态
@@ -493,17 +509,6 @@ export type OrderItem = {
      * Product.imgURL
      */
     imgURL?: string;
-};
-
-export type ServiceResultObjectObject = {
-    data?: {
-        [key: string]: unknown;
-    };
-    context?: {
-        [key: string]: unknown;
-    };
-    msg?: string;
-    success?: boolean;
 };
 
 export type BatchSupplyOrderDTO = {
@@ -837,10 +842,12 @@ export type CreateResponse = (PrePaidDTO);
 export type CreateError = unknown;
 
 export type SupplyOrderData = {
-    body: Order;
+    query: {
+        orderId: string;
+    };
 };
 
-export type SupplyOrderResponse = (ServiceResultObjectObject);
+export type SupplyOrderResponse = (ResponseBodyDTOServiceResultObjectObject);
 
 export type SupplyOrderError = unknown;
 

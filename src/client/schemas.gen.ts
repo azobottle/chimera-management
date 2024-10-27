@@ -617,8 +617,38 @@ export const PrePaidDTOSchema = {
     }
 } as const;
 
+export const ResponseBodyDTOServiceResultObjectObjectSchema = {
+    type: 'object',
+    properties: {
+        msg: {
+            type: 'string'
+        },
+        data: {
+            '$ref': '#/components/schemas/ServiceResultObjectObject'
+        }
+    }
+} as const;
+
+export const ServiceResultObjectObjectSchema = {
+    type: 'object',
+    properties: {
+        data: {
+            type: 'object'
+        },
+        context: {
+            type: 'object'
+        },
+        msg: {
+            type: 'string'
+        },
+        success: {
+            type: 'boolean'
+        }
+    }
+} as const;
+
 export const OrderSchema = {
-    required: ['customerType', 'items', 'scene', 'totalPrice', 'userId'],
+    required: ['customerType', 'id', 'items', 'scene', 'totalPrice', 'userId'],
     type: 'object',
     properties: {
         id: {
@@ -716,24 +746,6 @@ export const OrderItemSchema = {
         }
     },
     description: '订单其中的一个商品'
-} as const;
-
-export const ServiceResultObjectObjectSchema = {
-    type: 'object',
-    properties: {
-        data: {
-            type: 'object'
-        },
-        context: {
-            type: 'object'
-        },
-        msg: {
-            type: 'string'
-        },
-        success: {
-            type: 'boolean'
-        }
-    }
 } as const;
 
 export const BatchSupplyOrderDTOSchema = {

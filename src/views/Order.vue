@@ -586,7 +586,7 @@ const submitNewOrder = async () => {
 // 新增供餐和退款处理函数
 const handleSupplyOrder = async (order: Order) => {
   try {
-    await supplyOrder({ body: order });
+    await supplyOrder({query:{orderId:order.id}});
     ElMessage.success('供餐成功');
     await fetchOrders(); // 刷新订单列表
   } catch (error) {
