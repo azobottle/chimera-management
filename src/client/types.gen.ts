@@ -415,8 +415,13 @@ export type OrderItemApiParams = {
     };
 };
 
-export type PrePaidDTO = {
-    prepay_id?: string;
+export type PrepayWithRequestPaymentResponse = {
+    appId?: string;
+    nonceStr?: string;
+    packageVal?: string;
+    signType?: string;
+    paySign?: string;
+    timeStamp?: string;
 };
 
 export type ResponseBodyDTOServiceResultObjectObject = {
@@ -435,80 +440,12 @@ export type ServiceResultObjectObject = {
     success?: boolean;
 };
 
-/**
- * 就是订单呀
- */
-export type Order = {
-    id: ObjectId;
-    userId: ObjectId;
+export type RefundApplyApiParams = {
+    orderId: string;
     /**
-     * 自动填充状态
+     * 退款原因
      */
-    state?: string;
-    /**
-     * 顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"
-     */
-    customerType: string;
-    /**
-     * 场景，可选："堂食"，"外带"，"定时达"
-     */
-    scene: string;
-    deliveryInfo?: DeliveryInfo;
-    /**
-     * 订单所含商品列表
-     */
-    items: Array<OrderItem>;
-    /**
-     * 自动填充订单号
-     */
-    orderNum?: number;
-    /**
-     * 顾客备注
-     */
-    remark?: string;
-    /**
-     * 商家备注
-     */
-    merchantNote?: string;
-    /**
-     * 后端根据sum(OrderItem.price)-coupon.dePrice计算，单位为分。
-     */
-    totalPrice: number;
-    coupon?: CouponIns;
-    /**
-     * 只给商品端使用的，线下优惠，小程序端传了也不处理。
-     */
-    disPrice?: number;
-    /**
-     * 自动填充创建时间
-     */
-    createdAt?: string;
-};
-
-/**
- * 订单其中的一个商品
- */
-export type OrderItem = {
-    productId?: ObjectId;
-    /**
-     * 商品选项，key为ProductOption.id, value为一个完整的OptionValue
-     */
-    optionValues?: {
-        [key: string]: OptionValue;
-    };
-    /**
-     * Product.name
-     */
-    name?: string;
-    cateId?: ObjectId;
-    /**
-     * 根据Product.price和目前optionValues中OptionValue.priceAdjustment计算的价格。单位为分
-     */
-    price?: number;
-    /**
-     * Product.imgURL
-     */
-    imgURL?: string;
+    reason?: string;
 };
 
 export type BatchSupplyOrderDTO = {
@@ -565,6 +502,90 @@ export type AppConfigurationApiParams = {
      * 配置类别（用于分组管理）
      */
     category?: string;
+};
+
+/**
+ * 就是订单呀
+ */
+export type Order = {
+    id: ObjectId;
+    userId: ObjectId;
+    /**
+     * 自动填充状态
+     */
+    state?: string;
+    /**
+     * 顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"
+     */
+    customerType: string;
+    /**
+     * 场景，可选："堂食"，"外带"，"定时达"
+     */
+    scene: string;
+    deliveryInfo?: DeliveryInfo;
+    /**
+     * 订单所含商品列表
+     */
+    items: Array<OrderItem>;
+    /**
+     * 自动填充订单号
+     */
+    orderNum?: number;
+    /**
+     * 顾客备注
+     */
+    remark?: string;
+    /**
+     * 商家备注
+     */
+    merchantNote?: string;
+    /**
+     * 后端根据sum(OrderItem.price)-coupon.dePrice计算，单位为分。
+     */
+    totalPrice: number;
+    coupon?: CouponIns;
+    /**
+     * 只给商品端使用的，线下优惠，小程序端传了也不处理。
+     */
+    disPrice?: number;
+    /**
+     * 自动填充创建时间
+     */
+    createdAt?: string;
+    /**
+     * 退款原因
+     */
+    refundReason?: string;
+    /**
+     * 异常结束原因
+     */
+    abNormalEndReason?: string;
+};
+
+/**
+ * 订单其中的一个商品
+ */
+export type OrderItem = {
+    productId?: ObjectId;
+    /**
+     * 商品选项，key为ProductOption.id, value为一个完整的OptionValue
+     */
+    optionValues?: {
+        [key: string]: OptionValue;
+    };
+    /**
+     * Product.name
+     */
+    name?: string;
+    cateId?: ObjectId;
+    /**
+     * 根据Product.price和目前optionValues中OptionValue.priceAdjustment计算的价格。单位为分
+     */
+    price?: number;
+    /**
+     * Product.imgURL
+     */
+    imgURL?: string;
 };
 
 export type GetAllUsersResponse = (Array<User>);
@@ -837,7 +858,7 @@ export type CreateData = {
     body: OrderApiParams;
 };
 
-export type CreateResponse = (PrePaidDTO);
+export type CreateResponse = (PrepayWithRequestPaymentResponse);
 
 export type CreateError = unknown;
 
@@ -851,13 +872,21 @@ export type SupplyOrderResponse = (ResponseBodyDTOServiceResultObjectObject);
 
 export type SupplyOrderError = unknown;
 
-export type RefundOrderData = {
-    body: Order;
+export type RefundCallbackData = {
+    body: string;
 };
 
-export type RefundOrderResponse = (ServiceResultObjectObject);
+export type RefundCallbackResponse = (string);
 
-export type RefundOrderError = unknown;
+export type RefundCallbackError = unknown;
+
+export type RefundApplyData = {
+    body: RefundApplyApiParams;
+};
+
+export type RefundApplyResponse = (ResponseBodyDTOServiceResultObjectObject);
+
+export type RefundApplyError = unknown;
 
 export type CreateOrderInStoreData = {
     body: OrderApiParams;

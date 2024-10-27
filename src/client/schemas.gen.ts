@@ -608,10 +608,25 @@ export const OrderItemApiParamsSchema = {
     description: '订单其中的一个商品'
 } as const;
 
-export const PrePaidDTOSchema = {
+export const PrepayWithRequestPaymentResponseSchema = {
     type: 'object',
     properties: {
-        prepay_id: {
+        appId: {
+            type: 'string'
+        },
+        nonceStr: {
+            type: 'string'
+        },
+        packageVal: {
+            type: 'string'
+        },
+        signType: {
+            type: 'string'
+        },
+        paySign: {
+            type: 'string'
+        },
+        timeStamp: {
             type: 'string'
         }
     }
@@ -647,105 +662,18 @@ export const ServiceResultObjectObjectSchema = {
     }
 } as const;
 
-export const OrderSchema = {
-    required: ['customerType', 'id', 'items', 'scene', 'totalPrice', 'userId'],
+export const RefundApplyApiParamsSchema = {
+    required: ['orderId'],
     type: 'object',
     properties: {
-        id: {
-            '$ref': '#/components/schemas/ObjectId'
+        orderId: {
+            type: 'string'
         },
-        userId: {
-            '$ref': '#/components/schemas/ObjectId'
-        },
-        state: {
+        reason: {
             type: 'string',
-            description: '自动填充状态'
-        },
-        customerType: {
-            type: 'string',
-            description: '顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"'
-        },
-        scene: {
-            type: 'string',
-            description: '场景，可选："堂食"，"外带"，"定时达"'
-        },
-        deliveryInfo: {
-            '$ref': '#/components/schemas/DeliveryInfo'
-        },
-        items: {
-            type: 'array',
-            description: '订单所含商品列表',
-            example: '[example1,example2...]',
-            items: {
-                '$ref': '#/components/schemas/OrderItem'
-            }
-        },
-        orderNum: {
-            type: 'integer',
-            description: '自动填充订单号',
-            format: 'int32'
-        },
-        remark: {
-            type: 'string',
-            description: '顾客备注'
-        },
-        merchantNote: {
-            type: 'string',
-            description: '商家备注'
-        },
-        totalPrice: {
-            type: 'integer',
-            description: '后端根据sum(OrderItem.price)-coupon.dePrice计算，单位为分。',
-            format: 'int32'
-        },
-        coupon: {
-            '$ref': '#/components/schemas/CouponIns'
-        },
-        disPrice: {
-            type: 'integer',
-            description: '只给商品端使用的，线下优惠，小程序端传了也不处理。',
-            format: 'int32'
-        },
-        createdAt: {
-            type: 'string',
-            description: '自动填充创建时间',
-            format: 'date-time'
+            description: '退款原因'
         }
-    },
-    description: '就是订单呀'
-} as const;
-
-export const OrderItemSchema = {
-    type: 'object',
-    properties: {
-        productId: {
-            '$ref': '#/components/schemas/ObjectId'
-        },
-        optionValues: {
-            type: 'object',
-            additionalProperties: {
-                '$ref': '#/components/schemas/OptionValue'
-            },
-            description: '商品选项，key为ProductOption.id, value为一个完整的OptionValue'
-        },
-        name: {
-            type: 'string',
-            description: 'Product.name'
-        },
-        cateId: {
-            '$ref': '#/components/schemas/ObjectId'
-        },
-        price: {
-            type: 'integer',
-            description: '根据Product.price和目前optionValues中OptionValue.priceAdjustment计算的价格。单位为分',
-            format: 'int32'
-        },
-        imgURL: {
-            type: 'string',
-            description: 'Product.imgURL'
-        }
-    },
-    description: '订单其中的一个商品'
+    }
 } as const;
 
 export const BatchSupplyOrderDTOSchema = {
@@ -871,4 +799,113 @@ export const AppConfigurationApiParamsSchema = {
             description: '配置类别（用于分组管理）'
         }
     }
+} as const;
+
+export const OrderSchema = {
+    required: ['customerType', 'id', 'items', 'scene', 'totalPrice', 'userId'],
+    type: 'object',
+    properties: {
+        id: {
+            '$ref': '#/components/schemas/ObjectId'
+        },
+        userId: {
+            '$ref': '#/components/schemas/ObjectId'
+        },
+        state: {
+            type: 'string',
+            description: '自动填充状态'
+        },
+        customerType: {
+            type: 'string',
+            description: '顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"'
+        },
+        scene: {
+            type: 'string',
+            description: '场景，可选："堂食"，"外带"，"定时达"'
+        },
+        deliveryInfo: {
+            '$ref': '#/components/schemas/DeliveryInfo'
+        },
+        items: {
+            type: 'array',
+            description: '订单所含商品列表',
+            example: '[example1,example2...]',
+            items: {
+                '$ref': '#/components/schemas/OrderItem'
+            }
+        },
+        orderNum: {
+            type: 'integer',
+            description: '自动填充订单号',
+            format: 'int32'
+        },
+        remark: {
+            type: 'string',
+            description: '顾客备注'
+        },
+        merchantNote: {
+            type: 'string',
+            description: '商家备注'
+        },
+        totalPrice: {
+            type: 'integer',
+            description: '后端根据sum(OrderItem.price)-coupon.dePrice计算，单位为分。',
+            format: 'int32'
+        },
+        coupon: {
+            '$ref': '#/components/schemas/CouponIns'
+        },
+        disPrice: {
+            type: 'integer',
+            description: '只给商品端使用的，线下优惠，小程序端传了也不处理。',
+            format: 'int32'
+        },
+        createdAt: {
+            type: 'string',
+            description: '自动填充创建时间',
+            format: 'date-time'
+        },
+        refundReason: {
+            type: 'string',
+            description: '退款原因'
+        },
+        abNormalEndReason: {
+            type: 'string',
+            description: '异常结束原因'
+        }
+    },
+    description: '就是订单呀'
+} as const;
+
+export const OrderItemSchema = {
+    type: 'object',
+    properties: {
+        productId: {
+            '$ref': '#/components/schemas/ObjectId'
+        },
+        optionValues: {
+            type: 'object',
+            additionalProperties: {
+                '$ref': '#/components/schemas/OptionValue'
+            },
+            description: '商品选项，key为ProductOption.id, value为一个完整的OptionValue'
+        },
+        name: {
+            type: 'string',
+            description: 'Product.name'
+        },
+        cateId: {
+            '$ref': '#/components/schemas/ObjectId'
+        },
+        price: {
+            type: 'integer',
+            description: '根据Product.price和目前optionValues中OptionValue.priceAdjustment计算的价格。单位为分',
+            format: 'int32'
+        },
+        imgURL: {
+            type: 'string',
+            description: 'Product.imgURL'
+        }
+    },
+    description: '订单其中的一个商品'
 } as const;

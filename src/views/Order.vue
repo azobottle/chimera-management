@@ -6,7 +6,7 @@ import {
   createOrderInStore,
   getAllProductOptions,
   supplyOrder,
-  refundOrder,
+  refundApply,
 } from '../client/services.gen';
 import type { Order, Product, OptionValue, ProductOption, OrderApiParams, UserDTO } from '../client/types.gen';
 import {
@@ -48,7 +48,7 @@ const stateOptions = [
   { label: '已支付', value: '已支付' },
   { label: '待出餐', value: '待出餐' },
   { label: '待配送', value: '待配送' },
-  { label: '已完成', value: '已完成' },
+  { label: '正常结束', value: '正常结束' },
   { label: '已退款', value: '已退款' },
 ];
 
@@ -595,25 +595,15 @@ const handleSupplyOrder = async (order: Order) => {
   }
 };
 
-const handleRefundOrder = async (order: Order) => {
-  try {
-    await refundOrder({ body: order });
-    ElMessage.success('退款成功');
-    await fetchOrders(); // 刷新订单列表
-  } catch (error) {
-    console.error('退款时出错:', error);
-    ElMessage.error('退款时出错'+ error);
-  }
-};
 
 const refundDialogVisible = ref(false);
 const currentOrder = ref<Order | null>(null);
-const merchantNote = ref('');
+const refundReason = ref('');
 
 // Open the refund confirmation dialog
 const openRefundDialog = (order: Order) => {
   currentOrder.value = order;
-  merchantNote.value = ''; // Clear the note input
+  refundReason.value = ''; // Clear the note input
   refundDialogVisible.value = true;
 };
 
@@ -622,14 +612,13 @@ const confirmRefund = async () => {
   if (!currentOrder.value) return;
   
   try {
-    currentOrder.value.merchantNote = merchantNote.value; // Add the merchant note to the order
-    await refundOrder({ body: currentOrder.value });
-    ElMessage.success('退款成功');
+    await refundApply({ body: {orderId:currentOrder.value.id,reason:refundReason.value }});
+    ElMessage.success('退款申请成功');
     refundDialogVisible.value = false;
     await fetchOrders(); // Refresh the order list
   } catch (error) {
-    console.error('退款时出错:', error);
-    ElMessage.error('退款时出错'+error);
+    console.error('退款申请时出错:', error);
+    ElMessage.error('退款申请时出错'+error);
   }
 };
 
@@ -886,8 +875,8 @@ const confirmRefund = async () => {
 
     <!-- Refund Confirmation Dialog -->
     <el-dialog title="确认退款" v-model="refundDialogVisible">
-      <span>请输入商家备注进行确认：</span>
-      <el-input type="textarea" v-model="merchantNote" placeholder="请输入商家备注"></el-input>
+      <span>请输入退款原因进行确认：</span>
+      <el-input type="textarea" v-model="refundReason" placeholder="请输入退款原因"></el-input>
       <template #footer>
         <el-button @click="refundDialogVisible = false">取消</el-button>
         <el-button type="primary" @click="confirmRefund">确认</el-button>
