@@ -98,6 +98,10 @@ export type User = {
      */
     points?: number;
     /**
+     * 电话号码
+     */
+    number?: string;
+    /**
      * 用户持有的优惠券实例
      */
     coupons?: Array<CouponIns>;
@@ -178,6 +182,10 @@ export type Product = {
     productOptions?: {
         [key: string]: Array<OptionValue>;
     };
+    /**
+     * 是否只限堂食，为true时定时达页面不显示该商品
+     */
+    onlyDining?: boolean;
 };
 
 export type ProductOption = {
@@ -364,7 +372,7 @@ export type DeliveryInfo = {
      */
     address?: string;
     /**
-     * 绑定到具体订单实例的已选时间
+     * 绑定到具体订单实例的已选时间，可以是当天也可以是第二天。
      */
     time?: string;
 };
@@ -372,7 +380,7 @@ export type DeliveryInfo = {
 export type OrderApiParams = {
     userId: ObjectId;
     /**
-     * 顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"
+     * 顾客类型，可选："北大学生业务"，"清华学生业务"，"未学生认证业务"
      */
     customerType: string;
     /**
@@ -480,6 +488,7 @@ export type UserDTO = {
     studentCert?: boolean;
     school?: string;
     role?: string;
+    number?: string;
     points?: number;
     coupons?: Array<CouponIns>;
     pointsProducts?: Array<PointsProductIns>;
@@ -515,7 +524,7 @@ export type Order = {
      */
     state?: string;
     /**
-     * 顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"
+     * 顾客类型，可选："北大学生业务"，"清华学生业务"，"未学生认证业务"
      */
     customerType: string;
     /**
@@ -590,7 +599,11 @@ export type OrderItem = {
 
 export type GetAllUsersResponse = (Array<User>);
 
-export type GetAllUsersError = unknown;
+export type GetAllUsersError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type UpdateUserData = {
     body: User;
@@ -598,7 +611,11 @@ export type UpdateUserData = {
 
 export type UpdateUserResponse = (User);
 
-export type UpdateUserError = unknown;
+export type UpdateUserError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CreateUserData = {
     body: User;
@@ -606,11 +623,19 @@ export type CreateUserData = {
 
 export type CreateUserResponse = (User);
 
-export type CreateUserError = unknown;
+export type CreateUserError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllProductCatesResponse = (Array<ProductCate>);
 
-export type GetAllProductCatesError = unknown;
+export type GetAllProductCatesError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type UpdateProductCateData = {
     body: ProductCate;
@@ -618,7 +643,11 @@ export type UpdateProductCateData = {
 
 export type UpdateProductCateResponse = (ProductCate);
 
-export type UpdateProductCateError = unknown;
+export type UpdateProductCateError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CreateProductCateData = {
     body: ProductCate;
@@ -626,11 +655,19 @@ export type CreateProductCateData = {
 
 export type CreateProductCateResponse = (ProductCate);
 
-export type CreateProductCateError = unknown;
+export type CreateProductCateError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllProductsResponse = (Array<Product>);
 
-export type GetAllProductsError = unknown;
+export type GetAllProductsError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type UpdateProductData = {
     body: Product;
@@ -638,7 +675,11 @@ export type UpdateProductData = {
 
 export type UpdateProductResponse = (Product);
 
-export type UpdateProductError = unknown;
+export type UpdateProductError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CreateProductData = {
     body: Product;
@@ -646,11 +687,19 @@ export type CreateProductData = {
 
 export type CreateProductResponse = (Product);
 
-export type CreateProductError = unknown;
+export type CreateProductError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllProductOptionsResponse = (Array<ProductOption>);
 
-export type GetAllProductOptionsError = unknown;
+export type GetAllProductOptionsError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type UpdateProductOptionData = {
     body: ProductOption;
@@ -658,7 +707,11 @@ export type UpdateProductOptionData = {
 
 export type UpdateProductOptionResponse = (ProductOption);
 
-export type UpdateProductOptionError = unknown;
+export type UpdateProductOptionError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CreateProductOptionData = {
     body: ProductOption;
@@ -666,11 +719,19 @@ export type CreateProductOptionData = {
 
 export type CreateProductOptionResponse = (ProductOption);
 
-export type CreateProductOptionError = unknown;
+export type CreateProductOptionError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllPointsProductsResponse = (Array<PointsProduct>);
 
-export type GetAllPointsProductsError = unknown;
+export type GetAllPointsProductsError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type UpdatePointsProductData = {
     body: PointsProduct;
@@ -678,7 +739,11 @@ export type UpdatePointsProductData = {
 
 export type UpdatePointsProductResponse = (PointsProduct);
 
-export type UpdatePointsProductError = unknown;
+export type UpdatePointsProductError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CreatePointsProductData = {
     body: PointsProduct;
@@ -686,11 +751,19 @@ export type CreatePointsProductData = {
 
 export type CreatePointsProductResponse = (PointsProduct);
 
-export type CreatePointsProductError = unknown;
+export type CreatePointsProductError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllFixDeliveryInfosResponse = (Array<FixDeliveryInfo>);
 
-export type GetAllFixDeliveryInfosError = unknown;
+export type GetAllFixDeliveryInfosError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type UpdateFixDeliveryInfoData = {
     body: FixDeliveryInfo;
@@ -698,7 +771,11 @@ export type UpdateFixDeliveryInfoData = {
 
 export type UpdateFixDeliveryInfoResponse = (FixDeliveryInfo);
 
-export type UpdateFixDeliveryInfoError = unknown;
+export type UpdateFixDeliveryInfoError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CreateFixDeliveryInfoData = {
     body: FixDeliveryInfo;
@@ -706,11 +783,19 @@ export type CreateFixDeliveryInfoData = {
 
 export type CreateFixDeliveryInfoResponse = (FixDeliveryInfo);
 
-export type CreateFixDeliveryInfoError = unknown;
+export type CreateFixDeliveryInfoError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllCouponsResponse = (Array<Coupon>);
 
-export type GetAllCouponsError = unknown;
+export type GetAllCouponsError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type UpdateCouponData = {
     body: Coupon;
@@ -718,7 +803,11 @@ export type UpdateCouponData = {
 
 export type UpdateCouponResponse = (Coupon);
 
-export type UpdateCouponError = unknown;
+export type UpdateCouponError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CreateCouponData = {
     body: Coupon;
@@ -726,11 +815,19 @@ export type CreateCouponData = {
 
 export type CreateCouponResponse = (Coupon);
 
-export type CreateCouponError = unknown;
+export type CreateCouponError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllAppConfigurationsResponse = (Array<AppConfiguration>);
 
-export type GetAllAppConfigurationsError = unknown;
+export type GetAllAppConfigurationsError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type UpdateConfigurationData = {
     body: AppConfiguration;
@@ -738,7 +835,11 @@ export type UpdateConfigurationData = {
 
 export type UpdateConfigurationResponse = (AppConfiguration);
 
-export type UpdateConfigurationError = unknown;
+export type UpdateConfigurationError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type AddConfigurationData = {
     body: AppConfigurationApiParams;
@@ -746,11 +847,19 @@ export type AddConfigurationData = {
 
 export type AddConfigurationResponse = (AppConfiguration);
 
-export type AddConfigurationError = unknown;
+export type AddConfigurationError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllActivitiesResponse = (Array<Activity>);
 
-export type GetAllActivitiesError = unknown;
+export type GetAllActivitiesError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type UpdateActivityData = {
     body: Activity;
@@ -758,7 +867,11 @@ export type UpdateActivityData = {
 
 export type UpdateActivityResponse = (Activity);
 
-export type UpdateActivityError = unknown;
+export type UpdateActivityError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CreateEntityData = {
     body: Activity;
@@ -766,7 +879,11 @@ export type CreateEntityData = {
 
 export type CreateEntityResponse = (Activity);
 
-export type CreateEntityError = unknown;
+export type CreateEntityError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type UploadImageData = {
     body?: {
@@ -776,11 +893,19 @@ export type UploadImageData = {
 
 export type UploadImageResponse = (string);
 
-export type UploadImageError = unknown;
+export type UploadImageError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllProcessorMapsResponse = (Array<ProcessorMap>);
 
-export type GetAllProcessorMapsError = unknown;
+export type GetAllProcessorMapsError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CreateProcessorMapData = {
     body: ProcessorMap;
@@ -788,7 +913,11 @@ export type CreateProcessorMapData = {
 
 export type CreateProcessorMapResponse = (ProcessorMap);
 
-export type CreateProcessorMapError = unknown;
+export type CreateProcessorMapError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type UploadImagePointsProductData = {
     body?: {
@@ -798,7 +927,11 @@ export type UploadImagePointsProductData = {
 
 export type UploadImagePointsProductResponse = (string);
 
-export type UploadImagePointsProductError = unknown;
+export type UploadImagePointsProductError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type RedeemPointsProductData = {
     query: {
@@ -818,7 +951,11 @@ export type RedeemPointsProductResponse = ({
     };
 });
 
-export type RedeemPointsProductError = unknown;
+export type RedeemPointsProductError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type SetPointsProductAsReceivedData = {
     query: {
@@ -829,7 +966,11 @@ export type SetPointsProductAsReceivedData = {
 
 export type SetPointsProductAsReceivedResponse = (string);
 
-export type SetPointsProductAsReceivedError = unknown;
+export type SetPointsProductAsReceivedError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type ExchangeCouponData = {
     query: {
@@ -844,7 +985,11 @@ export type ExchangeCouponResponse = ({
     };
 });
 
-export type ExchangeCouponError = unknown;
+export type ExchangeCouponError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CallbackData = {
     body: string;
@@ -852,7 +997,11 @@ export type CallbackData = {
 
 export type CallbackResponse = (string);
 
-export type CallbackError = unknown;
+export type CallbackError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CreateData = {
     body: OrderApiParams;
@@ -860,7 +1009,11 @@ export type CreateData = {
 
 export type CreateResponse = (PrepayWithRequestPaymentResponse);
 
-export type CreateError = unknown;
+export type CreateError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type SupplyOrderData = {
     query: {
@@ -870,7 +1023,11 @@ export type SupplyOrderData = {
 
 export type SupplyOrderResponse = (ResponseBodyDTOServiceResultObjectObject);
 
-export type SupplyOrderError = unknown;
+export type SupplyOrderError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type RefundCallbackData = {
     body: string;
@@ -878,7 +1035,11 @@ export type RefundCallbackData = {
 
 export type RefundCallbackResponse = (string);
 
-export type RefundCallbackError = unknown;
+export type RefundCallbackError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type RefundApplyData = {
     body: RefundApplyApiParams;
@@ -886,7 +1047,11 @@ export type RefundApplyData = {
 
 export type RefundApplyResponse = (ResponseBodyDTOServiceResultObjectObject);
 
-export type RefundApplyError = unknown;
+export type RefundApplyError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CreateOrderInStoreData = {
     body: OrderApiParams;
@@ -894,7 +1059,11 @@ export type CreateOrderInStoreData = {
 
 export type CreateOrderInStoreResponse = (ServiceResultObjectObject);
 
-export type CreateOrderInStoreError = unknown;
+export type CreateOrderInStoreError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type BatchSupplyOrdersData = {
     body: BatchSupplyOrderDTO;
@@ -906,7 +1075,11 @@ export type BatchSupplyOrdersResponse = ({
     };
 });
 
-export type BatchSupplyOrdersError = unknown;
+export type BatchSupplyOrdersError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type AddCouponToUserData = {
     query: {
@@ -919,17 +1092,23 @@ export type AddCouponToUserResponse = ({
     [key: string]: unknown;
 });
 
-export type AddCouponToUserError = unknown;
+export type AddCouponToUserError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type CheckStudentIdentityData = {
-    query: {
-        apiParams: CheckStudentIdentityApiParams;
-    };
+    body?: CheckStudentIdentityApiParams;
 };
 
 export type CheckStudentIdentityResponse = (WxStudentCheckDTO);
 
-export type CheckStudentIdentityError = unknown;
+export type CheckStudentIdentityError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type LoginData = {
     body: LoginDTO;
@@ -937,7 +1116,11 @@ export type LoginData = {
 
 export type LoginResponse = (ResponseBodyDTOUserDTO);
 
-export type LoginError = unknown;
+export type LoginError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type UploadImage1Data = {
     body?: {
@@ -947,7 +1130,11 @@ export type UploadImage1Data = {
 
 export type UploadImage1Response = (string);
 
-export type UploadImage1Error = unknown;
+export type UploadImage1Error = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetUserByNameData = {
     path: {
@@ -957,7 +1144,11 @@ export type GetUserByNameData = {
 
 export type GetUserByNameResponse = (User);
 
-export type GetUserByNameError = unknown;
+export type GetUserByNameError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetNewUsersData = {
     query: {
@@ -968,15 +1159,27 @@ export type GetNewUsersData = {
 
 export type GetNewUsersResponse = (Array<User>);
 
-export type GetNewUsersError = unknown;
+export type GetNewUsersError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllProductCatesShopResponse = (Array<ProductCate>);
 
-export type GetAllProductCatesShopError = unknown;
+export type GetAllProductCatesShopError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllProductsShopResponse = (Array<Product>);
 
-export type GetAllProductsShopError = unknown;
+export type GetAllProductsShopError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type ExistsByCateIdData = {
     query: {
@@ -986,15 +1189,27 @@ export type ExistsByCateIdData = {
 
 export type ExistsByCateIdResponse = (boolean);
 
-export type ExistsByCateIdError = unknown;
+export type ExistsByCateIdError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllPointsProductsShopResponse = (Array<PointsProduct>);
 
-export type GetAllPointsProductsShopError = unknown;
+export type GetAllPointsProductsShopError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllPointsProductInsResponse = (Array<PointsProductIns>);
 
-export type GetAllPointsProductInsError = unknown;
+export type GetAllPointsProductInsError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllOrdersData = {
     query: {
@@ -1007,7 +1222,11 @@ export type GetAllOrdersResponse = ({
     [key: string]: unknown;
 });
 
-export type GetAllOrdersError = unknown;
+export type GetAllOrdersError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetOrdersByUserIdData = {
     path: {
@@ -1020,7 +1239,11 @@ export type GetOrdersByUserIdData = {
 
 export type GetOrdersByUserIdResponse = (Array<Order>);
 
-export type GetOrdersByUserIdError = unknown;
+export type GetOrdersByUserIdError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetOrdersByDeliveryInfoData = {
     query: {
@@ -1035,15 +1258,43 @@ export type GetOrdersByDeliveryInfoResponse = ({
     [key: string]: unknown;
 });
 
-export type GetOrdersByDeliveryInfoError = unknown;
+export type GetOrdersByDeliveryInfoError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
+export type GetOrderByIdData = {
+    query: {
+        orderId: string;
+    };
+};
+
+export type GetOrderByIdResponse = ({
+    [key: string]: unknown;
+});
+
+export type GetOrderByIdError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllCouponsForPointsResponse = (Array<Coupon>);
 
-export type GetAllCouponsForPointsError = unknown;
+export type GetAllCouponsForPointsError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetCouponInsOfAuserResponse = (Array<CouponIns>);
 
-export type GetCouponInsOfAuserError = unknown;
+export type GetCouponInsOfAuserError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type WxLoginOrRegisterData = {
     query: {
@@ -1053,15 +1304,27 @@ export type WxLoginOrRegisterData = {
 
 export type WxLoginOrRegisterResponse = (ResponseBodyDTOUserDTO);
 
-export type WxLoginOrRegisterError = unknown;
+export type WxLoginOrRegisterError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type ValidateResponse = (ResponseBodyDTOUserDTO);
 
-export type ValidateError = unknown;
+export type ValidateError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type GetAllActivitiesShopResponse = (Array<Activity>);
 
-export type GetAllActivitiesShopError = unknown;
+export type GetAllActivitiesShopError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type DeleteProductOptionData = {
     path: {
@@ -1071,7 +1334,11 @@ export type DeleteProductOptionData = {
 
 export type DeleteProductOptionResponse = (string);
 
-export type DeleteProductOptionError = unknown;
+export type DeleteProductOptionError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type DeleteFixDeliveryInfoData = {
     path: {
@@ -1081,7 +1348,11 @@ export type DeleteFixDeliveryInfoData = {
 
 export type DeleteFixDeliveryInfoResponse = (unknown);
 
-export type DeleteFixDeliveryInfoError = unknown;
+export type DeleteFixDeliveryInfoError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
 
 export type DeleteConfigurationData = {
     path: {
@@ -1091,4 +1362,8 @@ export type DeleteConfigurationData = {
 
 export type DeleteConfigurationResponse = (unknown);
 
-export type DeleteConfigurationError = unknown;
+export type DeleteConfigurationError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});

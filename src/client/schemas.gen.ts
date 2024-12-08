@@ -126,6 +126,10 @@ export const UserSchema = {
             description: '持有积分',
             format: 'int32'
         },
+        number: {
+            type: 'string',
+            description: '电话号码'
+        },
         coupons: {
             type: 'array',
             description: '用户持有的优惠券实例',
@@ -257,6 +261,10 @@ export const ProductSchema = {
                 }
             },
             description: '加购商品的可选项, key=ProductOption.id'
+        },
+        onlyDining: {
+            type: 'boolean',
+            description: '是否只限堂食，为true时定时达页面不显示该商品'
         }
     }
 } as const;
@@ -536,7 +544,7 @@ export const DeliveryInfoSchema = {
         },
         time: {
             type: 'string',
-            description: '绑定到具体订单实例的已选时间',
+            description: '绑定到具体订单实例的已选时间，可以是当天也可以是第二天。',
             format: 'date-time'
         }
     },
@@ -552,7 +560,7 @@ export const OrderApiParamsSchema = {
         },
         customerType: {
             type: 'string',
-            description: '顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"'
+            description: '顾客类型，可选："北大学生业务"，"清华学生业务"，"未学生认证业务"'
         },
         scene: {
             type: 'string',
@@ -759,6 +767,9 @@ export const UserDTOSchema = {
         role: {
             type: 'string'
         },
+        number: {
+            type: 'string'
+        },
         points: {
             type: 'integer',
             format: 'int32'
@@ -817,7 +828,7 @@ export const OrderSchema = {
         },
         customerType: {
             type: 'string',
-            description: '顾客类型，可选："北大学生业务"，"清华学生业务"，"未认证为学生身份的用户业务"'
+            description: '顾客类型，可选："北大学生业务"，"清华学生业务"，"未学生认证业务"'
         },
         scene: {
             type: 'string',

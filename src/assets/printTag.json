@@ -1,0 +1,129 @@
+{
+    "panels": [
+      {
+        "index": 0,
+        "name": 1,
+        "height": 30,
+        "width": 40,
+        "paperHeader": 1.5,
+        "paperFooter": 78.78787878787878,
+        "printElements": [
+          {
+            "options": {
+              "left": 3,
+              "top": 1.5,
+              "height": 22.5,
+              "width": 22.5,
+              "right": 24,
+              "bottom": 24,
+              "vCenter": 12.75,
+              "hCenter": 12.75
+            },
+            "printElementType": {
+              "title": "图片",
+              "type": "image"
+            }
+          },
+          {
+            "options": {
+              "left": 69,
+              "top": 6,
+              "height": 19.5,
+              "width": 39,
+              "title": "091",
+              "coordinateSync": false,
+              "widthHeightSync": false,
+              "fontSize": 20.25,
+              "fontWeight": "bolder",
+              "textAlign": "right",
+              "qrCodeLevel": 0,
+              "right": 108,
+              "bottom": 25.5,
+              "vCenter": 88.5,
+              "hCenter": 15.75
+            },
+            "printElementType": {
+              "title": "这是更新后的元素",
+              "type": "text"
+            }
+          },
+          {
+            "options": {
+              "left": 7.5,
+              "top": 28.5,
+              "height": 13.5,
+              "width": 33,
+              "title": "拿铁",
+              "coordinateSync": false,
+              "widthHeightSync": false,
+              "fontSize": 11.25,
+              "fontWeight": "bolder",
+              "qrCodeLevel": 0,
+              "right": 54,
+              "bottom": 44.25,
+              "vCenter": 30.75,
+              "hCenter": 36
+            },
+            "printElementType": {
+              "title": "这是更新后的元素",
+              "type": "text"
+            }
+          },
+          {
+            "options": {
+              "left": 7.5,
+              "top": 46.5,
+              "height": 13.5,
+              "width": 76.5,
+              "title": "冷\\少冰\\燕麦奶",
+              "coordinateSync": false,
+              "widthHeightSync": false,
+              "fontSize": 9,
+              "qrCodeLevel": 0,
+              "right": 84.75,
+              "bottom": 59.25,
+              "vCenter": 46.5,
+              "hCenter": 52.5
+            },
+            "printElementType": {
+              "title": "这是更新后的元素",
+              "type": "text"
+            }
+          },
+          {
+            "options": {
+              "left": 33,
+              "top": 61.5,
+              "height": 13.5,
+              "width": 76.5,
+              "title": "2024-10-17    08:16",
+              "coordinateSync": false,
+              "widthHeightSync": false,
+              "fontSize": 9,
+              "textAlign": "right",
+              "qrCodeLevel": 0,
+              "right": 109.5,
+              "bottom": 73.5,
+              "vCenter": 71.25,
+              "hCenter": 66.75
+            },
+            "printElementType": {
+              "title": "这是更新后的元素",
+              "type": "text"
+            }
+          }
+        ],
+        "paperNumberLeft": 96,
+        "paperNumberTop": 66,
+        "paperNumberDisabled": true,
+        "paperNumberContinue": true,
+        "watermarkOptions": {
+          "content": "vue-plugin-hiprint",
+          "rotate": 25,
+          "timestamp": true,
+          "format": "YYYY-MM-DD HH:mm"
+        },
+        "panelLayoutOptions": {}
+      }
+    ]
+  }

@@ -118,11 +118,11 @@ const paginatedProducts = computed(() => {
 const searchQuery = ref({
   name: '',
   cateId: '',
-  status: ''
+  status: null
 });
 
 const resetFilters = () => {
-  searchQuery.value = { name: '', cateId: '', status: '' };
+  searchQuery.value = { name: '', cateId: '', status: null };
   currentPage.value = 1; // Reset to first page after resetting
 };
 
@@ -131,7 +131,7 @@ const filteredProducts = computed(() => {
   return products.value.filter(product => {
     const matchesName = searchQuery.value.name === '' || product.name.includes(searchQuery.value.name);
     const matchesCate = searchQuery.value.cateId === '' || productCategories.value.get(product.cateId) === searchQuery.value.cateId;
-    const matchesStatus = searchQuery.value.status === '' || product.status === searchQuery.value.status;
+    const matchesStatus = searchQuery.value.status === null || product.status === searchQuery.value.status;
     return matchesName && matchesCate && matchesStatus && product.delete !== 1;
   });
 });
@@ -465,7 +465,7 @@ const onImageChange = (file: any) => {
         <template #default="{ row }">
           <div v-if="row.productOptions">
             <div v-for="(values, optionId) in row.productOptions" :key="optionId">
-              {{ getProductOptionDisplay(optionId, values) }}
+              {{ getProductOptionDisplay(String(optionId), values) }}
             </div>
           </div>
         </template>
@@ -551,12 +551,12 @@ const onImageChange = (file: any) => {
                 style="display: flex; justify-content: space-between; align-items: center; width: 100%;"
               >
                 <div style="font-weight: bold;">
-                  {{ getOptionName(optionId) }}:
+                  {{ getOptionName(String(optionId)) }}:
                 </div>
                 <el-button
                   type="danger"
                   size="small"
-                  @click="removeOption(optionId)"
+                  @click="removeOption(String(optionId))"
                   style="margin-left: auto;"
                 >
                   删除该选项
@@ -567,12 +567,12 @@ const onImageChange = (file: any) => {
                 v-model="selectedOptionValues[optionId]"
                 multiple
                 placeholder="选择值"
-                @change="onOptionValuesChange(optionId)"
+                @change="onOptionValuesChange(String(optionId))"
                 style="width: 100%;"
                 class="custom-select"
               >
                 <el-option
-                  v-for="availableValue in getAvailableOptionValues(optionId)"
+                  v-for="availableValue in getAvailableOptionValues(String(optionId))"
                   :key="availableValue.uuid"
                   :label="availableValue.value + ':' + availableValue.priceAdjustment.toFixed(1) + '元'"
                   :value="availableValue.value + ':' + availableValue.priceAdjustment.toFixed(1) + '元'"

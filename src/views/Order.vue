@@ -29,7 +29,15 @@ import {
   ElMessageBox,
 } from 'element-plus';
 import { API_BASE_URL, LOCAL_AUTH_NAME } from '@/client/customize';
+import { hiprint, hiPrintPlugin } from 'vue-plugin-hiprint';
 import { USER_DTO } from '@/router';
+import template_head from '@/assets/printTemplate_head.json';
+import template_tail from '@/assets/printTemplate_tail.json';
+
+// 初始化 hiprint
+hiprint.init({
+  host: 'http://localhost:17521',
+});
 
 // 订单数据
 const orders = ref<Order[]>([]);
@@ -55,7 +63,7 @@ const stateOptions = [
 const customerTypeOptions = [
   { label: '北大学生业务', value: '北大学生业务' },
   { label: '清华学生业务', value: '清华学生业务' },
-  { label: '未认证为学生身份的用户业务', value: '未认证为学生身份的用户业务' },
+  { label: '未学生认证业务', value: '未学生认证业务' },
 ];
 
 const sceneOptionsSearch = [
@@ -177,7 +185,10 @@ const fetchOrders = async () => {
         endTime: formatDate(endTime),
       },
     });
-    orders.value = response.data;
+
+    console.log(response.data)
+    
+    orders.value = response.data as unknown as Order[];
 
     console.log("Orders:", orders.value)
 
@@ -224,7 +235,7 @@ let ws: WebSocket | null = null;
     let isManuallyClosed = false; // 标志位：标记是否手动关闭 WebSocket
     const AUTHENTICATE="authenticate"
     const heartbeatIntervalTime =25000// 每25秒发送心跳
-    let heartbeatInterval: number | undefined;
+    let heartbeatInterval: ReturnType<typeof setInterval> | undefined;
     function startHeartbeat() {
     heartbeatInterval = setInterval(() => {
         if (ws?.readyState === WebSocket.OPEN) {
@@ -256,14 +267,330 @@ let ws: WebSocket | null = null;
       ws.onmessage = async (event: MessageEvent) => {
         const msg=event.data as string;
         if(msg.startsWith("order")){
-          await fetchOrders()
-            ElMessageBox.alert(
-            event.data,
-            '来新单辣！',
-            {
-              confirmButtonText: '确定',
-              type: 'success',
-            })
+          await fetchOrders();
+          const orderId = msg.split(":")[1].trim(); // 假设格式为 "order: 订单号"
+          console.log("收到新订单号:", orderId); // 输出提取的订单号
+          const order = orders.value.find(o => o.id.toString() === orderId);
+          console.log("订单数据总:", orders); // 输出提取的订单号
+          console.log("订单数据:", order); // 输出提取的订单号
+
+          // 存储最终结果的数组
+          const itemDetails = order.items.map(item => {
+              const options = item.optionValues ? Object.values(item.optionValues).map(option => option.value) : [];
+              const quantity = 1; // 默认数量为1
+              const price = item.price || 0; // 获取价格，默认为0
+              const itemTotal = price * quantity; // 计算总价
+
+              return {
+                  projectName: `${item.name}[${options.join(', ')}]`,
+                  quantity,
+                  price,
+                  itemTotal, // 添加 itemTotal 字段
+              };
+          });
+
+          // 统计数量
+          const quantityMap = new Map<string, number>();
+
+          itemDetails.forEach(detail => {
+              if (quantityMap.has(detail.projectName)) {
+                  quantityMap.set(detail.projectName, quantityMap.get(detail.projectName)! + 1);
+              } else {
+                  quantityMap.set(detail.projectName, detail.quantity);
+              }
+          });
+
+          // 构建最终结果
+          const finalItemDetails = Array.from(quantityMap.entries()).map(([projectName, quantity]) => {
+              const price = order.items.find(item => {
+                  const options = item.optionValues ? Object.values(item.optionValues).map(option => option.value) : [];
+                  return `${item.name}[${options.join(', ')}]` === projectName;
+              })?.price;
+
+              const itemTotal = (price || 0) * quantity; // 计算每个项目的总价
+
+              return {
+                  projectName,
+                  quantity,
+                  price: price || 0,
+                  itemTotal, // 添加 itemTotal 字段
+              };
+          });
+
+          // 输出最终结果
+          console.log(finalItemDetails);
+
+          // 计算总数量、总价格和总小计
+          const totalInfo = finalItemDetails.reduce((acc, detail) => {
+              acc.totalQuantity += detail.quantity;
+              acc.totalItemTotal += detail.itemTotal;
+              return acc;
+          }, { totalQuantity: 0, totalItemTotal: 0 });
+
+          // 输出 totalInfo
+          console.log(totalInfo);
+
+          // 计算优惠金额
+          let discountAmount = 0;
+
+          if (order.disPrice) {
+              discountAmount = order.disPrice;
+          } else if (order.coupon) {
+              discountAmount = order.coupon.dePrice;
+          }
+
+          console.log(discountAmount);
+          //处理打印模板
+          // 初始位置
+          let topPosition = 93;  // 起始 `top` 值
+          
+          const template = JSON.parse(JSON.stringify(template_head));;
+
+          // 逐个项目添加打印元素
+          finalItemDetails.forEach((item, index) => {
+            // 项目名称
+            template.panels[0].printElements.push({
+              "options": {
+                "left": 6,
+                "top": topPosition,
+                "height": 9.75,
+                "width": 133.5,
+                "title": item.projectName,
+                "right": 140.25,
+                "bottom": 103.5,
+                "vCenter": 73.5,
+                "hCenter": 98.625,
+                "coordinateSync": false,
+                "widthHeightSync": false,
+                "fontSize": 9,
+                "qrCodeLevel": 0,
+                "qid": `projectName_${index}`,
+              },
+              "printElementType": {
+                "title": "文本",
+                "type": "text"
+              }
+            });
+
+            // 数量
+            template.panels[0].printElements.push({
+              "options": {
+                "left": 136.5,
+                "top": topPosition,
+                "height": 9.75,
+                "width": 18,
+                "title": `${item.quantity}`,
+                "right": 155.5,
+                "bottom": 99.75,
+                "vCenter": 146.25,
+                "hCenter": 94.875,
+                "coordinateSync": false,
+                "widthHeightSync": false,
+                "fontSize": 9,
+                "qrCodeLevel": 0,
+                "qid": `quantity_${index}`,
+                "textAlign": "right"
+              },
+              "printElementType": {
+                "title": "文本",
+                "type": "text"
+              }
+            });
+
+            // 单价
+            template.panels[0].printElements.push({
+              "options": {
+                "left": 169.5,
+                "top": topPosition,
+                "height": 9.75,
+                "width": 18,
+                "title": `${(item.price / 100).toFixed(1)}`,
+                "right": 185.25,
+                "bottom": 99.75,
+                "vCenter": 176.25,
+                "hCenter": 94.875,
+                "coordinateSync": false,
+                "widthHeightSync": false,
+                "fontSize": 9,
+                "qrCodeLevel": 0,
+                "qid": `price_${index}`,
+                "textAlign": "right"
+              },
+              "printElementType": {
+                "title": "文本",
+                "type": "text"
+              }
+            });
+
+            // 小计
+            template.panels[0].printElements.push({
+              "options": {
+                "left": 190.5,
+                "top": topPosition,
+                "height": 9.75,
+                "width": 28.5,
+                "title": `${(item.itemTotal / 100).toFixed(1)}`,
+                "right": 218.25,
+                "bottom": 82.5,
+                "vCenter": 204,
+                "hCenter": 77.625,
+                "coordinateSync": false,
+                "widthHeightSync": false,
+                "fontSize": 9,
+                "qrCodeLevel": 0,
+                "qid": `itemTotal_${index}`,
+                "textAlign": "right"
+              },
+              "printElementType": {
+                "title": "文本",
+                "type": "text"
+              }
+            });
+
+            // 更新 top 值，移动到下一行
+            topPosition += 15;  // 增加15单位的高度
+          });
+
+          // 获取 finalItemDetails 的长度
+          const offsetTop = finalItemDetails.length * 15;
+          const tailElements = JSON.parse(JSON.stringify(template_tail.printElements));
+
+          // 遍历 `newElements`，并增加 top 值s
+          tailElements.forEach(element => {
+            element.options.top += offsetTop;
+          });
+
+          // 将修改后的 `newElements` 加入到模板
+          tailElements.forEach(element => {
+            template.panels[0].printElements.push(element);
+          });
+
+          //加入合计相关数据
+          template.panels[0].printElements.push({
+              "options": {
+                "left": 136.5,
+                "top": 104+offsetTop,
+                "height": 9.75,
+                "width": 18,
+                "title": `${totalInfo.totalQuantity}`,
+                "right": 158.49378204345703,
+                "bottom": 120.99375915527344,
+                "vCenter": 149.49378204345703,
+                "hCenter": 116.11875915527344,
+                "coordinateSync": false,
+                "widthHeightSync": false,
+                "fontSize": 9,
+                "qrCodeLevel": 0,
+                "qid": `totalQuantity`,
+                "textAlign": "right"
+              },
+              "printElementType": {
+                "title": "文本",
+                "type": "text"
+              }
+            });
+
+          template.panels[0].printElements.push({
+            "options": {
+              "left": 186,
+              "top": 104+offsetTop,
+              "height": 9.75,
+              "width": 33,
+              "title": `${(totalInfo.totalItemTotal / 100).toFixed(1)}`,
+              "right": 216.0000228881836,
+              "bottom": 144.75,
+              "vCenter": 199.5000228881836,
+              "hCenter": 139.875,
+              "coordinateSync": false,
+              "widthHeightSync": false,
+              "fontSize": 9,
+              "qrCodeLevel": 0,
+              "qid": `totalQuantity`,
+              "textAlign": "right"
+            },
+            "printElementType": {
+              "title": "文本",
+              "type": "text"
+            }
+          });
+
+          template.panels[0].printElements.push({
+            "options": {
+              "left": 186,
+              "top": 118+offsetTop,
+              "height": 9.75,
+              "width": 33,
+              "title": `-${(discountAmount / 100).toFixed(1)}`,
+              "right": 216.24776458740234,
+              "bottom": 157.74777603149414,
+              "vCenter": 199.74776458740234,
+              "hCenter": 152.87277603149414,
+              "coordinateSync": false,
+              "widthHeightSync": false,
+              "fontSize": 9,
+              "qrCodeLevel": 0,
+              "qid": `totalQuantity`,
+              "textAlign": "right"
+            },
+            "printElementType": {
+              "title": "文本",
+              "type": "text"
+            }
+          });
+
+          template.panels[0].printElements.push({
+            "options": {
+              "left": 186,
+              "top": 138+offsetTop,
+              "height": 9.75,
+              "width": 33,
+              "title": `${((totalInfo.totalItemTotal-discountAmount) / 100).toFixed(1)}`,
+              "right": 216.75,
+              "bottom": 180,
+              "vCenter": 200.25,
+              "hCenter": 175.125,
+              "coordinateSync": false,
+              "widthHeightSync": false,
+              "fontSize": 9,
+              "qrCodeLevel": 0,
+              "qid": `totalQuantity`,
+              "textAlign": "right"
+            },
+            "printElementType": {
+              "title": "文本",
+              "type": "text"
+            }
+          });
+
+          console.log(JSON.stringify(template, null, 2));
+
+          //打印
+          
+          let printData = {
+            orderNum: order?.orderNum?.toString(),
+            time: (function() {
+              const now = new Date();
+              const year = now.getFullYear();
+              const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要加1
+              const day = String(now.getDate()).padStart(2, '0');
+              const hours = String(now.getHours()).padStart(2, '0');
+              const minutes = String(now.getMinutes()).padStart(2, '0');
+              return `${year}-${month}-${day} ${hours}:${minutes}`;
+            })()
+          };
+
+          let hiprintTemplate = new hiprint.PrintTemplate({ template: template});
+          // 打印
+          hiprintTemplate.print(printData);
+          
+
+          ElMessageBox.alert(
+          event.data,
+          '来新单辣！',
+          {
+            confirmButtonText: '确定',
+            type: 'success',
+          });
         }else{
           console.log("收到消息",msg)
         }
@@ -416,6 +743,7 @@ const openNewOrderDialog = async () => {
     newOrderForm.value = {
       products: [],
       scene: '',
+      disPrice: 0,
     };
     newOrderDialogVisible.value = true;
   } catch (error) {
@@ -437,6 +765,7 @@ const addProduct = () => {
     availableOptions: {},
     name: null,
     imgURL: null,
+    price: null
   });
 };
 
@@ -527,7 +856,7 @@ const submitNewOrder = async () => {
   const orderData: OrderApiParams = {
     userId: userDTO.id, // 设置固定的用户ID
     scene: newOrderForm.value.scene,
-    customerType: '未认证为学生身份的用户业务',
+    customerType: '未学生认证业务',
     disPrice: disPriceInCents,
     items: newOrderForm.value.products.map((product) => {
       const selectedOptions: Record<string, string> = {};
@@ -738,14 +1067,12 @@ const confirmRefund = async () => {
       </div>
     </el-form>
 
-
-
     <h1>订单列表</h1>
 
     <el-table :data="paginatedOrders" stripe>
       <el-table-column prop="orderNum" label="订单号" width="70" />
       <el-table-column prop="state" label="状态" width="80px" />
-      <el-table-column label="商品" width="300px">
+      <el-table-column label="商品" width="230px">
         <template #default="props">
           <div>
             <span v-for="(item, index) in props.row.items" :key="item.uuid">
@@ -761,18 +1088,18 @@ const confirmRefund = async () => {
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerType" label="客户类型" width="210px" />
+      <el-table-column prop="customerType" label="客户类型" width="160px" />
       <el-table-column prop="scene" label="场景" width="70px" />
 
       <el-table-column prop="deliveryInfo.school" label="定时达学校" width="100px" />
       <el-table-column prop="deliveryInfo.address" label="定时达地址" width="200px" />
-      <el-table-column prop="deliveryInfo.time" label="定时达时间" width="200px" />
+      <el-table-column prop="deliveryInfo.time" label="定时达时间" width="160px" />
 
-      <el-table-column prop="createdAt" label="创建时间" width="200px" :formatter="showDate" />
+      <el-table-column prop="createdAt" label="创建时间" width="170px" :formatter="showDate" />
       <el-table-column label="操作">
         <template #default="scope">
           <el-button
-            v-if="scope.row.state === '待出餐'"
+            v-if="scope.row.state === '待出餐' || scope.row.state === '待配送'"
             type="primary"
             size="small"
             @click="handleSupplyOrder(scope.row)"
@@ -913,7 +1240,7 @@ const confirmRefund = async () => {
                   v-model="product.productId"
                   filterable
                   remote
-                  remote-method="fetchProductOptions"
+                  :remote-method="fetchProductOptions"
                   placeholder="请选择商品"
                   @change="handleProductChange(product)"
                   style="width: 150px;"

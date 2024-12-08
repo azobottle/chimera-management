@@ -1,0 +1,155 @@
+{
+  "printElements": [
+    {
+      "options": {
+        "left": 4.5,
+        "top": 98,
+        "height": 9,
+        "width": 216,
+        "borderWidth": "0.75",
+        "coordinateSync": false,
+        "widthHeightSync": false,
+        "borderStyle": "dashed",
+        "right": 219.75,
+        "bottom": 133.5000114440918,
+        "vCenter": 111.75,
+        "hCenter": 129.0000114440918
+      },
+      "printElementType": {
+        "title": "横线",
+        "type": "hline"
+      }
+    },
+    {
+      "options": {
+        "left": 6,
+        "top": 104,
+        "height": 9.75,
+        "width": 58.5,
+        "title": "合计",
+        "right": 69.99999904632568,
+        "bottom": 148.74999618530273,
+        "vCenter": 40.749999046325684,
+        "hCenter": 143.87499618530273,
+        "coordinateSync": false,
+        "widthHeightSync": false,
+        "fontSize": 12,
+        "qrCodeLevel": 0,
+        "qid": "orderNum_1"
+      },
+      "printElementType": {
+        "title": "文本",
+        "type": "text"
+      }
+    },
+    {
+      "options": {
+        "left": 6,
+        "top": 118,
+        "height": 9.75,
+        "width": 58.5,
+        "title": "优惠",
+        "right": 73.74999904632568,
+        "bottom": 160.74999618530273,
+        "vCenter": 44.499999046325684,
+        "hCenter": 155.87499618530273,
+        "coordinateSync": false,
+        "widthHeightSync": false,
+        "fontSize": 12,
+        "qrCodeLevel": 0,
+        "qid": "orderNum_1"
+      },
+      "printElementType": {
+        "title": "文本",
+        "type": "text"
+      }
+    },
+    {
+      "options": {
+        "left": 4.5,
+        "top": 134,
+        "height": 9,
+        "width": 216,
+        "borderWidth": "0.75",
+        "coordinateSync": false,
+        "widthHeightSync": false,
+        "borderStyle": "dashed",
+        "right": 222.24776458740234,
+        "bottom": 173.49777603149414,
+        "vCenter": 114.24776458740234,
+        "hCenter": 168.99777603149414
+      },
+      "printElementType": {
+        "title": "横线",
+        "type": "hline"
+      }
+    },
+    {
+      "options": {
+        "left": 6,
+        "top": 138,
+        "height": 9.75,
+        "width": 58.5,
+        "title": "应付",
+        "right": 72.24999904632568,
+        "bottom": 180.24999618530273,
+        "vCenter": 42.999999046325684,
+        "hCenter": 175.37499618530273,
+        "coordinateSync": false,
+        "widthHeightSync": false,
+        "fontSize": 12,
+        "qrCodeLevel": 0,
+        "qid": "orderNum_1"
+      },
+      "printElementType": {
+        "title": "文本",
+        "type": "text"
+      }
+    },
+    {
+      "options": {
+        "left": 4.5,
+        "top": 155,
+        "height": 9,
+        "width": 216,
+        "borderWidth": "0.75",
+        "coordinateSync": false,
+        "widthHeightSync": false,
+        "borderStyle": "solid",
+        "right": 221.49776458740234,
+        "bottom": 193.74777603149414,
+        "vCenter": 113.49776458740234,
+        "hCenter": 189.24777603149414
+      },
+      "printElementType": {
+        "title": "横线",
+        "type": "hline"
+      }
+    },
+    {
+      "options": {
+        "left": 3,
+        "top": 170,
+        "height": 21,
+        "width": 151.5,
+        "title": "谢谢惠顾，欢迎下次光临！",
+        "right": 156.75,
+        "bottom": 240.7500114440918,
+        "vCenter": 81,
+        "hCenter": 222.7500114440918,
+        "coordinateSync": false,
+        "widthHeightSync": false,
+        "fontSize": 12,
+        "qrCodeLevel": 0,
+        "qid": "orderNum_1",
+        "textAlign": "center",
+        "fontFamily": "STKaiti",
+        "fontWeight": "bolder"
+      },
+      "printElementType": {
+        "title": "文本",
+        "type": "text"
+      }
+    }
+  ]
+}

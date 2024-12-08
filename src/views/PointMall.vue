@@ -274,8 +274,9 @@ const fetchProductIns = async () => {
 const setProductInsAsReceived = async (ins: PointsProductIns) => {
   try {
     await setPointsProductAsReceived({
-      body: {
+      query: {
         uuid: ins.uuid,
+        userId: ins.userId
       },
     });
     ElMessage.success('已设置为已领取');
@@ -287,7 +288,7 @@ const setProductInsAsReceived = async (ins: PointsProductIns) => {
 };
 
 const copyMailInfo = (ins: PointsProductIns) => {
-  const mailInfo = `姓名：${ins.sendName}\n地址：${ins.sendAddr}\n电话：${ins.sendNum}`;
+  const mailInfo = `姓名：${ins.name}\n地址：${ins.sendAddr}\n电话：${ins.number}`;
   navigator.clipboard.writeText(mailInfo).then(
     () => {
       ElMessage.success('邮寄信息已复制到剪切板');

@@ -1,0 +1,248 @@
+{
+  "panels": [
+    {
+      "index": 0,
+      "name": 1,
+      "height": 120,
+      "width": 80,
+      "paperHeader": 4.5,
+      "paperFooter": 240,
+      "printElements": [
+        {
+          "options": {
+            "left": 42,
+            "top": 25.5,
+            "height": 16.5,
+            "width": 147,
+            "title": "奇美拉咖啡",
+            "right": 188.25,
+            "bottom": 48.75,
+            "vCenter": 114.75,
+            "hCenter": 36.75,
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 20.25,
+            "qrCodeLevel": 0,
+            "fontFamily": "STKaiti",
+            "fontWeight": "bolder",
+            "textAlign": "center"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        },
+        {
+          "options": {
+            "left": 4.5,
+            "top": 46.5,
+            "height": 9,
+            "width": 216,
+            "borderWidth": "0.75",
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "borderStyle": "solid",
+            "right": 220.5,
+            "bottom": 75,
+            "vCenter": 112.5,
+            "hCenter": 70.5
+          },
+          "printElementType": {
+            "title": "横线",
+            "type": "hline"
+          }
+        },
+        {
+          "options": {
+            "left": 85.5,
+            "top": 51,
+            "height": 9.75,
+            "width": 133.5,
+            "title": "时间",
+            "right": 219.75,
+            "bottom": 61.5,
+            "vCenter": 153,
+            "hCenter": 56.625,
+            "field": "time",
+            "testData": "2024-10-26 13:32",
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 11,
+            "qrCodeLevel": 0,
+            "qid": "orderNum_1",
+            "textAlign": "right"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        },
+        {
+          "options": {
+            "left": 6,
+            "top": 51,
+            "height": 9.75,
+            "width": 69,
+            "title": "订单号",
+            "right": 75.75,
+            "bottom": 63.75,
+            "vCenter": 41.25,
+            "hCenter": 58.875,
+            "field": "orderNum",
+            "testData": "45",
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 11,
+            "qrCodeLevel": 0
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        },
+        {
+          "options": {
+            "left": 6,
+            "top": 66,
+            "height": 9,
+            "width": 216,
+            "borderWidth": "0.75",
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "borderStyle": "solid",
+            "right": 220.5,
+            "bottom": 75,
+            "vCenter": 112.5,
+            "hCenter": 70.5
+          },
+          "printElementType": {
+            "title": "横线",
+            "type": "hline"
+          }
+        },
+        {
+          "options": {
+            "left": 126,
+            "top": 70.5,
+            "height": 10,
+            "width": 28.5,
+            "title": "数量",
+            "right": 153.75,
+            "bottom": 69,
+            "vCenter": 141,
+            "hCenter": 64.125,
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 12,
+            "qrCodeLevel": 0,
+            "qid": "orderNum_1",
+            "textAlign": "right"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        },
+        {
+          "options": {
+            "left": 160.5,
+            "top": 70.5,
+            "height": 9.75,
+            "width": 27,
+            "title": "单价",
+            "right": 187.5000114440918,
+            "bottom": 80.25,
+            "vCenter": 174.0000114440918,
+            "hCenter": 75.375,
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 12,
+            "qrCodeLevel": 0,
+            "qid": "orderNum_1",
+            "textAlign": "right"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        },
+        {
+          "options": {
+            "left": 6,
+            "top": 70.5,
+            "height": 9.75,
+            "width": 58.5,
+            "title": "项目名称",
+            "right": 62.25,
+            "bottom": 80.25,
+            "vCenter": 33,
+            "hCenter": 75.375,
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 12,
+            "qrCodeLevel": 0,
+            "qid": "orderNum_1"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        },
+        {
+          "options": {
+            "left": 190.5,
+            "top": 70.5,
+            "height": 9.75,
+            "width": 28.5,
+            "title": "小计",
+            "right": 218.25,
+            "bottom": 82.5,
+            "vCenter": 204,
+            "hCenter": 77.625,
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 12,
+            "qrCodeLevel": 0,
+            "qid": "orderNum_1",
+            "textAlign": "right"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        },
+        {
+          "options": {
+            "left": 4.5,
+            "top": 85.5,
+            "height": 9,
+            "width": 216,
+            "borderWidth": "0.75",
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "borderStyle": "dashed",
+            "right": 222.99776458740234,
+            "bottom": 93.99778747558594,
+            "vCenter": 114.99776458740234,
+            "hCenter": 89.49778747558594
+          },
+          "printElementType": {
+            "title": "横线",
+            "type": "hline"
+          }
+        }
+        
+      ],
+      "paperNumberLeft": 196,
+      "paperNumberTop": 318,
+      "paperNumberDisabled": true,
+      "paperNumberContinue": true,
+      "watermarkOptions": {},
+      "panelLayoutOptions": {
+        "layoutType": "column",
+        "layoutRowGap": 0,
+        "layoutColumnGap": 0
+      }
+    }
+  ]
+}

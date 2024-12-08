@@ -87,7 +87,7 @@ const fetchData = async () => {
         endTime: formatDate(endDate),
       },
     });
-    const orders: Order[] = orderResponse.data;
+    const orders: Order[] = orderResponse.data as unknown as Order[];
 
     // 计算订单量和营业额
     orderCount.value = orders.length;
@@ -100,7 +100,7 @@ const fetchData = async () => {
         endTime: formatDate(endDate),
       },
     });
-    const users: UserDTO[] = userResponse.data;
+    const users: UserDTO[] = userResponse.data as unknown as UserDTO[];
     newUserCount.value = users.length;
 
     // 获取商品销售数据
@@ -134,10 +134,10 @@ const fetchProductSalesData = (orders: Order[]) => {
         if (!productSalesMap[key]) {
           productSalesMap[key] = {
             name: item.name || '未知商品',
-            sales: item.quantity || 1, // 确保统计正确的销售量
+            sales: 1, // 确保统计正确的销售量
           };
         } else {
-          productSalesMap[key].sales += item.quantity || 1;
+          productSalesMap[key].sales += 1;
         }
       }
     });

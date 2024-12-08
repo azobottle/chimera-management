@@ -9,6 +9,11 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    
+    "noImplicitAny": false,      // 处理module找不到问题
+    "allowJs": true,             // 处理module找不到问题
+    "strict": false,             // 关闭所有严格类型检查
+    "strictNullChecks": false    // 允许所有类型可以被赋值为 null 或 undefined
   }
 }

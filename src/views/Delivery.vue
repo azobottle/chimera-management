@@ -55,7 +55,7 @@ const fetchOrders = async () => {
         date: new Date().toISOString().split('T')[0], // Get current date in YYYY-MM-DD format
       },
     });
-    orders.value = response.data;
+    orders.value = response.data as unknown as Order[];
     ordersFetched.value = true; // Set to true after fetching orders
   } catch (error) {
     console.error('Error fetching orders:', error);
@@ -138,7 +138,7 @@ onMounted(async () => {
 
     <!-- 显示订单数量 -->
     <div v-if="ordersFetched" style="margin-top: 10px;">
-      <p v-if="orders.value.length > 0">已查询到的订单数量: {{ orders.value.length }}</p>
+      <p v-if="orders.values.length > 0">已查询到的订单数量: {{ orders.values.length }}</p>
       <p v-else>未查询到符合条件的订单</p>
     </div>
 
