@@ -33,6 +33,7 @@ import { hiprint, hiPrintPlugin } from 'vue-plugin-hiprint';
 import { USER_DTO } from '@/router';
 import template_head from '@/assets/printTemplate_head.json';
 import template_tail from '@/assets/printTemplate_tail.json';
+import templateTag from '@/assets/printTag.json';
 
 // 初始化 hiprint
 hiprint.init({
@@ -244,390 +245,479 @@ let ws: WebSocket | null = null;
         }
     }, heartbeatIntervalTime);
 }
-    function stopHeartbeat() {
-    if (heartbeatInterval) {
-        clearInterval(heartbeatInterval);
-        heartbeatInterval = undefined;
-    }
+
+function stopHeartbeat() {
+  if (heartbeatInterval) {
+      clearInterval(heartbeatInterval);
+      heartbeatInterval = undefined;
+  }
 }
-    const connectWebSocket = () => {
-      const auth=localStorage.getItem(LOCAL_AUTH_NAME)
-      if(auth===null){
-        ElMessage.error("localStorage中auth对应的值为空");
-      }
-      ws = new WebSocket(API_BASE_URL+"/ws/order_create");
 
-      ws.onopen = () => {
-        console.log('WebSocket connected');
-        ws?.send(AUTHENTICATE+":"+auth)
-        reconnectAttempts = 0; // 连接成功后重置重连次数
-        startHeartbeat();
-      };
+const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmount: number, order_time:string, orderId:string) => {
+  let topPosition = 93;  // 起始 `top` 值
+      
+      const template = JSON.parse(JSON.stringify(template_head));;
 
-      ws.onmessage = async (event: MessageEvent) => {
-        const msg=event.data as string;
-        if(msg.startsWith("order")){
-          await fetchOrders();
-          const orderId = msg.split(":")[1].trim(); // 假设格式为 "order: 订单号"
-          console.log("收到新订单号:", orderId); // 输出提取的订单号
-          const order = orders.value.find(o => o.id.toString() === orderId);
-          console.log("订单数据总:", orders); // 输出提取的订单号
-          console.log("订单数据:", order); // 输出提取的订单号
-
-          // 存储最终结果的数组
-          const itemDetails = order.items.map(item => {
-              const options = item.optionValues ? Object.values(item.optionValues).map(option => option.value) : [];
-              const quantity = 1; // 默认数量为1
-              const price = item.price || 0; // 获取价格，默认为0
-              const itemTotal = price * quantity; // 计算总价
-
-              return {
-                  projectName: `${item.name}[${options.join(', ')}]`,
-                  quantity,
-                  price,
-                  itemTotal, // 添加 itemTotal 字段
-              };
-          });
-
-          // 统计数量
-          const quantityMap = new Map<string, number>();
-
-          itemDetails.forEach(detail => {
-              if (quantityMap.has(detail.projectName)) {
-                  quantityMap.set(detail.projectName, quantityMap.get(detail.projectName)! + 1);
-              } else {
-                  quantityMap.set(detail.projectName, detail.quantity);
-              }
-          });
-
-          // 构建最终结果
-          const finalItemDetails = Array.from(quantityMap.entries()).map(([projectName, quantity]) => {
-              const price = order.items.find(item => {
-                  const options = item.optionValues ? Object.values(item.optionValues).map(option => option.value) : [];
-                  return `${item.name}[${options.join(', ')}]` === projectName;
-              })?.price;
-
-              const itemTotal = (price || 0) * quantity; // 计算每个项目的总价
-
-              return {
-                  projectName,
-                  quantity,
-                  price: price || 0,
-                  itemTotal, // 添加 itemTotal 字段
-              };
-          });
-
-          // 输出最终结果
-          console.log(finalItemDetails);
-
-          // 计算总数量、总价格和总小计
-          const totalInfo = finalItemDetails.reduce((acc, detail) => {
-              acc.totalQuantity += detail.quantity;
-              acc.totalItemTotal += detail.itemTotal;
-              return acc;
-          }, { totalQuantity: 0, totalItemTotal: 0 });
-
-          // 输出 totalInfo
-          console.log(totalInfo);
-
-          // 计算优惠金额
-          let discountAmount = 0;
-
-          if (order.disPrice) {
-              discountAmount = order.disPrice;
-          } else if (order.coupon) {
-              discountAmount = order.coupon.dePrice;
+      // 逐个项目添加打印元素
+      finalItemDetails.forEach((item, index) => {
+        // 项目名称
+        template.panels[0].printElements.push({
+          "options": {
+            "left": 6,
+            "top": topPosition,
+            "height": 9.75,
+            "width": 133.5,
+            "title": item.projectName,
+            "right": 140.25,
+            "bottom": 103.5,
+            "vCenter": 73.5,
+            "hCenter": 98.625,
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 9,
+            "qrCodeLevel": 0,
+            "qid": `projectName_${index}`,
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
           }
+        });
 
-          console.log(discountAmount);
-          //处理打印模板
-          // 初始位置
-          let topPosition = 93;  // 起始 `top` 值
-          
-          const template = JSON.parse(JSON.stringify(template_head));;
+        // 数量
+        template.panels[0].printElements.push({
+          "options": {
+            "left": 136.5,
+            "top": topPosition,
+            "height": 9.75,
+            "width": 18,
+            "title": `${item.quantity}`,
+            "right": 155.5,
+            "bottom": 99.75,
+            "vCenter": 146.25,
+            "hCenter": 94.875,
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 9,
+            "qrCodeLevel": 0,
+            "qid": `quantity_${index}`,
+            "textAlign": "right"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        });
 
-          // 逐个项目添加打印元素
-          finalItemDetails.forEach((item, index) => {
-            // 项目名称
-            template.panels[0].printElements.push({
-              "options": {
-                "left": 6,
-                "top": topPosition,
-                "height": 9.75,
-                "width": 133.5,
-                "title": item.projectName,
-                "right": 140.25,
-                "bottom": 103.5,
-                "vCenter": 73.5,
-                "hCenter": 98.625,
-                "coordinateSync": false,
-                "widthHeightSync": false,
-                "fontSize": 9,
-                "qrCodeLevel": 0,
-                "qid": `projectName_${index}`,
-              },
-              "printElementType": {
-                "title": "文本",
-                "type": "text"
-              }
-            });
+        // 单价
+        template.panels[0].printElements.push({
+          "options": {
+            "left": 169.5,
+            "top": topPosition,
+            "height": 9.75,
+            "width": 18,
+            "title": `${(item.price / 100).toFixed(1)}`,
+            "right": 185.25,
+            "bottom": 99.75,
+            "vCenter": 176.25,
+            "hCenter": 94.875,
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 9,
+            "qrCodeLevel": 0,
+            "qid": `price_${index}`,
+            "textAlign": "right"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        });
 
-            // 数量
-            template.panels[0].printElements.push({
-              "options": {
-                "left": 136.5,
-                "top": topPosition,
-                "height": 9.75,
-                "width": 18,
-                "title": `${item.quantity}`,
-                "right": 155.5,
-                "bottom": 99.75,
-                "vCenter": 146.25,
-                "hCenter": 94.875,
-                "coordinateSync": false,
-                "widthHeightSync": false,
-                "fontSize": 9,
-                "qrCodeLevel": 0,
-                "qid": `quantity_${index}`,
-                "textAlign": "right"
-              },
-              "printElementType": {
-                "title": "文本",
-                "type": "text"
-              }
-            });
+        // 小计
+        template.panels[0].printElements.push({
+          "options": {
+            "left": 190.5,
+            "top": topPosition,
+            "height": 9.75,
+            "width": 28.5,
+            "title": `${(item.itemTotal / 100).toFixed(1)}`,
+            "right": 218.25,
+            "bottom": 82.5,
+            "vCenter": 204,
+            "hCenter": 77.625,
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 9,
+            "qrCodeLevel": 0,
+            "qid": `itemTotal_${index}`,
+            "textAlign": "right"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        });
 
-            // 单价
-            template.panels[0].printElements.push({
-              "options": {
-                "left": 169.5,
-                "top": topPosition,
-                "height": 9.75,
-                "width": 18,
-                "title": `${(item.price / 100).toFixed(1)}`,
-                "right": 185.25,
-                "bottom": 99.75,
-                "vCenter": 176.25,
-                "hCenter": 94.875,
-                "coordinateSync": false,
-                "widthHeightSync": false,
-                "fontSize": 9,
-                "qrCodeLevel": 0,
-                "qid": `price_${index}`,
-                "textAlign": "right"
-              },
-              "printElementType": {
-                "title": "文本",
-                "type": "text"
-              }
-            });
+        // 更新 top 值，移动到下一行
+        topPosition += 15;  // 增加15单位的高度
+      });
 
-            // 小计
-            template.panels[0].printElements.push({
-              "options": {
-                "left": 190.5,
-                "top": topPosition,
-                "height": 9.75,
-                "width": 28.5,
-                "title": `${(item.itemTotal / 100).toFixed(1)}`,
-                "right": 218.25,
-                "bottom": 82.5,
-                "vCenter": 204,
-                "hCenter": 77.625,
-                "coordinateSync": false,
-                "widthHeightSync": false,
-                "fontSize": 9,
-                "qrCodeLevel": 0,
-                "qid": `itemTotal_${index}`,
-                "textAlign": "right"
-              },
-              "printElementType": {
-                "title": "文本",
-                "type": "text"
-              }
-            });
+      // 获取 finalItemDetails 的长度
+      const offsetTop = finalItemDetails.length * 15;
+      const tailElements = JSON.parse(JSON.stringify(template_tail.printElements));
 
-            // 更新 top 值，移动到下一行
-            topPosition += 15;  // 增加15单位的高度
-          });
+      // 遍历 `newElements`，并增加 top 值s
+      tailElements.forEach(element => {
+        element.options.top += offsetTop;
+      });
 
-          // 获取 finalItemDetails 的长度
-          const offsetTop = finalItemDetails.length * 15;
-          const tailElements = JSON.parse(JSON.stringify(template_tail.printElements));
+      // 将修改后的 `newElements` 加入到模板
+      tailElements.forEach(element => {
+        template.panels[0].printElements.push(element);
+      });
 
-          // 遍历 `newElements`，并增加 top 值s
-          tailElements.forEach(element => {
-            element.options.top += offsetTop;
-          });
+      //加入合计相关数据
+      template.panels[0].printElements.push({
+          "options": {
+            "left": 136.5,
+            "top": 104+offsetTop,
+            "height": 9.75,
+            "width": 18,
+            "title": `${totalInfo.totalQuantity}`,
+            "right": 158.49378204345703,
+            "bottom": 120.99375915527344,
+            "vCenter": 149.49378204345703,
+            "hCenter": 116.11875915527344,
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 9,
+            "qrCodeLevel": 0,
+            "qid": `totalQuantity`,
+            "textAlign": "right"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        });
 
-          // 将修改后的 `newElements` 加入到模板
-          tailElements.forEach(element => {
-            template.panels[0].printElements.push(element);
-          });
-
-          //加入合计相关数据
-          template.panels[0].printElements.push({
-              "options": {
-                "left": 136.5,
-                "top": 104+offsetTop,
-                "height": 9.75,
-                "width": 18,
-                "title": `${totalInfo.totalQuantity}`,
-                "right": 158.49378204345703,
-                "bottom": 120.99375915527344,
-                "vCenter": 149.49378204345703,
-                "hCenter": 116.11875915527344,
-                "coordinateSync": false,
-                "widthHeightSync": false,
-                "fontSize": 9,
-                "qrCodeLevel": 0,
-                "qid": `totalQuantity`,
-                "textAlign": "right"
-              },
-              "printElementType": {
-                "title": "文本",
-                "type": "text"
-              }
-            });
-
-          template.panels[0].printElements.push({
-            "options": {
-              "left": 186,
-              "top": 104+offsetTop,
-              "height": 9.75,
-              "width": 33,
-              "title": `${(totalInfo.totalItemTotal / 100).toFixed(1)}`,
-              "right": 216.0000228881836,
-              "bottom": 144.75,
-              "vCenter": 199.5000228881836,
-              "hCenter": 139.875,
-              "coordinateSync": false,
-              "widthHeightSync": false,
-              "fontSize": 9,
-              "qrCodeLevel": 0,
-              "qid": `totalQuantity`,
-              "textAlign": "right"
-            },
-            "printElementType": {
-              "title": "文本",
-              "type": "text"
-            }
-          });
-
-          template.panels[0].printElements.push({
-            "options": {
-              "left": 186,
-              "top": 118+offsetTop,
-              "height": 9.75,
-              "width": 33,
-              "title": `-${(discountAmount / 100).toFixed(1)}`,
-              "right": 216.24776458740234,
-              "bottom": 157.74777603149414,
-              "vCenter": 199.74776458740234,
-              "hCenter": 152.87277603149414,
-              "coordinateSync": false,
-              "widthHeightSync": false,
-              "fontSize": 9,
-              "qrCodeLevel": 0,
-              "qid": `totalQuantity`,
-              "textAlign": "right"
-            },
-            "printElementType": {
-              "title": "文本",
-              "type": "text"
-            }
-          });
-
-          template.panels[0].printElements.push({
-            "options": {
-              "left": 186,
-              "top": 138+offsetTop,
-              "height": 9.75,
-              "width": 33,
-              "title": `${((totalInfo.totalItemTotal-discountAmount) / 100).toFixed(1)}`,
-              "right": 216.75,
-              "bottom": 180,
-              "vCenter": 200.25,
-              "hCenter": 175.125,
-              "coordinateSync": false,
-              "widthHeightSync": false,
-              "fontSize": 9,
-              "qrCodeLevel": 0,
-              "qid": `totalQuantity`,
-              "textAlign": "right"
-            },
-            "printElementType": {
-              "title": "文本",
-              "type": "text"
-            }
-          });
-
-          console.log(JSON.stringify(template, null, 2));
-
-          //打印
-          
-          let printData = {
-            orderNum: order?.orderNum?.toString(),
-            time: (function() {
-              const now = new Date();
-              const year = now.getFullYear();
-              const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要加1
-              const day = String(now.getDate()).padStart(2, '0');
-              const hours = String(now.getHours()).padStart(2, '0');
-              const minutes = String(now.getMinutes()).padStart(2, '0');
-              return `${year}-${month}-${day} ${hours}:${minutes}`;
-            })()
-          };
-
-          let hiprintTemplate = new hiprint.PrintTemplate({ template: template});
-          // 打印
-          hiprintTemplate.print(printData);
-          
-
-          ElMessageBox.alert(
-          event.data,
-          '来新单辣！',
-          {
-            confirmButtonText: '确定',
-            type: 'success',
-          });
-        }else{
-          console.log("收到消息",msg)
+      template.panels[0].printElements.push({
+        "options": {
+          "left": 186,
+          "top": 104+offsetTop,
+          "height": 9.75,
+          "width": 33,
+          "title": `${(totalInfo.totalItemTotal / 100).toFixed(1)}`,
+          "right": 216.0000228881836,
+          "bottom": 144.75,
+          "vCenter": 199.5000228881836,
+          "hCenter": 139.875,
+          "coordinateSync": false,
+          "widthHeightSync": false,
+          "fontSize": 9,
+          "qrCodeLevel": 0,
+          "qid": `totalQuantity`,
+          "textAlign": "right"
+        },
+        "printElementType": {
+          "title": "文本",
+          "type": "text"
         }
+      });
+
+      template.panels[0].printElements.push({
+        "options": {
+          "left": 186,
+          "top": 118+offsetTop,
+          "height": 9.75,
+          "width": 33,
+          "title": `-${(discountAmount / 100).toFixed(1)}`,
+          "right": 216.24776458740234,
+          "bottom": 157.74777603149414,
+          "vCenter": 199.74776458740234,
+          "hCenter": 152.87277603149414,
+          "coordinateSync": false,
+          "widthHeightSync": false,
+          "fontSize": 9,
+          "qrCodeLevel": 0,
+          "qid": `totalQuantity`,
+          "textAlign": "right"
+        },
+        "printElementType": {
+          "title": "文本",
+          "type": "text"
+        }
+      });
+
+      template.panels[0].printElements.push({
+        "options": {
+          "left": 186,
+          "top": 138+offsetTop,
+          "height": 9.75,
+          "width": 33,
+          "title": `${((totalInfo.totalItemTotal-discountAmount) / 100).toFixed(1)}`,
+          "right": 216.75,
+          "bottom": 180,
+          "vCenter": 200.25,
+          "hCenter": 175.125,
+          "coordinateSync": false,
+          "widthHeightSync": false,
+          "fontSize": 9,
+          "qrCodeLevel": 0,
+          "qid": `totalQuantity`,
+          "textAlign": "right"
+        },
+        "printElementType": {
+          "title": "文本",
+          "type": "text"
+        }
+      });
+
+      console.log(JSON.stringify(template, null, 2));
+
+      //打印
+
+      let printData = {
+        orderNum: orderId,
+        time: order_time
       };
 
-      ws.onclose = () => {
-        if (isManuallyClosed){
-          console.log("WebSocket disconnected,isManuallyClosed,no reconnect")
-          stopHeartbeat();
-          return;
-        }
-        console.log('WebSocket disconnected'+reconnectAttempts+","+maxReconnectAttempts);
-        if (reconnectAttempts < maxReconnectAttempts) {
-          reconnectAttempts++;
-          reconnectWebSocket(); // 尝试重连
+      let hiprintTemplate = new hiprint.PrintTemplate({ template: template});
+      // 打印
+      hiprintTemplate.print(printData);
+};
+
+
+
+const printOrderTag = (tagInfo:any[], orderId:string, order_time:string) => {
+      
+  const template = JSON.parse(JSON.stringify(templateTag));;
+
+
+  // 遍历每个订单项，为每个项创建一个打印任务
+  tagInfo.forEach((item, index) => {
+    // 加载模板副本
+    let template = JSON.parse(JSON.stringify(baseTemplate));
+
+    // 设置基础信息，例如订单号和时间
+    const orderInfoElement = template.panels[0].printElements.find(element => element.options.title.includes('订单号'));
+    const imageElement = template.panels[0].printElements.find(element => element.printElementType.type === 'image');
+    if (imageElement) {
+      imageElement.options.title = '/taglogo.jpg';  // 假设公共目录直接访问
+    }
+
+    if (orderInfoElement) {
+      orderInfoElement.options.title = `订单号: ${orderId}`;
+    }
+    const timeElement = template.panels[0].printElements.find(element => element.options.title.includes('时间'));
+    if (timeElement) {
+      timeElement.options.title = `时间: ${orderTime}`;
+    }
+
+    // 添加当前订单项的 'name' 文本元素
+    template.panels[0].printElements.push({
+      options: {
+        left: 7.5,
+        top: 28.5, // 确定的位置
+        height: 13.5,
+        width: 33,
+        title: item.name,
+        fontSize: 11.25,
+        fontWeight: "bolder"
+      },
+      printElementType: {
+        type: "text"
+      }
+    });
+
+    // 添加当前订单项的 'tag' 文本元素
+    template.panels[0].printElements.push({
+      options: {
+        left: 7.5,
+        top: 46.5, // 确定的位置
+        height: 13.5,
+        width: 76.5,
+        title: item.tag,
+        fontSize: 9
+      },
+      printElementType: {
+        type: "text"
+      }
+    });
+
+    // 创建打印模板对象并打印
+    let hiprintTemplate = new hiprint.PrintTemplate({ template });
+    hiprintTemplate.print();
+  });
+};
+
+const connectWebSocket = () => {
+  const auth=localStorage.getItem(LOCAL_AUTH_NAME)
+  if(auth===null){
+    ElMessage.error("localStorage中auth对应的值为空");
+  }
+  ws = new WebSocket(API_BASE_URL+"/ws/order_create");
+
+  ws.onopen = () => {
+    console.log('WebSocket connected');
+    ws?.send(AUTHENTICATE+":"+auth)
+    reconnectAttempts = 0; // 连接成功后重置重连次数
+    startHeartbeat();
+  };
+
+  ws.onmessage = async (event: MessageEvent) => {
+    const msg=event.data as string;
+    if(msg.startsWith("order")){
+      await fetchOrders();
+      const orderId = msg.split(":")[1].trim(); // 假设格式为 "order: 订单号"
+      console.log("收到新订单号:", orderId); // 输出提取的订单号
+      const order = orders.value.find(o => o.id.toString() === orderId);
+      console.log("订单数据总:", orders); // 输出提取的订单号
+      console.log("订单数据:", order); // 输出提取的订单号
+
+      // 存储最终结果的数组
+      const itemDetails = order.items.map(item => {
+        const options = item.optionValues ? Object.values(item.optionValues).map(option => option.value) : [];
+        const quantity = 1; // 默认数量为1
+        const price = item.price || 0; // 获取价格，默认为0
+        const itemTotal = price * quantity; // 计算总价
+
+        return {
+            projectName: `${item.name}[${options.join(', ')}]`,
+            quantity,
+            price,
+            itemTotal, // 添加 itemTotal 字段
+        };
+      });
+
+      // 统计数量
+      const quantityMap = new Map<string, number>();
+
+      itemDetails.forEach(detail => {
+        if (quantityMap.has(detail.projectName)) {
+            quantityMap.set(detail.projectName, quantityMap.get(detail.projectName)! + 1);
         } else {
-          console.error('Max reconnect attempts reached');
-          stopHeartbeat();
-          showReconnectAlert(); // 耗尽重连次数后显示弹窗
+            quantityMap.set(detail.projectName, detail.quantity);
         }
-      };
+      });
 
-      ws.onerror = (error: Event) => {
-        console.error('WebSocket error:', error);
-        ws?.close(); // 发生错误时关闭连接，触发 onclose
-      };
-    };
+      // 构建最终结果
+      const finalItemDetails = Array.from(quantityMap.entries()).map(([projectName, quantity]) => {
+        const price = order.items.find(item => {
+          const options = item.optionValues ? Object.values(item.optionValues).map(option => option.value) : [];
+          return `${item.name}[${options.join(', ')}]` === projectName;
+        })?.price;
 
-    const reconnectWebSocket = () => {
-      // if (reconnectTimer) return; // 如果已经有定时器，不重复设置
+        const itemTotal = (price || 0) * quantity; // 计算每个项目的总价
 
-      console.log(`Reconnecting in ${reconnectInterval / 1000} seconds...`);
-      // reconnectTimer = 
-      window.setTimeout(() => {
-        connectWebSocket();
-      }, reconnectInterval);
-    };
+        return {
+            projectName,
+            quantity,
+            price: price || 0,
+            itemTotal, // 添加 itemTotal 字段
+        };
+      });
+
+      // 输出最终结果
+      console.log(finalItemDetails);
+
+      // 计算总数量、总价格和总小计
+      const totalInfo = finalItemDetails.reduce((acc, detail) => {
+          acc.totalQuantity += detail.quantity;
+          acc.totalItemTotal += detail.itemTotal;
+          return acc;
+      }, { totalQuantity: 0, totalItemTotal: 0 });
+
+      // 输出 totalInfo
+      console.log(totalInfo);
+
+      // 计算优惠金额
+      let discountAmount = 0;
+
+      if (order.disPrice) {
+        discountAmount = order.disPrice;
+      } else if (order.coupon) {
+        discountAmount = order.coupon.dePrice;
+      }
+
+      console.log(discountAmount);
+      //处理打印模板
+      // 初始位置
+
+      let order_time = (function() {
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要加1
+          const day = String(now.getDate()).padStart(2, '0');
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+          return `${year}-${month}-${day} ${hours}:${minutes}`;
+        })()
+      
+
+      // printOrderDetails(finalItemDetails, totalInfo, discountAmount, order_time, orderId);
+
+      // 创建独立的 tagInfo 数组
+      const tagInfo = order.items.map(item => {
+          const options = item.optionValues ? Object.values(item.optionValues).map(option => option.value) : [];
+          const name = item.name
+          const tag = `${options.join('\\')}`; // 以 \\ 分隔选项
+          return {
+            tag,
+            name
+          };
+      });
+
+      console.log(tagInfo);
+
+      printOrderTag(tagInfo, orderId, order_time);
+
+      ElMessageBox.alert(
+      event.data,
+      '来新单辣！',
+      {
+        confirmButtonText: '确定',
+        type: 'success',
+      });
+    }else{
+      console.log("收到消息",msg)
+    }
+  };
+
+  ws.onclose = () => {
+    if (isManuallyClosed){
+      console.log("WebSocket disconnected,isManuallyClosed,no reconnect")
+      stopHeartbeat();
+      return;
+    }
+    console.log('WebSocket disconnected'+reconnectAttempts+","+maxReconnectAttempts);
+    if (reconnectAttempts < maxReconnectAttempts) {
+      reconnectAttempts++;
+      reconnectWebSocket(); // 尝试重连
+    } else {
+      console.error('Max reconnect attempts reached');
+      stopHeartbeat();
+      showReconnectAlert(); // 耗尽重连次数后显示弹窗
+    }
+  };
+
+  ws.onerror = (error: Event) => {
+    console.error('WebSocket error:', error);
+    ws?.close(); // 发生错误时关闭连接，触发 onclose
+  };
+};
+
+const reconnectWebSocket = () => {
+  // if (reconnectTimer) return; // 如果已经有定时器，不重复设置
+
+  console.log(`Reconnecting in ${reconnectInterval / 1000} seconds...`);
+  // reconnectTimer = 
+  window.setTimeout(() => {
+    connectWebSocket();
+  }, reconnectInterval);
+};
+
 // 显示重连失败弹窗
 const showReconnectAlert = () => {
       ElMessageBox.alert(
@@ -639,6 +729,7 @@ const showReconnectAlert = () => {
         }
       );
     };
+
 onMounted(async () => {
   try {
     await fetchProducts();

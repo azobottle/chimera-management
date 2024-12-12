@@ -117,12 +117,6 @@
         "paperNumberTop": 66,
         "paperNumberDisabled": true,
         "paperNumberContinue": true,
-        "watermarkOptions": {
-          "content": "vue-plugin-hiprint",
-          "rotate": 25,
-          "timestamp": true,
-          "format": "YYYY-MM-DD HH:mm"
-        },
         "panelLayoutOptions": {}
       }
     ]
