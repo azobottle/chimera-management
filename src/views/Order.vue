@@ -557,7 +557,7 @@ const connectWebSocket = () => {
   if(auth===null){
     ElMessage.error("localStorage中auth对应的值为空");
   }
-  ws = new WebSocket(API_BASE_URL+"/ws/order_create");
+  ws = new WebSocket(API_BASE_URL+"/ws/orders");
 
   ws.onopen = () => {
     console.log('WebSocket connected');
@@ -568,9 +568,11 @@ const connectWebSocket = () => {
 
   ws.onmessage = async (event: MessageEvent) => {
     const msg=event.data as string;
-    if(msg.startsWith("order")){
+    const dto=JSON.parse(msg)
+    const state=dto.state as string
+    if(state=="已支付"){
       await fetchOrders();
-      const orderId = msg.split(":")[1].trim(); // 假设格式为 "order: 订单号"
+      const orderId = dto.orderId
       console.log("收到新订单号:", orderId); // 输出提取的订单号
       const order = orders.value.find(o => o.id.toString() === orderId);
       console.log("订单数据总:", orders); // 输出提取的订单号
@@ -679,6 +681,24 @@ const connectWebSocket = () => {
       {
         confirmButtonText: '确定',
         type: 'success',
+      });
+    }else if(state=="已退款"){
+      await fetchOrders(); // 刷新订单列表
+      ElMessageBox.alert(
+      event.data,
+      '已退款',
+      {
+        confirmButtonText: '确定',
+        type: 'info',
+      });
+    }else if(state=="异常结束"){
+      await fetchOrders(); // 刷新订单列表
+      ElMessageBox.alert(
+      event.data,
+      '异常结束，店员可以主动和客户沟通处理',
+      {
+        confirmButtonText: '确定',
+        type: 'warning',
       });
     }else{
       console.log("收到消息",msg)
