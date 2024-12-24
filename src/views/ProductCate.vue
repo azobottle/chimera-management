@@ -140,7 +140,7 @@ const getStatusLabel = (status: number) => {
         </template>
       </el-table-column>
       
-      <el-table-column prop="priority" label="排序"></el-table-column>
+      <el-table-column prop="priority" label="排序（越大在菜单排得越前）"></el-table-column>
 
       <el-table-column label="">
         <template #default="{ row }">

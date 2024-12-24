@@ -6,9 +6,8 @@ import {
   getAllActivitiesShop,
   updateActivity,
   createEntity,
-  getAllProductCatesShop,
 } from '../client/services.gen';
-import type { Activity, ProductCate } from '../client/types.gen';
+import type { Activity } from '../client/types.gen';
 import {
   ElMessage,
   ElTable,
@@ -22,11 +21,12 @@ import {
   ElOption,
   ElPagination,
   ElDatePicker,
+  ElRadioGroup,
+  ElRadio,
+  ElUpload,
 } from 'element-plus';
 
 const activities = ref<Activity[]>([]);
-const productCategories = ref<Map<string, string>>(new Map());
-const productCategoriesArray = ref<Array<{ id: string; title: string }>>([]);
 const isDeleteDialogVisible = ref(false);
 const isEditDialogVisible = ref(false);
 const isDeleting = ref(false);
@@ -36,6 +36,8 @@ const editableActivity = ref<Activity | null>(null);
 
 const imageFile = ref<File | null>(null);
 const imagePreview = ref<string | null>(null);
+const imageFileMenu = ref<File | null>(null);
+const imagePreviewMenu = ref<string | null>(null);
 const isCreating = ref(false);
 
 // Pagination variables
@@ -52,12 +54,11 @@ const paginatedActivities = computed(() => {
 // Search-related variables
 const searchQuery = ref({
   title: '',
-  cateId: '',
   status: '',
 });
 
 const resetFilters = () => {
-  searchQuery.value = { title: '', cateId: '', status: '' };
+  searchQuery.value = { title: '', status: '' };
   currentPage.value = 1; // Reset to first page after resetting
 };
 
@@ -66,24 +67,23 @@ const filteredActivities = computed(() => {
   return activities.value.filter((activity) => {
     const matchesTitle =
       searchQuery.value.title === '' ||
-      activity.title?.includes(searchQuery.value.title);
-    const matchesCate =
-      searchQuery.value.cateId === '' ||
-      (activity.cateIds && activity.cateIds.includes(searchQuery.value.cateId));
+      (activity.title && activity.title.includes(searchQuery.value.title));
     const matchesStatus =
       searchQuery.value.status === '' ||
-      activity.status?.toString() === searchQuery.value.status;
-    return matchesTitle && matchesCate && matchesStatus && activity.delete !== 1;
+      (activity.status !== undefined && activity.status.toString() === searchQuery.value.status);
+    return matchesTitle && matchesStatus && activity.delete !== 1;
   });
 });
 
 const openEditDialog = (activity: Activity) => {
   editableActivity.value = {
     ...activity,
-    cateIds: activity.cateIds ? [...activity.cateIds] : [],
+    // Removed cateIds and dePrice
   };
   imageFile.value = null;
   imagePreview.value = activity.imgURL || null;
+  imageFileMenu.value = null;
+  imagePreviewMenu.value = activity.imgURL_menu || null;
   isCreating.value = false;
   isEditDialogVisible.value = true;
 };
@@ -93,8 +93,10 @@ const saveActivityChanges = async () => {
 
   isSaving.value = true;
   let imageFilename = editableActivity.value.imgURL || '';
+  let imageFilenameMenu = editableActivity.value.imgURL_menu || '';
 
   try {
+    // Upload imgURL if a new file is selected
     if (imageFile.value) {
       try {
         const imageResponse = await uploadImage1({
@@ -105,14 +107,39 @@ const saveActivityChanges = async () => {
         imageFilename = imageResponse.data;
       } catch (error) {
         console.error('Image upload failed:', error);
+        ElMessage.error('主图片上传失败');
+        throw error;
       }
     }
 
+    // Upload imgURL_menu if a new file is selected
+    if (imageFileMenu.value) {
+      try {
+        const imageMenuResponse = await uploadImage1({
+          body: {
+            image: imageFileMenu.value,
+          },
+        });
+        imageFilenameMenu = imageMenuResponse.data;
+      } catch (error) {
+        console.error('Menu Image upload failed:', error);
+        ElMessage.error('菜单图片上传失败');
+        throw error;
+      }
+    }
+
+    // Extract filename from URL if necessary
     if (imageFilename.includes('/')) {
       imageFilename = imageFilename.split('/').pop()!;
     }
 
+    if (imageFilenameMenu.includes('/')) {
+      imageFilenameMenu = imageFilenameMenu.split('/').pop()!;
+    }
+
+    // Update the editableActivity with new image filenames
     editableActivity.value.imgURL = imageFilename;
+    editableActivity.value.imgURL_menu = imageFilenameMenu;
 
     console.log('editableActivity', editableActivity.value);
 
@@ -120,21 +147,21 @@ const saveActivityChanges = async () => {
       await createEntity({
         body: editableActivity.value,
       });
-      ElMessage.success('Activity created successfully');
+      ElMessage.success('活动创建成功');
     } else {
       await updateActivity({
         body: editableActivity.value,
         method: 'PUT',
         throwOnError: true,
       });
-      ElMessage.success('Activity updated successfully');
+      ElMessage.success('活动更新成功');
     }
 
     await fetchActivities();
     isEditDialogVisible.value = false;
   } catch (error) {
     console.error('Error saving activity:', error);
-    ElMessage.error('Failed to save activity');
+    ElMessage.error('保存活动失败');
   } finally {
     isSaving.value = false;
   }
@@ -150,45 +177,16 @@ const fetchActivities = async () => {
   }
 };
 
-const fetchProductCategories = async () => {
-  try {
-    const response = await getAllProductCatesShop();
-    const categories: ProductCate[] = response.data
-      .filter(
-        (category: ProductCate) => category.delete === 0 && category.status !== 0
-      )
-      .sort((a: ProductCate, b: ProductCate) => b.priority - a.priority);
-    const categoryMap = new Map<string, string>();
-    categories.forEach((category) => {
-      if (category.id && category.title) {
-        categoryMap.set(category.id.toString(), category.title);
-      }
-    });
-    productCategories.value = categoryMap;
-
-    // Convert the Map to an array for easier iteration in templates
-    productCategoriesArray.value = Array.from(categoryMap.entries()).map(
-      ([id, title]) => ({ id, title })
-    );
-  } catch (error) {
-    console.error('Error fetching product categories:', error);
-  }
-};
-
 onMounted(async () => {
   try {
     await fetchActivities();
-    await fetchProductCategories();
+    // Removed fetchProductCategories
   } catch (error) {
     console.error('Error during onMounted:', error);
   }
 });
 
-const getCategoryTitles = (cateIds: string[]) => {
-  return cateIds
-    .map((id) => productCategories.value.get(id) || '未知分类')
-    .join(', ');
-};
+// Removed getCategoryTitles
 
 const getStatusLabel = (status: number) => {
   return status === 1 ? '上架' : '下架';
@@ -205,20 +203,27 @@ const deleteActivity = async () => {
   try {
     let imageFilename = activityToDelete.value.imgURL;
 
-    if (imageFilename.includes('/')) {
+    if (imageFilename && imageFilename.includes('/')) {
       imageFilename = imageFilename.split('/').pop();
+    }
+    let imageFilenameMenu = activityToDelete.value.imgURL_menu;
+    if (imageFilenameMenu && imageFilenameMenu.includes('/')) {
+      imageFilenameMenu = imageFilenameMenu.split('/').pop();
     }
     const updatedActivity = {
       ...activityToDelete.value,
       delete: 1,
       status: 0,
-      imgURL: imageFilename,
+      imgURL: imageFilename || '',
+      imgURL_menu: imageFilenameMenu || '',
     };
     await updateActivity({ body: updatedActivity });
     await fetchActivities();
     isDeleteDialogVisible.value = false;
+    ElMessage.success('活动删除成功');
   } catch (error) {
     console.error('Error deleting activity:', error);
+    ElMessage.error('删除活动失败');
   } finally {
     isDeleting.value = false;
   }
@@ -227,16 +232,18 @@ const deleteActivity = async () => {
 const openCreateDialog = () => {
   editableActivity.value = {
     title: '',
+    imgURL: '',
+    imgURL_menu: '',
     describe: '',
     startTime: '',
     endTime: '',
-    dePrice: 0,
     status: 1,
-    imgURL: '',
-    cateIds: [],
+    delete: 0,
   };
   imageFile.value = null;
   imagePreview.value = null;
+  imageFileMenu.value = null;
+  imagePreviewMenu.value = null;
   isCreating.value = true;
   isEditDialogVisible.value = true;
 };
@@ -247,7 +254,17 @@ const onImageChange = (file: any) => {
     imagePreview.value = URL.createObjectURL(imageFile.value);
     console.log(imageFile.value);
   } else {
-    console.error('No file selected');
+    console.error('No file selected for 主图片');
+  }
+};
+
+const onImageMenuChange = (file: any) => {
+  if (file && file.raw) {
+    imageFileMenu.value = file.raw;
+    imagePreviewMenu.value = URL.createObjectURL(imageFileMenu.value);
+    console.log(imageFileMenu.value);
+  } else {
+    console.error('No file selected for 菜单图片');
   }
 };
 
@@ -276,21 +293,6 @@ const formatDateTime = (dateTimeStr: string) => {
         <el-input v-model="searchQuery.title" placeholder="输入活动名称"></el-input>
       </el-form-item>
 
-      <el-form-item label="分类">
-        <el-select
-          v-model="searchQuery.cateId"
-          placeholder="选择分类"
-          style="width: 150pt;"
-        >
-          <el-option
-            v-for="category in productCategoriesArray"
-            :key="category.id"
-            :label="category.title"
-            :value="category.id"
-          />
-        </el-select>
-      </el-form-item>
-
       <el-form-item label="状态">
         <el-select
           v-model="searchQuery.status"
@@ -312,22 +314,32 @@ const formatDateTime = (dateTimeStr: string) => {
     <h1>活动列表</h1>
 
     <el-table :data="paginatedActivities" stripe>
-      <el-table-column prop="imgURL" label="图片" width="160px">
+      <el-table-column prop="imgURL" label="主图片" width="160px">
         <template #default="{ row }">
           <img
             :src="row.imgURL"
-            alt="Activity Image"
+            alt="主活动图片"
             v-if="row.imgURL"
             style="width: 100px; height: auto;"
           />
         </template>
       </el-table-column>
 
-      <el-table-column label="活动信息" width="200px">
+      <el-table-column prop="imgURL_menu" label="菜单图片" width="160px">
+        <template #default="{ row }">
+          <img
+            :src="row.imgURL_menu"
+            alt="菜单图片"
+            v-if="row.imgURL_menu"
+            style="width: 100px; height: auto;"
+          />
+        </template>
+      </el-table-column>
+
+      <el-table-column label="活动名称" width="200px">
         <template #default="{ row }">
           <div>
             <div style="font-weight: bold;">{{ row.title }}</div>
-            <div>优惠抵扣: {{ row.dePrice }}分</div>
           </div>
         </template>
       </el-table-column>
@@ -336,15 +348,6 @@ const formatDateTime = (dateTimeStr: string) => {
         <template #default="{ row }">
           <div>开始时间：{{ formatDateTime(row.startTime) }}</div>  
           <div>结束时间：{{ formatDateTime(row.endTime) }}</div>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="适用分类">
-        <template #default="{ row }">
-          <div v-if="row.cateIds && row.cateIds.length > 0">
-            {{ getCategoryTitles(row.cateIds) }}
-          </div>
-          <div v-else>全部分类</div>
         </template>
       </el-table-column>
 
@@ -388,14 +391,10 @@ const formatDateTime = (dateTimeStr: string) => {
     </el-dialog>
 
     <!-- Create/Edit Activity Dialog -->
-    <el-dialog v-model="isEditDialogVisible" width="50%" title="编辑活动">
+    <el-dialog v-model="isEditDialogVisible" width="50%" :title="isCreating ? '创建活动' : '编辑活动'">
       <el-form v-if="editableActivity" :model="editableActivity">
         <el-form-item label="活动名称">
           <el-input v-model="editableActivity.title"></el-input>
-        </el-form-item>
-
-        <el-form-item label="优惠抵扣价格">
-          <el-input type="number" v-model.number="editableActivity.dePrice" />
         </el-form-item>
 
         <el-form-item label="活动时间">
@@ -413,22 +412,6 @@ const formatDateTime = (dateTimeStr: string) => {
           />
         </el-form-item>
 
-        <el-form-item label="适用分类">
-          <el-select
-            v-model="editableActivity.cateIds"
-            multiple
-            placeholder="选择适用分类"
-            style="width: 100%;"
-          >
-            <el-option
-              v-for="category in productCategoriesArray"
-              :key="category.id"
-              :label="category.title"
-              :value="category.id"
-            />
-          </el-select>
-        </el-form-item>
-
         <el-form-item label="描述">
           <el-input type="textarea" v-model="editableActivity.describe" />
         </el-form-item>
@@ -440,7 +423,7 @@ const formatDateTime = (dateTimeStr: string) => {
           </el-radio-group>
         </el-form-item>
 
-        <el-form-item label="上传图片">
+        <el-form-item label="上传主图片">
           <img
             :src="imagePreview"
             v-if="imagePreview"
@@ -453,12 +436,34 @@ const formatDateTime = (dateTimeStr: string) => {
             :show-file-list="false"
             :auto-upload="false"
           >
-            <el-button type="primary">选择图片</el-button>
+            <el-button type="primary">选择主图片</el-button>
           </el-upload>
           <div
             style="color: #f56c6c; font-size: 12px; margin-top: 5px; width: 100%;"
           >
-            图片文件名禁止使用中文
+            主图片文件名禁止使用中文
+          </div>
+        </el-form-item>
+
+        <el-form-item label="上传菜单图片">
+          <img
+            :src="imagePreviewMenu"
+            v-if="imagePreviewMenu"
+            style="width: 100px; height: auto; margin-right: 10px;"
+          />
+          <el-upload
+            action=""
+            :file-list="[]"
+            :on-change="onImageMenuChange"
+            :show-file-list="false"
+            :auto-upload="false"
+          >
+            <el-button type="primary">选择菜单图片</el-button>
+          </el-upload>
+          <div
+            style="color: #f56c6c; font-size: 12px; margin-top: 5px; width: 100%;"
+          >
+            菜单图片文件名禁止使用中文
           </div>
         </el-form-item>
       </el-form>

@@ -373,7 +373,7 @@ export const CouponSchema = {
         },
         type: {
             type: 'string',
-            description: '类型，可选："新客"，"兑换"，"活动"，"临时"'
+            description: '类型，可选："新客"，"兑换"，"活动"，"学生"，"临时"'
         },
         dePrice: {
             type: 'integer',
@@ -444,6 +444,31 @@ export const AppConfigurationSchema = {
     description: '配置document，给一些变化频繁的配置用'
 } as const;
 
+export const InventorySchema = {
+    type: 'object',
+    properties: {
+        id: {
+            '$ref': '#/components/schemas/ObjectId'
+        },
+        name: {
+            type: 'string'
+        },
+        type: {
+            type: 'string'
+        },
+        deleted: {
+            type: 'boolean'
+        },
+        unit: {
+            type: 'string'
+        },
+        remain: {
+            type: 'integer',
+            format: 'int32'
+        }
+    }
+} as const;
+
 export const ActivitySchema = {
     type: 'object',
     properties: {
@@ -456,7 +481,11 @@ export const ActivitySchema = {
         },
         imgURL: {
             type: 'string',
-            description: '活动图片URL'
+            description: '首页/我的，竖样式活动图片URL'
+        },
+        imgURL_menu: {
+            type: 'string',
+            description: '菜单，横样式活动图片URL'
         },
         describe: {
             type: 'string',
@@ -471,19 +500,6 @@ export const ActivitySchema = {
             type: 'string',
             description: '活动结束时间，到时自动下架',
             format: 'date-time'
-        },
-        dePrice: {
-            type: 'integer',
-            description: '活动优惠抵扣价格，对于cateIds对应类的所有商品，减去这个价格。单位为分。',
-            format: 'int32'
-        },
-        cateIds: {
-            type: 'array',
-            description: '适用商品类，对应ProductCate.id，当用户点击活动时，跳转到cateIds[0]对应的侧边栏',
-            items: {
-                type: 'string',
-                description: '适用商品类，对应ProductCate.id，当用户点击活动时，跳转到cateIds[0]对应的侧边栏'
-            }
         },
         status: {
             type: 'integer',
@@ -546,6 +562,10 @@ export const DeliveryInfoSchema = {
             type: 'string',
             description: '绑定到具体订单实例的已选时间，可以是当天也可以是第二天。',
             format: 'date-time'
+        },
+        number: {
+            type: 'string',
+            description: '电话号码，第一次要求用户填写，提交订单后自动存到User.number，之后前端自动从这里取'
         }
     },
     description: '定时达配送信息'
@@ -671,7 +691,7 @@ export const ServiceResultObjectObjectSchema = {
 } as const;
 
 export const RefundApplyApiParamsSchema = {
-    required: ['orderId'],
+    required: ['orderId', 'reason'],
     type: 'object',
     properties: {
         orderId: {
@@ -808,6 +828,46 @@ export const AppConfigurationApiParamsSchema = {
         category: {
             type: 'string',
             description: '配置类别（用于分组管理）'
+        }
+    }
+} as const;
+
+export const TimePeriodRequestSchema = {
+    type: 'object',
+    properties: {
+        startTime: {
+            type: 'string',
+            format: 'date-time'
+        },
+        endTime: {
+            type: 'string',
+            format: 'date-time'
+        }
+    }
+} as const;
+
+export const InboundRequestSchema = {
+    type: 'object',
+    properties: {
+        inventoryId: {
+            type: 'string'
+        },
+        amount: {
+            type: 'integer',
+            format: 'int32'
+        }
+    }
+} as const;
+
+export const CheckInventoryRequestSchema = {
+    type: 'object',
+    properties: {
+        inventoryId: {
+            type: 'string'
+        },
+        checkedAmount: {
+            type: 'integer',
+            format: 'int32'
         }
     }
 } as const;

@@ -253,7 +253,7 @@ export type Coupon = {
      */
     name?: string;
     /**
-     * 类型，可选："新客"，"兑换"，"活动"，"临时"
+     * 类型，可选："新客"，"兑换"，"活动"，"学生"，"临时"
      */
     type?: string;
     /**
@@ -313,6 +313,15 @@ export type AppConfiguration = {
     category?: string;
 };
 
+export type Inventory = {
+    id?: ObjectId;
+    name?: string;
+    type?: string;
+    deleted?: boolean;
+    unit?: string;
+    remain?: number;
+};
+
 export type Activity = {
     id?: ObjectId;
     /**
@@ -320,9 +329,13 @@ export type Activity = {
      */
     title?: string;
     /**
-     * 活动图片URL
+     * 首页/我的，竖样式活动图片URL
      */
     imgURL?: string;
+    /**
+     * 菜单，横样式活动图片URL
+     */
+    imgURL_menu?: string;
     /**
      * 活动介绍
      */
@@ -335,14 +348,6 @@ export type Activity = {
      * 活动结束时间，到时自动下架
      */
     endTime?: string;
-    /**
-     * 活动优惠抵扣价格，对于cateIds对应类的所有商品，减去这个价格。单位为分。
-     */
-    dePrice?: number;
-    /**
-     * 适用商品类，对应ProductCate.id，当用户点击活动时，跳转到cateIds[0]对应的侧边栏
-     */
-    cateIds?: Array<(string)>;
     /**
      * 0为下架，1为上架。=0时不返回给小程序
      */
@@ -375,6 +380,10 @@ export type DeliveryInfo = {
      * 绑定到具体订单实例的已选时间，可以是当天也可以是第二天。
      */
     time?: string;
+    /**
+     * 电话号码，第一次要求用户填写，提交订单后自动存到User.number，之后前端自动从这里取
+     */
+    number?: string;
 };
 
 export type OrderApiParams = {
@@ -453,7 +462,7 @@ export type RefundApplyApiParams = {
     /**
      * 退款原因
      */
-    reason?: string;
+    reason: string;
 };
 
 export type BatchSupplyOrderDTO = {
@@ -511,6 +520,21 @@ export type AppConfigurationApiParams = {
      * 配置类别（用于分组管理）
      */
     category?: string;
+};
+
+export type TimePeriodRequest = {
+    startTime?: string;
+    endTime?: string;
+};
+
+export type InboundRequest = {
+    inventoryId?: string;
+    amount?: number;
+};
+
+export type CheckInventoryRequest = {
+    inventoryId?: string;
+    checkedAmount?: number;
 };
 
 /**
@@ -853,6 +877,23 @@ export type AddConfigurationError = ({
     };
 });
 
+export type UpdateInventoryData = {
+    body: Inventory;
+    query: {
+        id: string;
+    };
+};
+
+export type UpdateInventoryResponse = ({
+    [key: string]: unknown;
+});
+
+export type UpdateInventoryError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
 export type GetAllActivitiesResponse = (Array<Activity>);
 
 export type GetAllActivitiesError = ({
@@ -1081,6 +1122,22 @@ export type BatchSupplyOrdersError = ({
     };
 });
 
+export type DistributeCouponToStudentsData = {
+    query: {
+        couponId: string;
+    };
+};
+
+export type DistributeCouponToStudentsResponse = ({
+    [key: string]: unknown;
+});
+
+export type DistributeCouponToStudentsError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
 export type AddCouponToUserData = {
     query: {
         couponId: string;
@@ -1117,6 +1174,62 @@ export type LoginData = {
 export type LoginResponse = (ResponseBodyDTOUserDTO);
 
 export type LoginError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
+export type GetInventoryRecordsByTimePeriodData = {
+    body: TimePeriodRequest;
+};
+
+export type GetInventoryRecordsByTimePeriodResponse = ({
+    [key: string]: unknown;
+});
+
+export type GetInventoryRecordsByTimePeriodError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
+export type InboundData = {
+    body: InboundRequest;
+};
+
+export type InboundResponse = ({
+    [key: string]: unknown;
+});
+
+export type InboundError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
+export type CreateInventoryData = {
+    body: Inventory;
+};
+
+export type CreateInventoryResponse = ({
+    [key: string]: unknown;
+});
+
+export type CreateInventoryError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
+export type CheckInventoryData = {
+    body: CheckInventoryRequest;
+};
+
+export type CheckInventoryResponse = ({
+    [key: string]: unknown;
+});
+
+export type CheckInventoryError = ({
     [key: string]: {
         [key: string]: unknown;
     };
@@ -1160,6 +1273,20 @@ export type GetNewUsersData = {
 export type GetNewUsersResponse = (Array<User>);
 
 export type GetNewUsersError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
+export type GetUserDtoByIdData = {
+    path: {
+        id: string;
+    };
+};
+
+export type GetUserDtoByIdResponse = (UserDTO);
+
+export type GetUserDtoByIdError = ({
     [key: string]: {
         [key: string]: unknown;
     };
@@ -1313,6 +1440,32 @@ export type WxLoginOrRegisterError = ({
 export type ValidateResponse = (ResponseBodyDTOUserDTO);
 
 export type ValidateError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
+export type GetOperationRecordsData = {
+    path: {
+        id: string;
+    };
+};
+
+export type GetOperationRecordsResponse = ({
+    [key: string]: unknown;
+});
+
+export type GetOperationRecordsError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
+export type GetAllInventoriesResponse = ({
+    [key: string]: unknown;
+});
+
+export type GetAllInventoriesError = ({
     [key: string]: {
         [key: string]: unknown;
     };

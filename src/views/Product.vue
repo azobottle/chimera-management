@@ -85,6 +85,7 @@ const removeOption = (optionId: string) => {
 
 const onOptionValuesChange = (optionId: string) => {
   if (editableProduct.value?.productOptions) {
+    console.log("selectedOptionValues:" + selectedOptionValues.value[optionId])
     editableProduct.value.productOptions[optionId] = selectedOptionValues.value[optionId].map(optionString => {
       const [value, priceAdjustmentString] = optionString.split(':');
       const priceAdjustment = parseFloat(priceAdjustmentString.replace('元', '')); // 去掉'元'并转换为数字
@@ -93,6 +94,8 @@ const onOptionValuesChange = (optionId: string) => {
       const existingOption = productOptions.value.get(optionId)?.values.find(option => 
         option.value === value && option.priceAdjustment === priceAdjustment
       );
+
+      console.log("existingOption:" + existingOption.value)
 
       return {
         uuid: existingOption?.uuid, // 使用已存在的 uuid
@@ -374,7 +377,8 @@ const openCreateDialog = () => {
     describe: '',
     status: 1,
     imgURL: '',
-    productOptions: {}
+    productOptions: {},
+    onlyDining: false,
   };
   selectedOptionValues.value = {};
   imageFile.value = null;
@@ -471,6 +475,13 @@ const onImageChange = (file: any) => {
         </template>
       </el-table-column>
 
+      <el-table-column label="堂食限定" width="100px">
+        <template #default="{ row }">
+          <span v-if="row.onlyDining">仅限堂食</span>
+          <span v-else> - </span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="状态" width="100px">
         <template #default="{ row }">
           <span>{{ getStatusLabel(row.status) }}</span>
@@ -530,6 +541,13 @@ const onImageChange = (file: any) => {
         </el-form-item>
         <el-form-item label="描述">
           <el-input type="textarea" v-model="editableProduct.describe" />
+        </el-form-item>
+
+        <el-form-item label="仅限堂食">
+          <el-radio-group v-model="editableProduct.onlyDining">
+            <el-radio :label="true">是</el-radio>
+            <el-radio :label="false">否</el-radio>
+          </el-radio-group>
         </el-form-item>
 
         <el-form-item label="商品状态">

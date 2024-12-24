@@ -20,15 +20,18 @@
           <span>登录</span>
         </el-menu-item>
 
-        <el-menu-item index="/stats">
-          <i class="el-icon-menu"></i>
-          <span>经营统计</span>
-        </el-menu-item>
-
-        <el-menu-item index="/appConfiguration">
-          <i class="el-icon-menu"></i>
-          <span>配置表</span>
-        </el-menu-item>
+        <!-- 商品 -->
+        <el-sub-menu index="1">
+          <template #title>
+            <i class="el-icon-menu"></i>
+            <span>管理</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="/stats">经营统计</el-menu-item>
+            <el-menu-item index="/inventory">出入库</el-menu-item>
+            <el-menu-item index="/appConfiguration">配置表</el-menu-item>
+          </el-menu-item-group>
+        </el-sub-menu>
 
         <!-- 商品 -->
         <el-sub-menu index="2">
@@ -51,7 +54,6 @@
           </template>
           <el-menu-item-group>
             <el-menu-item index="/order">订单列表</el-menu-item>
-            <el-menu-item index="/orderPrint">打印设置</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
 

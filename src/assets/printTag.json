@@ -30,7 +30,7 @@
               "top": 6,
               "height": 19.5,
               "width": 39,
-              "title": "091",
+              "title": "订单号",
               "coordinateSync": false,
               "widthHeightSync": false,
               "fontSize": 20.25,
@@ -49,54 +49,11 @@
           },
           {
             "options": {
-              "left": 7.5,
-              "top": 28.5,
-              "height": 13.5,
-              "width": 33,
-              "title": "拿铁",
-              "coordinateSync": false,
-              "widthHeightSync": false,
-              "fontSize": 11.25,
-              "fontWeight": "bolder",
-              "qrCodeLevel": 0,
-              "right": 54,
-              "bottom": 44.25,
-              "vCenter": 30.75,
-              "hCenter": 36
-            },
-            "printElementType": {
-              "title": "这是更新后的元素",
-              "type": "text"
-            }
-          },
-          {
-            "options": {
-              "left": 7.5,
-              "top": 46.5,
-              "height": 13.5,
-              "width": 76.5,
-              "title": "冷\\少冰\\燕麦奶",
-              "coordinateSync": false,
-              "widthHeightSync": false,
-              "fontSize": 9,
-              "qrCodeLevel": 0,
-              "right": 84.75,
-              "bottom": 59.25,
-              "vCenter": 46.5,
-              "hCenter": 52.5
-            },
-            "printElementType": {
-              "title": "这是更新后的元素",
-              "type": "text"
-            }
-          },
-          {
-            "options": {
               "left": 33,
               "top": 61.5,
               "height": 13.5,
               "width": 76.5,
-              "title": "2024-10-17    08:16",
+              "title": "时间",
               "coordinateSync": false,
               "widthHeightSync": false,
               "fontSize": 9,

@@ -19,7 +19,8 @@
     "element-plus": "^2.8.2",
     "vue": "^3.4.29",
     "vue-plugin-hiprint": "^0.0.56",
-    "vue-router": "^4.3.3"
+    "vue-router": "^4.3.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@hey-api/client-fetch": "^0.2.4",

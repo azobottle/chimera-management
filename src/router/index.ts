@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router' // 使用 type-only 导入
 import Order from '../views/Order.vue'
-import OrderPrint from '../views/OrderPrint.vue'
 import Product from '../views/Product.vue'
+import Inventory from '../views/Inventory.vue'
 import ProductCate from '../views/ProductCate.vue'
 import ProductOpt from '../views/ProductOpt.vue'
 import User from '../views/User.vue'
@@ -20,11 +20,11 @@ import { LOCAL_AUTH_NAME } from '@/client/customize'
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/order', component: Order },
-  { path: '/orderPrint', component: OrderPrint },
   { path: '/product', component: Product },
   { path: '/productCate', component: ProductCate },
   { path: '/productOpt', component: ProductOpt },
   { path: '/user', component: User },
+  { path: '/inventory', component: Inventory },
   { path: '/userAddress', component: UserAddress },
   { path: '/stats', component: Stats },
   { path: '/coupon', component: Coupon },

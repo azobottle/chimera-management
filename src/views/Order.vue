@@ -8,7 +8,7 @@ import {
   supplyOrder,
   refundApply,
 } from '../client/services.gen';
-import type { Order, Product, OptionValue, ProductOption, OrderApiParams, UserDTO } from '../client/types.gen';
+import type { Order, Product, OptionValue, ProductOption, OrderApiParams, UserDTO, DeliveryInfo } from '../client/types.gen';
 import {
   ElMessage,
   ElTable,
@@ -253,7 +253,40 @@ function stopHeartbeat() {
   }
 }
 
-const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmount: number, order_time:string, orderId:string) => {
+// 获取电话号码的后四位
+const getLastFourDigits = (number: string): string => {
+    const trimmedNumber = number.replace(/\D/g, '');  // 移除非数字字符
+    return trimmedNumber.slice(-4);
+};
+
+// 组合地址
+const getAddress = (deliveryInfo?: DeliveryInfo | null): string => {
+    const school = deliveryInfo?.school ? deliveryInfo.school : "";
+    const address = deliveryInfo?.address ? deliveryInfo.address : "";
+    const combined = `${school} ${address}`.trim();
+    return combined || "地址未提供";
+};
+
+// 格式化发送时间
+const formatSendTime = (time: string): string => {
+    const date = new Date(time);
+    if (isNaN(date.getTime())) {
+        return "无效时间";
+    }
+    const year = date.getFullYear();
+    const month = padZero(date.getMonth() + 1); // 月份从0开始
+    const day = padZero(date.getDate());
+    const hours = padZero(date.getHours());
+    const minutes = padZero(date.getMinutes());
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+};
+
+// 辅助函数：补零
+const padZero = (num: number): string => {
+    return num < 10 ? `0${num}` : `${num}`;
+};
+
+const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmount: number, order_time:string, orderId:string, deliveryInfo?:DeliveryInfo | null) => {
   let topPosition = 93;  // 起始 `top` 值
       
       const template = JSON.parse(JSON.stringify(template_head));;
@@ -365,6 +398,7 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
 
       // 获取 finalItemDetails 的长度
       const offsetTop = finalItemDetails.length * 15;
+      const root_paparFooter = 240;
       const tailElements = JSON.parse(JSON.stringify(template_tail.printElements));
 
       // 遍历 `newElements`，并增加 top 值s
@@ -474,112 +508,223 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
         }
       });
 
+      let printData = {};
+
+      if (deliveryInfo) {
+        template.panels[0].printElements.push({
+          "options": {
+            "left": 4.5,
+            "top": 181.5+offsetTop,
+            "height": 9.75,
+            "width": 69,
+            "title": "订单号",
+            "right": 75.24778747558594,
+            "bottom": 191.49776458740234,
+            "vCenter": 40.74778747558594,
+            "hCenter": 186.62276458740234,
+            "field": "orderNum",
+            "testData": "45",
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 12,
+            "qrCodeLevel": 0,
+            "qid": "orderNum_1",
+            "fontWeight": "bold"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        });
+
+        template.panels[0].printElements.push({
+          "options": {
+            "left": 109.5,
+            "top": 181.5+offsetTop,
+            "height": 9.75,
+            "width": 108,
+            "title": "号码后四位",
+            "right": 216.7500228881836,
+            "bottom": 191.25,
+            "vCenter": 162.7500228881836,
+            "hCenter": 186.375,
+            "field": "userNum",
+            "testData": "1223",
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 12,
+            "qrCodeLevel": 0,
+            "qid": "orderNum_2",
+            "fontWeight": "bold",
+            "textAlign": "right"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        });
+
+        template.panels[0].printElements.push({
+          "options": {
+            "left": 4.5,
+            "top": 222+offsetTop,
+            "height": 9.75,
+            "width": 216,
+            "title": "配送地址",
+            "right": 222.75,
+            "bottom": 231.7500228881836,
+            "vCenter": 114.75,
+            "hCenter": 226.8750228881836,
+            "field": "addr",
+            "testData": "北京大学第一教学楼",
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 12,
+            "qrCodeLevel": 0,
+            "qid": "userNum_1",
+            "fontWeight": "bold"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        });
+
+        template.panels[0].printElements.push({
+          "options": {
+            "left": 4.5,
+            "top": 202.5+offsetTop,
+            "height": 9.75,
+            "width": 216,
+            "title": "配送时间",
+            "right": 221.25,
+            "bottom": 211.5,
+            "vCenter": 113.25,
+            "hCenter": 206.625,
+            "field": "sendTime",
+            "testData": "2024-12-20 10:00",
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 12,
+            "qrCodeLevel": 0,
+            "qid": "addr_1",
+            "fontWeight": "bold"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        });
+
+        template.panels[0].paperFooter = root_paparFooter + offsetTop + 50;
+
+        console.log("deliveryInfo:", JSON.stringify(deliveryInfo, null, 2));
+
+        printData = {
+          orderNum: orderId,
+          time: order_time,
+          userNum: deliveryInfo?.number ? getLastFourDigits(deliveryInfo.number) : "N/A",
+          addr: getAddress(deliveryInfo),
+          sendTime: deliveryInfo?.time ? formatSendTime(deliveryInfo.time) : "N/A"
+        };
+
+      } else {
+        printData = {
+          orderNum: orderId,
+          time: order_time,
+        };
+      }
+
       console.log(JSON.stringify(template, null, 2));
 
-      //打印
-
-      let printData = {
-        orderNum: orderId,
-        time: order_time
-      };
-
       let hiprintTemplate = new hiprint.PrintTemplate({ template: template});
-      // 打印
-      hiprintTemplate.print(printData);
-};
 
-
-
-const printOrderTag = (tagInfo:any[], orderId:string, order_time:string) => {
+      // 模板对象获取
       
-  const template = JSON.parse(JSON.stringify(templateTag));;
+      const printerList = hiprintTemplate.getPrinterList();
+      // console.log("printerList:", JSON.stringify(printerList, null, 2));
 
-
-  // 遍历每个订单项，为每个项创建一个打印任务
-  tagInfo.forEach((item, index) => {
-    // 加载模板副本
-    let template = JSON.parse(JSON.stringify(baseTemplate));
-
-    // 设置基础信息，例如订单号和时间
-    const orderInfoElement = template.panels[0].printElements.find(element => element.options.title.includes('订单号'));
-    const imageElement = template.panels[0].printElements.find(element => element.printElementType.type === 'image');
-    if (imageElement) {
-      imageElement.options.title = '/taglogo.jpg';  // 假设公共目录直接访问
-    }
-
-    if (orderInfoElement) {
-      orderInfoElement.options.title = `订单号: ${orderId}`;
-    }
-    const timeElement = template.panels[0].printElements.find(element => element.options.title.includes('时间'));
-    if (timeElement) {
-      timeElement.options.title = `时间: ${orderTime}`;
-    }
-
-    // 添加当前订单项的 'name' 文本元素
-    template.panels[0].printElements.push({
-      options: {
-        left: 7.5,
-        top: 28.5, // 确定的位置
-        height: 13.5,
-        width: 33,
-        title: item.name,
-        fontSize: 11.25,
-        fontWeight: "bolder"
-      },
-      printElementType: {
-        type: "text"
-      }
-    });
-
-    // 添加当前订单项的 'tag' 文本元素
-    template.panels[0].printElements.push({
-      options: {
-        left: 7.5,
-        top: 46.5, // 确定的位置
-        height: 13.5,
-        width: 76.5,
-        title: item.tag,
-        fontSize: 9
-      },
-      printElementType: {
-        type: "text"
-      }
-    });
-
-    // 创建打印模板对象并打印
-    let hiprintTemplate = new hiprint.PrintTemplate({ template });
-    hiprintTemplate.print();
-  });
+      // 打印
+      hiprintTemplate.print2(printData, {printer: 'XP-80C'});
 };
 
-const connectWebSocket = () => {
-  const auth=localStorage.getItem(LOCAL_AUTH_NAME)
-  if(auth===null){
-    ElMessage.error("localStorage中auth对应的值为空");
+const printOrderTag = (tagInfo: any[], orderId: string, order_time: string) => {
+
+// 遍历每个订单项，为每个项创建一个打印任务
+tagInfo.forEach((item, index) => {
+  // 每次循环都创建一个新的模板副本
+  const template = JSON.parse(JSON.stringify(templateTag));
+
+  // 设置基础信息，例如订单号和时间
+  const orderInfoElement = template.panels[0].printElements.find(element => 
+    element.options && element.options.title && element.options.title.includes('订单号')
+  );
+  const imageElement = template.panels[0].printElements.find(element => element.printElementType.type === 'image');
+  
+  if (imageElement) {
+    imageElement.printElementType.title = '/taglogo.jpg';  // 假设公共目录直接访问
   }
-  ws = new WebSocket(API_BASE_URL+"/ws/orders");
 
-  ws.onopen = () => {
-    console.log('WebSocket connected');
-    ws?.send(AUTHENTICATE+":"+auth)
-    reconnectAttempts = 0; // 连接成功后重置重连次数
-    startHeartbeat();
-  };
+  if (orderInfoElement) {
+    orderInfoElement.options.title = `${orderId}`;
+  }
+  const timeElement = template.panels[0].printElements.find(element => 
+    element.options && element.options.title && element.options.title.includes('时间')
+  );
 
-  ws.onmessage = async (event: MessageEvent) => {
-    const msg=event.data as string;
-    const dto=JSON.parse(msg)
-    const state=dto.state as string
-    if(state=="已支付"){
-      await fetchOrders();
-      const orderId = dto.orderId
-      console.log("收到新订单号:", orderId); // 输出提取的订单号
-      const order = orders.value.find(o => o.id.toString() === orderId);
-      console.log("订单数据总:", orders); // 输出提取的订单号
-      console.log("订单数据:", order); // 输出提取的订单号
+  if (timeElement) {
+    timeElement.options.title = `${order_time}`;
+  }
 
-      // 存储最终结果的数组
-      const itemDetails = order.items.map(item => {
+  // 添加当前订单项的 'name' 文本元素
+  template.panels[0].printElements.push({
+    options: {
+      left: 7.5,
+      top: 28.5, // 确定的位置
+      height: 13.5,
+      width: 70,
+      title: item.name,
+      fontSize: 11.25,
+      fontWeight: "bolder"
+    },
+    printElementType: {
+      type: "text"
+    }
+  });
+
+  // 添加当前订单项的 'tag' 文本元素
+  template.panels[0].printElements.push({
+    options: {
+      left: 7.5,
+      top: 46.5, // 确定的位置
+      height: 13.5,
+      width: 76.5,
+      title: item.tag,
+      fontSize: 9
+    },
+    printElementType: {
+      type: "text"
+    }
+  });
+
+  
+
+  // 创建打印模板对象并打印
+  console.log("打印:", JSON.stringify(template)); // 更正打印输出，显示完整模板内容
+
+  let hiprintTemplate = new hiprint.PrintTemplate({ template });
+  const printData = {}
+  // 模板对象获取
+  // const printerList = hiprintTemplate.getPrinterList();
+  // console.log("printerList:", JSON.stringify(printerList, null, 2));
+  hiprintTemplate.print2(printData, {printer: "Xprinter XP-T202UA"});
+});
+};
+
+const printOrder = (order: Order) => {
+
+  // 存储最终结果的数组
+  const itemDetails = order.items.map(item => {
         const options = item.optionValues ? Object.values(item.optionValues).map(option => option.value) : [];
         const quantity = 1; // 默认数量为1
         const price = item.price || 0; // 获取价格，默认为0
@@ -656,9 +801,10 @@ const connectWebSocket = () => {
           const minutes = String(now.getMinutes()).padStart(2, '0');
           return `${year}-${month}-${day} ${hours}:${minutes}`;
         })()
-      
 
-      // printOrderDetails(finalItemDetails, totalInfo, discountAmount, order_time, orderId);
+      console.log("deliveryInfo  data:", JSON.stringify(order.deliveryInfo, null, 2));
+
+      printOrderDetails(finalItemDetails, totalInfo, discountAmount, order_time, order.orderNum.toString(), order.deliveryInfo);
 
       // 创建独立的 tagInfo 数组
       const tagInfo = order.items.map(item => {
@@ -672,8 +818,38 @@ const connectWebSocket = () => {
       });
 
       console.log(tagInfo);
+      // printOrderTag(tagInfo, order.orderNum.toString(), order_time);
 
-      printOrderTag(tagInfo, orderId, order_time);
+};
+
+
+const connectWebSocket = () => {
+  const auth=localStorage.getItem(LOCAL_AUTH_NAME)
+  if(auth===null){
+    ElMessage.error("localStorage中auth对应的值为空");
+  }
+  ws = new WebSocket(API_BASE_URL+"/ws/orders");
+
+  ws.onopen = () => {
+    console.log('WebSocket connected');
+    ws?.send(AUTHENTICATE+":"+auth)
+    reconnectAttempts = 0; // 连接成功后重置重连次数
+    startHeartbeat();
+  };
+
+  ws.onmessage = async (event: MessageEvent) => {
+    const msg=event.data as string;
+    const dto=JSON.parse(msg)
+    const state=dto.state as string
+    if(state=="已支付"){
+      await fetchOrders();
+      const orderId = dto.orderId
+      console.log("收到新订单号:", orderId); // 输出提取的订单号
+      const order = orders.value.find(o => o.id.toString() === orderId);
+      console.log("订单数据总:", orders); // 输出提取的订单号
+      console.log("订单数据:", order); // 输出提取的订单号
+      
+      printOrder(order);
 
       ElMessageBox.alert(
       event.data,
@@ -810,9 +986,6 @@ const showDate = (row: any): string => {
         return '';
     }
 };
-
-
-
 
 // 新建订单对话框状态
 const newOrderDialogVisible = ref(false);
@@ -1204,7 +1377,12 @@ const confirmRefund = async () => {
 
       <el-table-column prop="deliveryInfo.school" label="定时达学校" width="100px" />
       <el-table-column prop="deliveryInfo.address" label="定时达地址" width="200px" />
-      <el-table-column prop="deliveryInfo.time" label="定时达时间" width="160px" />
+      <el-table-column label="定时达时间" width="160px">
+        <template #default="props">
+          {{ formatSendTime(props.row.deliveryInfo?.time) || '无' }}
+        </template>
+      </el-table-column>
+
 
       <el-table-column prop="createdAt" label="创建时间" width="170px" :formatter="showDate" />
       <el-table-column label="操作">
@@ -1233,8 +1411,15 @@ const confirmRefund = async () => {
           >
             详情
           </el-button>
+          <el-button 
+            type="success" 
+            size="small" 
+            @click="printOrder(scope.row)"
+          >
+            打印
+          </el-button>
         </template>
-    </el-table-column>
+      </el-table-column>
 
     </el-table>
 
@@ -1281,7 +1466,7 @@ const confirmRefund = async () => {
               <p><strong>地址:</strong> {{ selectedOrder.deliveryInfo.address }}</p>
             </el-col>
             <el-col :span="12">
-              <p><strong>时间:</strong> {{ selectedOrder.deliveryInfo.time }}</p>
+              <p><strong>时间:</strong> {{ formatSendTime(selectedOrder.deliveryInfo.time || '') }}</p>
             </el-col>
           </el-row>
         </div>
@@ -1314,7 +1499,7 @@ const confirmRefund = async () => {
     <!-- Refund Confirmation Dialog -->
     <el-dialog title="确认退款" v-model="refundDialogVisible">
       <span>请输入退款原因进行确认：</span>
-      <el-input type="textarea" v-model="refundReason" placeholder="请输入退款原因"></el-input>
+      <el-input type="textarea" v-model="refundReason" placeholder="请输入退款原因，不可为空。"></el-input>
       <template #footer>
         <el-button @click="refundDialogVisible = false">取消</el-button>
         <el-button type="primary" @click="confirmRefund">确认</el-button>

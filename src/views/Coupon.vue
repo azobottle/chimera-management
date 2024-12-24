@@ -6,6 +6,7 @@ import {
   updateCoupon,
   getAllProductCates,
   addCouponToUser,
+  distributeCouponToStudents
 } from '../client/services.gen';
 import type { Coupon, ProductCate } from '../client/types.gen';
 import {
@@ -19,6 +20,7 @@ import {
   ElOption,
   ElDatePicker,
   ElCheckbox,
+  ElMessageBox 
 } from 'element-plus';
 
 const coupons = ref<Coupon[]>([]);
@@ -73,6 +75,7 @@ const couponTypes = [
   { label: '新客', value: '新客' },
   { label: '兑换', value: '兑换' },
   { label: '活动', value: '活动' },
+  { label: '学生', value: '学生' },
   { label: '临时', value: '临时' },
 ];
 
@@ -271,13 +274,39 @@ const issueCoupon = async () => {
   }
 };
 
+const confirmDistribute = async (coupon) => {
+  try {
+    const confirmed = await ElMessageBox.confirm(
+      '确定要将此优惠券发放给所有认证为学生的用户吗？',
+      '发放确认',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    );
+    if (confirmed) {
+      await distributeCouponToStudents({
+        query: {
+          couponId: coupon.id.toString(),
+        }
+      });
+      ElMessage.success('优惠券成功发放给学生');
+    }
+  } catch (error) {
+    console.error('Error distributing coupon:', error);
+    ElMessage.error('发放失败！');
+  }
+};
+
+
 // 监听 editableCoupon.type 的变化，自动设置 convertible
 watch(
   () => editableCoupon.value?.type,
   (newType) => {
     if (editableCoupon.value) {
       editableCoupon.value.convertible = newType === '兑换';
-      if (['新客', '兑换', '临时'].includes(newType)) {
+      if (['新客', '兑换', '临时', '学生'].includes(newType)) {
         // 设置有效期为空
         editableCoupon.value.validity = null;
       }
@@ -386,6 +415,7 @@ onMounted(async () => {
           <el-button type="primary" @click="openEditDialog(row)">编辑</el-button>
           <el-button type="danger" @click="confirmDelete(row)">删除</el-button>
           <el-button v-if="row.type === '临时'" type="success" @click="openIssueDialog(row)">发放</el-button>
+          <el-button v-if="row.type === '学生'" type="success" @click="confirmDistribute(row)">发放</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -456,7 +486,7 @@ onMounted(async () => {
             format="YYYY-MM-DD"
             value-format="YYYY-MM-DD"
             clearable
-            :disabled="['新客', '兑换', '临时'].includes(editableCoupon.type)"
+            :disabled="['新客', '兑换', '临时', '学生'].includes(editableCoupon.type)"
           ></el-date-picker>
         </el-form-item>
 
