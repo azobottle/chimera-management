@@ -225,6 +225,22 @@ const formatDateTime = (dateTimeStr: string) => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
+// 格式化发送时间
+const formatSendTime = (time: string): string => {
+    if (!time) return '';
+    const date = new Date(time);
+
+    const year = date.getFullYear();
+    const month = padZero(date.getMonth() + 1); // 月份从0开始
+    const day = padZero(date.getDate());
+    return `${year}-${month}-${day}`;
+};
+
+// 辅助函数：补零
+const padZero = (num: number): string => {
+    return num < 10 ? `0${num}` : `${num}`;
+};
+
 // Points Product Instances Management
 const productInsList = ref<PointsProductIns[]>([]);
 const currentInsPage = ref(1);
@@ -493,8 +509,6 @@ const activeTab = ref('productManagement');
         <h1>已兑换积分商品列表</h1>
 
         <el-table :data="paginatedProductIns" stripe>
-          <el-table-column prop="uuid" label="兑换编号" width="200px" />
-
           <el-table-column prop="name" label="商品名称" />
 
           <el-table-column prop="userId" label="用户ID" />
@@ -505,12 +519,18 @@ const activeTab = ref('productManagement');
             </template>
           </el-table-column>
 
+          <el-table-column label="自提时间">
+            <template #default="{ row }">
+              {{ formatSendTime(row.getDate) || '无' }}
+            </template>
+          </el-table-column>
+
           <el-table-column label="邮递信息">
             <template #default="{ row }">
               <div v-if="row.sendType === 1">
-                <div>姓名：{{ row.sendName }}</div>
+                <div>姓名：{{ row.Name }}</div>
                 <div>地址：{{ row.sendAddr }}</div>
-                <div>电话：{{ row.sendNum }}</div>
+                <div>电话：{{ row.number }}</div>
               </div>
               <div v-else>无</div>
             </template>
@@ -522,7 +542,7 @@ const activeTab = ref('productManagement');
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" width="200px">
+          <el-table-column label="操作">
             <template #default="{ row }">
               <el-button
                 v-if="row.received === 0"

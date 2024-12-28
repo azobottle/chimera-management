@@ -470,7 +470,7 @@ export type BatchSupplyOrderDTO = {
 };
 
 export type CheckStudentIdentityApiParams = {
-    [key: string]: unknown;
+    wx_student_check_code: string;
 };
 
 export type WxStudentCheckDTO = {
@@ -1156,7 +1156,7 @@ export type AddCouponToUserError = ({
 });
 
 export type CheckStudentIdentityData = {
-    body?: CheckStudentIdentityApiParams;
+    body: CheckStudentIdentityApiParams;
 };
 
 export type CheckStudentIdentityResponse = (WxStudentCheckDTO);
@@ -1375,7 +1375,6 @@ export type GetOrdersByUserIdError = ({
 export type GetOrdersByDeliveryInfoData = {
     query: {
         address: string;
-        date: string;
         school: string;
         time: string;
     };
@@ -1440,6 +1439,14 @@ export type WxLoginOrRegisterError = ({
 export type ValidateResponse = (ResponseBodyDTOUserDTO);
 
 export type ValidateError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
+export type GetOpeningTimeResponse = (string);
+
+export type GetOpeningTimeError = ({
     [key: string]: {
         [key: string]: unknown;
     };

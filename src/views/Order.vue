@@ -286,7 +286,7 @@ const padZero = (num: number): string => {
     return num < 10 ? `0${num}` : `${num}`;
 };
 
-const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmount: number, order_time:string, orderId:string, deliveryInfo?:DeliveryInfo | null) => {
+const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmount: number, order_time:string, order:Order) => {
   let topPosition = 93;  // 起始 `top` 值
       
       const template = JSON.parse(JSON.stringify(template_head));;
@@ -398,7 +398,7 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
 
       // 获取 finalItemDetails 的长度
       const offsetTop = finalItemDetails.length * 15;
-      const root_paparFooter = 240;
+      const root_paparFooter = 200;
       const tailElements = JSON.parse(JSON.stringify(template_tail.printElements));
 
       // 遍历 `newElements`，并增加 top 值s
@@ -510,7 +510,35 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
 
       let printData = {};
 
-      if (deliveryInfo) {
+      const type = typeof order.deliveryInfo;
+      
+
+      if (order.deliveryInfo) {
+
+        template.panels[0].printElements.push({
+          "options": {
+            "left": 4.5,
+            "top": 163.5+offsetTop,
+            "height": 9.75,
+            "width": 82.5,
+            "title": "配送信息",
+            "right": 63.75,
+            "bottom": 173.2500228881836,
+            "vCenter": 34.5,
+            "hCenter": 168.3750228881836,
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 12,
+            "qrCodeLevel": 0,
+            "qid": "orderNum_1",
+            "fontWeight": "bold"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        });
+
         template.panels[0].printElements.push({
           "options": {
             "left": 4.5,
@@ -616,7 +644,62 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
           }
         });
 
-        template.panels[0].paperFooter = root_paparFooter + offsetTop + 50;
+        template.panels[0].printElements.push({
+          "options": {
+            "left": 4.5,
+            "top": 235.5+offsetTop,
+            "height": 20,
+            "width": 216,
+            "title": "备注",
+            "right": 221.25,
+            "bottom": 211.5,
+            "vCenter": 113.25,
+            "hCenter": 206.625,
+            "field": "remark",
+            "testData": "2024-12-20 10:00",
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 12,
+            "qrCodeLevel": 0,
+            "qid": "addr_1",
+            "fontWeight": "bold",
+            "lineHeight": 18
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        });
+
+        template.panels[0].printElements.push({
+            "options": {
+              "left": 3,
+              "top": 280+offsetTop,
+              "height": 9.75,
+              "width": 219,
+              "title": "****************************************",
+              "right": 225,
+              "bottom": 253.5000228881836,
+              "vCenter": 115.5,
+              "hCenter": 248.6250228881836,
+              "coordinateSync": false,
+              "widthHeightSync": false,
+              "fontSize": 12,
+              "qrCodeLevel": 0,
+              "qid": "orderNum_1",
+              "textAlign": "center"
+            },
+            "printElementType": {
+              "title": "文本",
+              "type": "text"
+            }
+        });
+
+
+
+        const deliveryInfo = order.deliveryInfo;
+        const orderId = order.orderNum.toString();
+        template.panels[0].paperFooter = root_paparFooter + offsetTop + 120;
 
         console.log("deliveryInfo:", JSON.stringify(deliveryInfo, null, 2));
 
@@ -625,13 +708,67 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
           time: order_time,
           userNum: deliveryInfo?.number ? getLastFourDigits(deliveryInfo.number) : "N/A",
           addr: getAddress(deliveryInfo),
-          sendTime: deliveryInfo?.time ? formatSendTime(deliveryInfo.time) : "N/A"
+          sendTime: deliveryInfo?.time ? formatSendTime(deliveryInfo.time) : "N/A",
+          remark: order.remark.toString()
         };
 
       } else {
+        const orderId = order.orderNum.toString();
+
+        template.panels[0].printElements.push({
+          "options": {
+            "left": 4.5,
+            "top": 163.5+offsetTop,
+            "height": 9.75,
+            "width": 216,
+            "title": "备注",
+            "right": 221.25,
+            "bottom": 211.5,
+            "vCenter": 113.25,
+            "hCenter": 206.625,
+            "field": "remark",
+            "testData": "2024-12-20 10:00",
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 12,
+            "qrCodeLevel": 0,
+            "qid": "addr_1",
+            "fontWeight": "bold"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        });
+
+        template.panels[0].printElements.push({
+            "options": {
+              "left": 3,
+              "top": 200+offsetTop,
+              "height": 9.75,
+              "width": 219,
+              "title": "****************************************",
+              "right": 225,
+              "bottom": 253.5000228881836,
+              "vCenter": 115.5,
+              "hCenter": 248.6250228881836,
+              "coordinateSync": false,
+              "widthHeightSync": false,
+              "fontSize": 12,
+              "qrCodeLevel": 0,
+              "qid": "orderNum_1",
+              "textAlign": "center"
+            },
+            "printElementType": {
+              "title": "文本",
+              "type": "text"
+            }
+        });
+
         printData = {
           orderNum: orderId,
           time: order_time,
+          remark: order.remark
         };
       }
 
@@ -642,9 +779,10 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
       // 模板对象获取
       
       const printerList = hiprintTemplate.getPrinterList();
-      // console.log("printerList:", JSON.stringify(printerList, null, 2));
+      console.log("printerList:", JSON.stringify(printerList, null, 2));
 
       // 打印
+      // hiprintTemplate.print2(printData, {printer: 'XP-80C (副本 1)'});
       hiprintTemplate.print2(printData, {printer: 'XP-80C'});
 };
 
@@ -706,8 +844,6 @@ tagInfo.forEach((item, index) => {
       type: "text"
     }
   });
-
-  
 
   // 创建打印模板对象并打印
   console.log("打印:", JSON.stringify(template)); // 更正打印输出，显示完整模板内容
@@ -802,9 +938,7 @@ const printOrder = (order: Order) => {
           return `${year}-${month}-${day} ${hours}:${minutes}`;
         })()
 
-      console.log("deliveryInfo  data:", JSON.stringify(order.deliveryInfo, null, 2));
-
-      printOrderDetails(finalItemDetails, totalInfo, discountAmount, order_time, order.orderNum.toString(), order.deliveryInfo);
+      printOrderDetails(finalItemDetails, totalInfo, discountAmount, order_time, order);
 
       // 创建独立的 tagInfo 数组
       const tagInfo = order.items.map(item => {
@@ -818,7 +952,7 @@ const printOrder = (order: Order) => {
       });
 
       console.log(tagInfo);
-      // printOrderTag(tagInfo, order.orderNum.toString(), order_time);
+      printOrderTag(tagInfo, order.orderNum.toString(), order_time);
 
 };
 
@@ -1356,7 +1490,7 @@ const confirmRefund = async () => {
     <el-table :data="paginatedOrders" stripe>
       <el-table-column prop="orderNum" label="订单号" width="70" />
       <el-table-column prop="state" label="状态" width="80px" />
-      <el-table-column label="商品" width="230px">
+      <el-table-column label="商品" width="100px">
         <template #default="props">
           <div>
             <span v-for="(item, index) in props.row.items" :key="item.uuid">
@@ -1376,7 +1510,7 @@ const confirmRefund = async () => {
       <el-table-column prop="scene" label="场景" width="70px" />
 
       <el-table-column prop="deliveryInfo.school" label="定时达学校" width="100px" />
-      <el-table-column prop="deliveryInfo.address" label="定时达地址" width="200px" />
+      <el-table-column prop="deliveryInfo.address" label="定时达地址" width="120px" />
       <el-table-column label="定时达时间" width="160px">
         <template #default="props">
           {{ formatSendTime(props.row.deliveryInfo?.time) || '无' }}
@@ -1397,7 +1531,7 @@ const confirmRefund = async () => {
           </el-button>
           <!-- Show the refund button only if the order is not already refunded -->
           <el-button 
-            v-if="scope.row.state !== '已退款'"
+            v-if="scope.row.state !== '已退款' && scope.row.state !== '预支付' && scope.row.state !== '已关单'"
             type="danger" 
             size="small" 
             @click="openRefundDialog(scope.row)"

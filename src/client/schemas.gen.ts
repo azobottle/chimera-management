@@ -717,7 +717,13 @@ export const BatchSupplyOrderDTOSchema = {
 } as const;
 
 export const CheckStudentIdentityApiParamsSchema = {
-    type: 'object'
+    required: ['wx_student_check_code'],
+    type: 'object',
+    properties: {
+        wx_student_check_code: {
+            type: 'string'
+        }
+    }
 } as const;
 
 export const WxStudentCheckDTOSchema = {

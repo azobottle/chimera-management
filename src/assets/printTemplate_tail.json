@@ -125,52 +125,6 @@
         "title": "横线",
         "type": "hline"
       }
-    },
-    {
-      "options": {
-        "left": 4.5,
-        "top": 163.5,
-        "height": 9.75,
-        "width": 82.5,
-        "title": "配送信息",
-        "right": 63.75,
-        "bottom": 173.2500228881836,
-        "vCenter": 34.5,
-        "hCenter": 168.3750228881836,
-        "coordinateSync": false,
-        "widthHeightSync": false,
-        "fontSize": 12,
-        "qrCodeLevel": 0,
-        "qid": "orderNum_1",
-        "fontWeight": "bold"
-      },
-      "printElementType": {
-        "title": "文本",
-        "type": "text"
-      }
-    },
-    {
-      "options": {
-        "left": 3,
-        "top": 244.5,
-        "height": 9.75,
-        "width": 219,
-        "title": "****************************************",
-        "right": 225,
-        "bottom": 253.5000228881836,
-        "vCenter": 115.5,
-        "hCenter": 248.6250228881836,
-        "coordinateSync": false,
-        "widthHeightSync": false,
-        "fontSize": 12,
-        "qrCodeLevel": 0,
-        "qid": "orderNum_1",
-        "textAlign": "center"
-      },
-      "printElementType": {
-        "title": "文本",
-        "type": "text"
-      }
     }
   ]
 }

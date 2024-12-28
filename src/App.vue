@@ -20,16 +20,15 @@
           <span>登录</span>
         </el-menu-item>
 
-        <!-- 商品 -->
+        <!-- 订单 -->
         <el-sub-menu index="1">
           <template #title>
             <i class="el-icon-menu"></i>
-            <span>管理</span>
+            <span>订单</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="/stats">经营统计</el-menu-item>
-            <el-menu-item index="/inventory">出入库</el-menu-item>
-            <el-menu-item index="/appConfiguration">配置表</el-menu-item>
+            <el-menu-item index="/order">订单列表</el-menu-item>
+            <el-menu-item index="/delivery">送达通知</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
 
@@ -46,19 +45,8 @@
           </el-menu-item-group>
         </el-sub-menu>
 
-        <!-- 订单 -->
-        <el-sub-menu index="3">
-          <template #title>
-            <i class="el-icon-menu"></i>
-            <span>订单</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="/order">订单列表</el-menu-item>
-          </el-menu-item-group>
-        </el-sub-menu>
-
         <!-- 用户 -->
-        <el-sub-menu index="4">
+        <el-sub-menu index="3">
           <template #title>
             <i class="el-icon-menu"></i>
             <span>用户</span>
@@ -70,7 +58,7 @@
         </el-sub-menu>
 
         <!-- 优惠活动 -->
-        <el-sub-menu index="5">
+        <el-sub-menu index="4">
           <template #title>
             <i class="el-icon-menu"></i>
             <span>优惠活动</span>
@@ -82,10 +70,18 @@
           </el-menu-item-group>
         </el-sub-menu>
 
-        <el-menu-item index="/delivery">
-          <i class="el-icon-menu"></i>
-          <span>送达通知</span>
-        </el-menu-item>
+        <el-sub-menu index="5">
+          <template #title>
+            <i class="el-icon-menu"></i>
+            <span>管理</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="/stats">经营统计</el-menu-item>
+            <el-menu-item index="/inventory">出入库</el-menu-item>
+            <el-menu-item index="/appConfiguration">配置表</el-menu-item>
+          </el-menu-item-group>
+        </el-sub-menu>
+
       </el-menu>
     </el-aside>
 
