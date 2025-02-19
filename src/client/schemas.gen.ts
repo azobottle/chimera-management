@@ -42,6 +42,47 @@ export const CouponInsSchema = {
     description: '用户持有的优惠券实例'
 } as const;
 
+export const DeliveryInfoSchema = {
+    type: 'object',
+    properties: {
+        school: {
+            type: 'string'
+        },
+        address: {
+            type: 'string',
+            description: '绑定到具体订单实例的已选地址'
+        },
+        time: {
+            type: 'string',
+            description: '绑定到具体订单实例的已选时间，可以是当天也可以是第二天。',
+            format: 'date-time'
+        },
+        number: {
+            type: 'string',
+            description: '电话号码，第一次要求用户填写，提交订单后自动存到User.number，之后前端自动从这里取'
+        }
+    },
+    description: '上次定时达配送信息'
+} as const;
+
+export const PhoneInfoSchema = {
+    type: 'object',
+    properties: {
+        phoneNumber: {
+            type: 'string'
+        },
+        purePhoneNumber: {
+            type: 'string'
+        },
+        countryCode: {
+            type: 'string'
+        },
+        watermark: {
+            '$ref': '#/components/schemas/WaterMark'
+        }
+    }
+} as const;
+
 export const PointsProductInsSchema = {
     required: ['uuid'],
     type: 'object',
@@ -130,6 +171,9 @@ export const UserSchema = {
             type: 'string',
             description: '电话号码'
         },
+        deliveryInfo: {
+            '$ref': '#/components/schemas/DeliveryInfo'
+        },
         coupons: {
             type: 'array',
             description: '用户持有的优惠券实例',
@@ -155,6 +199,22 @@ export const UserSchema = {
             type: 'string'
         },
         jwt: {
+            type: 'string'
+        },
+        phoneInfo: {
+            '$ref': '#/components/schemas/PhoneInfo'
+        }
+    }
+} as const;
+
+export const WaterMarkSchema = {
+    type: 'object',
+    properties: {
+        timestamp: {
+            type: 'integer',
+            format: 'int32'
+        },
+        appid: {
             type: 'string'
         }
     }
@@ -221,7 +281,12 @@ export const ProductSchema = {
             type: 'string'
         },
         imgURL: {
-            type: 'string'
+            type: 'string',
+            description: '菜单详情图'
+        },
+        imgURL_small: {
+            type: 'string',
+            description: '菜单首页缩略图'
         },
         price: {
             type: 'integer',
@@ -261,6 +326,24 @@ export const ProductSchema = {
                 }
             },
             description: '加购商品的可选项, key=ProductOption.id'
+        },
+        needStockWithRestrictBuy: {
+            type: 'boolean',
+            description: '是否需要库存管理/限制购买，前端判断为True时限购一单'
+        },
+        stock: {
+            type: 'integer',
+            description: '库存数量，为0时前端提示已售罄并不可下单',
+            format: 'int32'
+        },
+        presaleNum: {
+            type: 'integer',
+            description: '预售买数量，补货后清零',
+            format: 'int32'
+        },
+        stocked: {
+            type: 'boolean',
+            description: '当天是否已补货，0点设为False'
         },
         onlyDining: {
             type: 'boolean',
@@ -340,10 +423,42 @@ export const FixDeliveryInfoSchema = {
         },
         times: {
             type: 'array',
-            description: '可选时间',
+            description: '旧时间',
             items: {
                 type: 'string',
-                description: '可选时间'
+                description: '旧时间'
+            }
+        },
+        times_today: {
+            type: 'array',
+            description: '今日时间',
+            items: {
+                type: 'string',
+                description: '今日时间'
+            }
+        },
+        times_tomor: {
+            type: 'array',
+            description: '明日时间',
+            items: {
+                type: 'string',
+                description: '明日时间'
+            }
+        },
+        times_work: {
+            type: 'array',
+            description: '工作日可选时间',
+            items: {
+                type: 'string',
+                description: '工作日可选时间'
+            }
+        },
+        times_weekend: {
+            type: 'array',
+            description: '周末可选时间',
+            items: {
+                type: 'string',
+                description: '周末可选时间'
             }
         },
         addresses: {
@@ -374,6 +489,10 @@ export const CouponSchema = {
         type: {
             type: 'string',
             description: '类型，可选："新客"，"兑换"，"活动"，"学生"，"临时"'
+        },
+        description: {
+            type: 'string',
+            description: '说明'
         },
         dePrice: {
             type: 'integer',
@@ -548,29 +667,6 @@ export const ProcessorMapSchema = {
     }
 } as const;
 
-export const DeliveryInfoSchema = {
-    type: 'object',
-    properties: {
-        school: {
-            type: 'string'
-        },
-        address: {
-            type: 'string',
-            description: '绑定到具体订单实例的已选地址'
-        },
-        time: {
-            type: 'string',
-            description: '绑定到具体订单实例的已选时间，可以是当天也可以是第二天。',
-            format: 'date-time'
-        },
-        number: {
-            type: 'string',
-            description: '电话号码，第一次要求用户填写，提交订单后自动存到User.number，之后前端自动从这里取'
-        }
-    },
-    description: '定时达配送信息'
-} as const;
-
 export const OrderApiParamsSchema = {
     required: ['customerType', 'items', 'scene', 'userId'],
     type: 'object',
@@ -636,30 +732,6 @@ export const OrderItemApiParamsSchema = {
     description: '订单其中的一个商品'
 } as const;
 
-export const PrepayWithRequestPaymentResponseSchema = {
-    type: 'object',
-    properties: {
-        appId: {
-            type: 'string'
-        },
-        nonceStr: {
-            type: 'string'
-        },
-        packageVal: {
-            type: 'string'
-        },
-        signType: {
-            type: 'string'
-        },
-        paySign: {
-            type: 'string'
-        },
-        timeStamp: {
-            type: 'string'
-        }
-    }
-} as const;
-
 export const ResponseBodyDTOServiceResultObjectObjectSchema = {
     type: 'object',
     properties: {
@@ -712,6 +784,32 @@ export const BatchSupplyOrderDTOSchema = {
             items: {
                 type: 'string'
             }
+        }
+    }
+} as const;
+
+export const GetPhoneNumberByCodeApiParamsSchema = {
+    required: ['code'],
+    type: 'object',
+    properties: {
+        code: {
+            type: 'string'
+        }
+    }
+} as const;
+
+export const WxGetPhoneNumberResponseDTOSchema = {
+    type: 'object',
+    properties: {
+        errcode: {
+            type: 'integer',
+            format: 'int32'
+        },
+        errmsg: {
+            type: 'string'
+        },
+        phone_info: {
+            '$ref': '#/components/schemas/PhoneInfo'
         }
     }
 } as const;
@@ -811,6 +909,9 @@ export const UserDTOSchema = {
             items: {
                 '$ref': '#/components/schemas/PointsProductIns'
             }
+        },
+        deliveryInfo: {
+            '$ref': '#/components/schemas/DeliveryInfo'
         }
     }
 } as const;
@@ -937,6 +1038,11 @@ export const OrderSchema = {
             description: '只给商品端使用的，线下优惠，小程序端传了也不处理。',
             format: 'int32'
         },
+        points: {
+            type: 'integer',
+            description: '本单获取积分数目',
+            format: 'int32'
+        },
         createdAt: {
             type: 'string',
             description: '自动填充创建时间',
@@ -979,9 +1085,9 @@ export const OrderItemSchema = {
             description: '根据Product.price和目前optionValues中OptionValue.priceAdjustment计算的价格。单位为分',
             format: 'int32'
         },
-        imgURL: {
+        imgURL_small: {
             type: 'string',
-            description: 'Product.imgURL'
+            description: 'Product.imgURL_small'
         }
     },
     description: '订单其中的一个商品'

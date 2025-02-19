@@ -189,7 +189,9 @@ const fetchOrders = async () => {
 
     console.log(response.data)
     
-    orders.value = response.data as unknown as Order[];
+    // 过滤掉 state 为 "已关单" 的订单
+    orders.value = (response.data as unknown as Order[]).filter(order => order.state !== "已关单");
+
 
     console.log("Orders:", orders.value)
 
@@ -398,7 +400,7 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
 
       // 获取 finalItemDetails 的长度
       const offsetTop = finalItemDetails.length * 15;
-      const root_paparFooter = 200;
+      const root_paparFooter = 220;
       const tailElements = JSON.parse(JSON.stringify(template_tail.printElements));
 
       // 遍历 `newElements`，并增加 top 值s
@@ -514,6 +516,7 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
       
 
       if (order.deliveryInfo) {
+        const remark = order.remark.toString();
 
         template.panels[0].printElements.push({
           "options": {
@@ -650,12 +653,11 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
             "top": 235.5+offsetTop,
             "height": 20,
             "width": 216,
-            "title": "备注",
+            "title": remark,
             "right": 221.25,
             "bottom": 211.5,
             "vCenter": 113.25,
             "hCenter": 206.625,
-            "field": "remark",
             "testData": "2024-12-20 10:00",
             "coordinateSync": false,
             "widthHeightSync": false,
@@ -674,7 +676,7 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
         template.panels[0].printElements.push({
             "options": {
               "left": 3,
-              "top": 280+offsetTop,
+              "top": 300+offsetTop,
               "height": 9.75,
               "width": 219,
               "title": "****************************************",
@@ -709,11 +711,11 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
           userNum: deliveryInfo?.number ? getLastFourDigits(deliveryInfo.number) : "N/A",
           addr: getAddress(deliveryInfo),
           sendTime: deliveryInfo?.time ? formatSendTime(deliveryInfo.time) : "N/A",
-          remark: order.remark.toString()
         };
 
       } else {
         const orderId = order.orderNum.toString();
+        const remark = "【" + order.scene + "】 " + order.remark;
 
         template.panels[0].printElements.push({
           "options": {
@@ -721,12 +723,11 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
             "top": 163.5+offsetTop,
             "height": 9.75,
             "width": 216,
-            "title": "备注",
+            "title": remark,
             "right": 221.25,
             "bottom": 211.5,
             "vCenter": 113.25,
             "hCenter": 206.625,
-            "field": "remark",
             "testData": "2024-12-20 10:00",
             "coordinateSync": false,
             "widthHeightSync": false,
@@ -744,7 +745,7 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
         template.panels[0].printElements.push({
             "options": {
               "left": 3,
-              "top": 200+offsetTop,
+              "top": 220+offsetTop,
               "height": 9.75,
               "width": 219,
               "title": "****************************************",
@@ -768,11 +769,10 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
         printData = {
           orderNum: orderId,
           time: order_time,
-          remark: order.remark
         };
       }
 
-      console.log(JSON.stringify(template, null, 2));
+      console.log("打印结果：", JSON.stringify(template, null, 2));
 
       let hiprintTemplate = new hiprint.PrintTemplate({ template: template});
 
@@ -783,6 +783,7 @@ const printOrderDetails = (finalItemDetails: any[], totalInfo: any, discountAmou
 
       // 打印
       // hiprintTemplate.print2(printData, {printer: 'XP-80C (副本 1)'});
+      // hiprintTemplate.print2(printData, {printer: 'Microsoft Print to PDF'});
       hiprintTemplate.print2(printData, {printer: 'XP-80C'});
 };
 
@@ -1506,7 +1507,7 @@ const confirmRefund = async () => {
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerType" label="客户类型" width="160px" />
+      <el-table-column prop="remark" label="顾客备注" width="160px" />
       <el-table-column prop="scene" label="场景" width="70px" />
 
       <el-table-column prop="deliveryInfo.school" label="定时达学校" width="100px" />
@@ -1581,7 +1582,7 @@ const confirmRefund = async () => {
             </el-col>
             <el-col :span="12">
               <p><strong>用户Id:</strong> {{ selectedOrder.userId }}</p>
-              <p><strong>客户类型:</strong> {{ selectedOrder.customerType }}</p>
+              <!-- <p><strong>客户类型:</strong> {{ selectedOrder.customerType }}</p> -->
               <p><strong>顾客备注:</strong> {{ selectedOrder.remark }}</p>
               <p><strong>商家备注:</strong> {{ selectedOrder.merchantNote }}</p>
               <p><strong>创建时间:</strong> {{ showDate(selectedOrder) }}</p>
@@ -1601,6 +1602,9 @@ const confirmRefund = async () => {
             </el-col>
             <el-col :span="12">
               <p><strong>时间:</strong> {{ formatSendTime(selectedOrder.deliveryInfo.time || '') }}</p>
+            </el-col>
+            <el-col :span="12">
+              <p><strong>电话:</strong> {{ formatSendTime(selectedOrder.deliveryInfo.number || '') }}</p>
             </el-col>
           </el-row>
         </div>

@@ -83,7 +83,8 @@ const fetchData = async () => {
     ElMessage.error('选择的视图类型无效')
     return
   }
-
+  console.log("startTime:"+formatDate(startDate))
+  console.log("endTime:"+formatDate(endDate))
   try {
     // 获取订单数据
     const orderResponse = await getAllOrders({

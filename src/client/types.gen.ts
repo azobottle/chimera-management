@@ -34,6 +34,32 @@ export type CouponIns = {
 };
 
 /**
+ * 上次定时达配送信息
+ */
+export type DeliveryInfo = {
+    school?: string;
+    /**
+     * 绑定到具体订单实例的已选地址
+     */
+    address?: string;
+    /**
+     * 绑定到具体订单实例的已选时间，可以是当天也可以是第二天。
+     */
+    time?: string;
+    /**
+     * 电话号码，第一次要求用户填写，提交订单后自动存到User.number，之后前端自动从这里取
+     */
+    number?: string;
+};
+
+export type PhoneInfo = {
+    phoneNumber?: string;
+    purePhoneNumber?: string;
+    countryCode?: string;
+    watermark?: WaterMark;
+};
+
+/**
  * 用户兑换过的积分商品列表
  */
 export type PointsProductIns = {
@@ -101,6 +127,7 @@ export type User = {
      * 电话号码
      */
     number?: string;
+    deliveryInfo?: DeliveryInfo;
     /**
      * 用户持有的优惠券实例
      */
@@ -113,6 +140,12 @@ export type User = {
     hashedPassword?: string;
     role?: string;
     jwt?: string;
+    phoneInfo?: PhoneInfo;
+};
+
+export type WaterMark = {
+    timestamp?: number;
+    appid?: string;
 };
 
 export type ProductCate = {
@@ -151,7 +184,14 @@ export type Product = {
     id?: ObjectId;
     cateId: ObjectId;
     name?: string;
+    /**
+     * 菜单详情图
+     */
     imgURL?: string;
+    /**
+     * 菜单首页缩略图
+     */
+    imgURL_small?: string;
     /**
      * 基础价格，单位为分
      */
@@ -182,6 +222,22 @@ export type Product = {
     productOptions?: {
         [key: string]: Array<OptionValue>;
     };
+    /**
+     * 是否需要库存管理/限制购买，前端判断为True时限购一单
+     */
+    needStockWithRestrictBuy?: boolean;
+    /**
+     * 库存数量，为0时前端提示已售罄并不可下单
+     */
+    stock?: number;
+    /**
+     * 预售买数量，补货后清零
+     */
+    presaleNum?: number;
+    /**
+     * 当天是否已补货，0点设为False
+     */
+    stocked?: boolean;
     /**
      * 是否只限堂食，为true时定时达页面不显示该商品
      */
@@ -233,9 +289,25 @@ export type FixDeliveryInfo = {
      */
     school?: string;
     /**
-     * 可选时间
+     * 旧时间
      */
     times?: Array<(string)>;
+    /**
+     * 今日时间
+     */
+    times_today?: Array<(string)>;
+    /**
+     * 明日时间
+     */
+    times_tomor?: Array<(string)>;
+    /**
+     * 工作日可选时间
+     */
+    times_work?: Array<(string)>;
+    /**
+     * 周末可选时间
+     */
+    times_weekend?: Array<(string)>;
     /**
      * 可选地址
      */
@@ -256,6 +328,10 @@ export type Coupon = {
      * 类型，可选："新客"，"兑换"，"活动"，"学生"，"临时"
      */
     type?: string;
+    /**
+     * 说明
+     */
+    description?: string;
     /**
      * 抵扣金额。单位为分。
      */
@@ -367,25 +443,6 @@ export type ProcessorMap = {
     processorIds?: Array<(number)>;
 };
 
-/**
- * 定时达配送信息
- */
-export type DeliveryInfo = {
-    school?: string;
-    /**
-     * 绑定到具体订单实例的已选地址
-     */
-    address?: string;
-    /**
-     * 绑定到具体订单实例的已选时间，可以是当天也可以是第二天。
-     */
-    time?: string;
-    /**
-     * 电话号码，第一次要求用户填写，提交订单后自动存到User.number，之后前端自动从这里取
-     */
-    number?: string;
-};
-
 export type OrderApiParams = {
     userId: ObjectId;
     /**
@@ -432,15 +489,6 @@ export type OrderItemApiParams = {
     };
 };
 
-export type PrepayWithRequestPaymentResponse = {
-    appId?: string;
-    nonceStr?: string;
-    packageVal?: string;
-    signType?: string;
-    paySign?: string;
-    timeStamp?: string;
-};
-
 export type ResponseBodyDTOServiceResultObjectObject = {
     msg?: string;
     data?: ServiceResultObjectObject;
@@ -467,6 +515,16 @@ export type RefundApplyApiParams = {
 
 export type BatchSupplyOrderDTO = {
     orderIds?: Array<(string)>;
+};
+
+export type GetPhoneNumberByCodeApiParams = {
+    code: string;
+};
+
+export type WxGetPhoneNumberResponseDTO = {
+    errcode?: number;
+    errmsg?: string;
+    phone_info?: PhoneInfo;
 };
 
 export type CheckStudentIdentityApiParams = {
@@ -501,6 +559,7 @@ export type UserDTO = {
     points?: number;
     coupons?: Array<CouponIns>;
     pointsProducts?: Array<PointsProductIns>;
+    deliveryInfo?: DeliveryInfo;
 };
 
 export type AppConfigurationApiParams = {
@@ -582,6 +641,10 @@ export type Order = {
      */
     disPrice?: number;
     /**
+     * 本单获取积分数目
+     */
+    points?: number;
+    /**
      * 自动填充创建时间
      */
     createdAt?: string;
@@ -616,9 +679,9 @@ export type OrderItem = {
      */
     price?: number;
     /**
-     * Product.imgURL
+     * Product.imgURL_small
      */
-    imgURL?: string;
+    imgURL_small?: string;
 };
 
 export type GetAllUsersResponse = (Array<User>);
@@ -940,6 +1003,21 @@ export type UploadImageError = ({
     };
 });
 
+export type ReplenishProductData = {
+    query: {
+        productId: string;
+        replenishQuantity: number;
+    };
+};
+
+export type ReplenishProductResponse = (string);
+
+export type ReplenishProductError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
 export type GetAllProcessorMapsResponse = (Array<ProcessorMap>);
 
 export type GetAllProcessorMapsError = ({
@@ -1048,7 +1126,9 @@ export type CreateData = {
     body: OrderApiParams;
 };
 
-export type CreateResponse = (PrepayWithRequestPaymentResponse);
+export type CreateResponse = ({
+    [key: string]: unknown;
+});
 
 export type CreateError = ({
     [key: string]: {
@@ -1150,6 +1230,18 @@ export type AddCouponToUserResponse = ({
 });
 
 export type AddCouponToUserError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
+export type GetPhoneNumberData = {
+    body: GetPhoneNumberByCodeApiParams;
+};
+
+export type GetPhoneNumberResponse = (WxGetPhoneNumberResponseDTO);
+
+export type GetPhoneNumberError = ({
     [key: string]: {
         [key: string]: unknown;
     };
@@ -1361,6 +1453,7 @@ export type GetOrdersByUserIdData = {
     };
     query?: {
         all?: boolean;
+        newest?: boolean;
     };
 };
 
@@ -1439,6 +1532,14 @@ export type WxLoginOrRegisterError = ({
 export type ValidateResponse = (ResponseBodyDTOUserDTO);
 
 export type ValidateError = ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+});
+
+export type GetTimeToStopOrderingResponse = (string);
+
+export type GetTimeToStopOrderingError = ({
     [key: string]: {
         [key: string]: unknown;
     };

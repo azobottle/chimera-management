@@ -6,10 +6,10 @@ import {
   getAllProductCatesShop,
   getAllProductOptions,
   updateProduct,
-  createProduct
+  createProduct,
+  replenishProduct
 } from '../client/services.gen';
-import type { Product, ProductOption, OptionValue, Order } from '../client/types.gen';
-import type { ProductCate } from '../client/types.gen';
+import type { Product, ProductOption, OptionValue, Order, ProductCate } from '../client/types.gen';
 import {
   ElMessage,
   ElTable,
@@ -32,8 +32,10 @@ const productCategories = ref<Map<string, string>>(new Map());
 const productOptions = ref<Map<string, ProductOption>>(new Map());
 const isDeleteDialogVisible = ref(false);
 const isEditDialogVisible = ref(false);
+const isReplenishDialogVisible = ref(false);
 const isDeleting = ref(false);
 const isSaving = ref(false);
+const isReplenishing = ref(false);
 const productToDelete = ref<Product | null>(null);
 const editableProduct = ref<Product | null>(null);
 
@@ -44,6 +46,9 @@ const isCreating = ref(false);
 const selectedOptionValues = ref<{ [key: string]: string[] }>({});
 
 const newOptionId = ref('');
+
+const replenishProductTo = ref<Product | null>(null);
+const replenishQuantity = ref<number>(0);
 
 const availableOptions = computed(() => {
   const selectedOptionIds = Object.keys(editableProduct.value?.productOptions || {});
@@ -117,27 +122,30 @@ const paginatedProducts = computed(() => {
   return filteredProducts.value.slice(start, end);
 });
 
-// 搜索相关
 const searchQuery = ref({
   name: '',
   cateId: '',
-  status: null
+  status: null,
+  needStockWithRestrictBuy: null, // 新增字段
 });
 
+
 const resetFilters = () => {
-  searchQuery.value = { name: '', cateId: '', status: null };
+  searchQuery.value = { name: '', cateId: '', status: null, needStockWithRestrictBuy: null };
   currentPage.value = 1; // Reset to first page after resetting
 };
 
-// Modify filteredProducts to apply the search criteria
+
 const filteredProducts = computed(() => {
   return products.value.filter(product => {
-    const matchesName = searchQuery.value.name === '' || product.name.includes(searchQuery.value.name);
-    const matchesCate = searchQuery.value.cateId === '' || productCategories.value.get(product.cateId) === searchQuery.value.cateId;
+    const matchesName = searchQuery.value.name === '' || product.name?.includes(searchQuery.value.name);
+    const matchesCate = searchQuery.value.cateId === '' || productCategories.value.get(product.cateId.toString()) === searchQuery.value.cateId;
     const matchesStatus = searchQuery.value.status === null || product.status === searchQuery.value.status;
-    return matchesName && matchesCate && matchesStatus && product.delete !== 1;
+    const matchesNeedStockWithRestrictBuy = searchQuery.value.needStockWithRestrictBuy === null || product.needStockWithRestrictBuy === searchQuery.value.needStockWithRestrictBuy;
+    return matchesName && matchesCate && matchesStatus && matchesNeedStockWithRestrictBuy && product.delete !== 1;
   });
 });
+
 
 const openEditDialog = (product: Product) => {
   editableProduct.value = {
@@ -195,7 +203,10 @@ const saveProductChanges = async () => {
     // Before sending data to backend, convert prices from yuan to fen
     const productToSend = {
       ...editableProduct.value,
-      price: Math.round(editableProduct.value.price * 100)
+      price: Math.round(editableProduct.value.price * 100),
+      stock: editableProduct.value.stock || 0,
+      presaleNum: editableProduct.value.presaleNum || 0,
+      stocked: editableProduct.value.stocked || false
     };
 
     // Adjust OptionValue.priceAdjustment
@@ -240,6 +251,37 @@ const saveProductChanges = async () => {
   }
 };
 
+// const fetchProducts = async () => {
+//   try {
+//     const productResponse = await getAllProductsShop();
+//     products.value = productResponse.data.map(product => {
+//       // Adjust price from 'fen' to 'yuan'
+//       const adjustedProduct = {
+//         ...product,
+//         price: product.price / 100,
+//         stock: product.stock || 0,
+//         presaleNum: product.presaleNum || 0,
+//         stocked: product.stocked || false
+//       };
+//       // Adjust OptionValue.priceAdjustment
+//       if (adjustedProduct.productOptions) {
+//         const adjustedProductOptions = {};
+//         for (const [optionId, values] of Object.entries(adjustedProduct.productOptions)) {
+//           adjustedProductOptions[optionId] = values.map(value => ({
+//             ...value,
+//             priceAdjustment: value.priceAdjustment / 100
+//           }));
+//         }
+//         adjustedProduct.productOptions = adjustedProductOptions;
+//       }
+//       return adjustedProduct;
+//     });
+//     console.log('products:', products.value);
+//   } catch (error) {
+//     console.error('Error fetching products:', error);
+//   }
+// };
+
 const fetchProducts = async () => {
   try {
     const productResponse = await getAllProductsShop();
@@ -247,7 +289,11 @@ const fetchProducts = async () => {
       // Adjust price from 'fen' to 'yuan'
       const adjustedProduct = {
         ...product,
-        price: product.price / 100
+        price: product.price / 100,
+        stock: product.stock || 0,
+        presaleNum: product.presaleNum || 0,
+        stocked: product.stocked || false,
+        needStockWithRestrictBuy: product.needStockWithRestrictBuy ?? false // 添加这一行
       };
       // Adjust OptionValue.priceAdjustment
       if (adjustedProduct.productOptions) {
@@ -267,6 +313,7 @@ const fetchProducts = async () => {
     console.error('Error fetching products:', error);
   }
 };
+
 
 const fetchProductCategories = async () => {
   try {
@@ -379,6 +426,10 @@ const openCreateDialog = () => {
     imgURL: '',
     productOptions: {},
     onlyDining: false,
+    needStockWithRestrictBuy: false,
+    stock: 0,
+    presaleNum: 0,
+    stocked: false,
   };
   selectedOptionValues.value = {};
   imageFile.value = null;
@@ -394,6 +445,43 @@ const onImageChange = (file: any) => {
     console.log(imageFile.value);
   } else {
     console.error('No file selected');
+  }
+};
+
+// Replenish Functions
+const openReplenishDialog = (product: Product) => {
+  replenishProductTo.value = product;
+  replenishQuantity.value = 0;
+  isReplenishDialogVisible.value = true;
+};
+
+const replenish = async () => {
+  if (!replenishProductTo.value) return;
+  const productId = replenishProductTo.value.id?.toString();
+  if (!productId) {
+    ElMessage.error('Invalid product ID');
+    return;
+  }
+  if (replenishQuantity.value <= 0) {
+    ElMessage.error('补货数量必须大于0');
+    return;
+  }
+  isReplenishing.value = true;
+  try {
+    await replenishProduct({
+        query: {
+          productId,
+          replenishQuantity: replenishQuantity.value
+        }
+    });
+    ElMessage.success('补货成功');
+    await fetchProducts(); // Refresh the products list
+    isReplenishDialogVisible.value = false;
+  } catch (error) {
+    console.error('Error replenishing product:', error);
+    ElMessage.error('补货失败');
+  } finally {
+    isReplenishing.value = false;
   }
 };
 </script>
@@ -422,6 +510,14 @@ const onImageChange = (file: any) => {
         <el-select v-model="searchQuery.status" placeholder="选择状态" style="width: 100pt;">
           <el-option :label="'上架'" :value="1" />
           <el-option :label="'下架'" :value="0" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="需要库存管理">
+        <el-select v-model="searchQuery.needStockWithRestrictBuy" placeholder="选择是否需要库存管理" style="width: 150pt;">
+          <el-option :label="'是'" :value="true" />
+          <el-option :label="'否'" :value="false" />
+          <el-option :label="'全部'" :value="null" />
         </el-select>
       </el-form-item>
 
@@ -488,14 +584,34 @@ const onImageChange = (file: any) => {
         </template>
       </el-table-column>
 
-      <el-table-column prop="" label="统计" width="130px" />
+      <el-table-column label="统计" width="200px">
+        <template #default="{ row }">
+          <div v-if="row.needStockWithRestrictBuy">
+            <div>库存: {{ row.stock }}</div>
+            <div>预售买数量: {{ row.presaleNum }}</div>
+            <div>是否已补货: {{ row.stocked ? '是' : '否' }}</div>
+          </div>
+          <div v-else>
+            -
+          </div>
+        </template>
+      </el-table-column>
 
-      <el-table-column label="编辑" width="200px">
+      <el-table-column label="编辑" >
         <template #default="{ row }">
           <el-button type="primary" @click="openEditDialog(row)">编辑</el-button>
           <el-button type="danger" @click="confirmDelete(row)">删除</el-button>
+          <!-- 使用 v-if 直接控制是否渲染补货按钮 -->
+          <el-button
+            v-if="row.needStockWithRestrictBuy"
+            type="warning"
+            @click="openReplenishDialog(row)"
+          >
+            补货
+          </el-button>
         </template>
       </el-table-column>
+
     </el-table>
 
     <!-- 分页组件 -->
@@ -516,7 +632,7 @@ const onImageChange = (file: any) => {
     </el-dialog>
 
     <!-- Create/Edit Product Dialog -->
-    <el-dialog v-model="isEditDialogVisible" width="50%" title="编辑商品">
+    <el-dialog v-model="isEditDialogVisible" width="50%" :title="isCreating ? '创建商品' : '编辑商品'">
       <el-form v-if="editableProduct" :model="editableProduct">
         <el-form-item label="名称">
           <el-input v-model="editableProduct.name"></el-input>
@@ -556,6 +672,23 @@ const onImageChange = (file: any) => {
             <el-radio :label="0">下架</el-radio>
           </el-radio-group>
         </el-form-item>
+
+        <!-- New Fields for Stock Management -->
+        <el-form-item label="需要库存管理">
+          <el-switch v-model="editableProduct.needStockWithRestrictBuy" active-text="是" inactive-text="否"></el-switch>
+        </el-form-item>
+
+        <div v-if="editableProduct.needStockWithRestrictBuy">
+          <el-form-item label="库存数量">
+            <el-input-number v-model.number="editableProduct.stock" :min="0" />
+          </el-form-item>
+          <el-form-item label="预售买数量">
+            <el-input-number v-model.number="editableProduct.presaleNum" :min="0" />
+          </el-form-item>
+          <el-form-item label="是否已补货">
+            <el-switch v-model="editableProduct.stocked" active-text="是" inactive-text="否"></el-switch>
+          </el-form-item>
+        </div>
 
         <el-form-item label="可选项" class="option-container">
           <div
@@ -631,7 +764,7 @@ const onImageChange = (file: any) => {
             </el-form-item>
           </el-form-item>
         </el-form-item>
-
+        
         <el-form-item label="上传图片">
           <img
             :src="imagePreview"
@@ -656,6 +789,19 @@ const onImageChange = (file: any) => {
       <template #footer>
         <el-button type="primary" @click="saveProductChanges" :loading="isSaving">保存</el-button>
         <el-button @click="isEditDialogVisible = false">取消</el-button>
+      </template>
+    </el-dialog>
+
+    <!-- Replenish Dialog -->
+    <el-dialog v-model="isReplenishDialogVisible" width="30%" title="补货">
+      <el-form>
+        <el-form-item label="补货数量">
+          <el-input-number v-model.number="replenishQuantity" :min="1" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button type="primary" @click="replenish" :loading="isReplenishing">确认</el-button>
+        <el-button @click="isReplenishDialogVisible = false">取消</el-button>
       </template>
     </el-dialog>
   </div>

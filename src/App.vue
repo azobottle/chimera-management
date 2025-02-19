@@ -27,8 +27,8 @@
             <span>订单</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="/order">订单列表</el-menu-item>
-            <el-menu-item index="/delivery">送达通知</el-menu-item>
+            <el-menu-item index="/orderShop">订单列表</el-menu-item>
+            <el-menu-item index="/deliveryShop">送达管理</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
 
@@ -39,9 +39,9 @@
             <span>商品</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="/product">商品管理</el-menu-item>
-            <el-menu-item index="/productCate">商品分类</el-menu-item>
-            <el-menu-item index="/productOpt">商品选项</el-menu-item>
+            <el-menu-item index="/productShop">商品管理</el-menu-item>
+            <el-menu-item index="/productCateShop">商品分类</el-menu-item>
+            <el-menu-item index="/productOptShop">商品选项</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
 
@@ -52,8 +52,8 @@
             <span>用户</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="/user">用户列表</el-menu-item>
-            <el-menu-item index="/userAddress">定时达信息</el-menu-item>
+            <el-menu-item index="/userShop">用户列表</el-menu-item>
+            <el-menu-item index="/userAddressShop">定时达信息</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
 
@@ -64,9 +64,9 @@
             <span>优惠活动</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="/coupon">优惠券</el-menu-item>
-            <el-menu-item index="/pointMall">积分商城</el-menu-item>
-            <el-menu-item index="/activity">活动管理</el-menu-item>
+            <el-menu-item index="/couponShop">优惠券</el-menu-item>
+            <el-menu-item index="/pointMallShop">积分商城</el-menu-item>
+            <el-menu-item index="/activityShop">活动管理</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
 
@@ -76,9 +76,9 @@
             <span>管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="/stats">经营统计</el-menu-item>
-            <el-menu-item index="/inventory">出入库</el-menu-item>
-            <el-menu-item index="/appConfiguration">配置表</el-menu-item>
+            <el-menu-item index="/statsShop">经营统计</el-menu-item>
+            <el-menu-item index="/inventoryShop">出入库</el-menu-item>
+            <el-menu-item index="/appConfigurationShop">配置表</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
 

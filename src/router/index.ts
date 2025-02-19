@@ -19,28 +19,29 @@ import { LOCAL_AUTH_NAME } from '@/client/customize'
 
 
 const routes: Array<RouteRecordRaw> = [
-  { path: '/order', component: Order },
-  { path: '/product', component: Product },
-  { path: '/productCate', component: ProductCate },
-  { path: '/productOpt', component: ProductOpt },
-  { path: '/user', component: User },
-  { path: '/inventory', component: Inventory },
-  { path: '/userAddress', component: UserAddress },
-  { path: '/stats', component: Stats },
-  { path: '/coupon', component: Coupon },
-  { path: '/pointMall', component: PointMall },
-  { path: '/activity', component: Activity },
+  { path: '/orderShop', component: Order },
+  { path: '/productShop', component: Product },
+  { path: '/productCateShop', component: ProductCate },
+  { path: '/productOptShop', component: ProductOpt },
+  { path: '/userShop', component: User },
+  { path: '/inventoryShop', component: Inventory },
+  { path: '/userAddressShop', component: UserAddress },
+  { path: '/statsShop', component: Stats },
+  { path: '/couponShop', component: Coupon },
+  { path: '/pointMallShop', component: PointMall },
+  { path: '/activityShop', component: Activity },
   { path: '/login', component: Login },
-  { path: '/appConfiguration', component: AppConfiguration },
-  { path: '/delivery', component: Delivery }
+  { path: '/appConfigurationShop', component: AppConfiguration },
+  { path: '/deliveryShop', component: Delivery }
 
   
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/shop/'), // 设置基路径
   routes,
 })
+
 export const USER_DTO="userDTO"
 router.beforeEach((to, from, next) => {
 

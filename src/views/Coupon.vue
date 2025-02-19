@@ -372,8 +372,9 @@ onMounted(async () => {
 
     <el-table :data="filteredCoupons" stripe>
       <el-table-column prop="name" label="名称" />
-      <el-table-column prop="type" label="类型" />
-      <el-table-column label="分类">
+      <el-table-column prop="type" label="类型"  width="70px"/>
+      <el-table-column prop="description" label="说明" />
+      <el-table-column label="商品分类" width="100px">
         <template #default="{ row }">
           <!-- 根据 cateId 显示分类名称 -->
           <span>
@@ -385,19 +386,19 @@ onMounted(async () => {
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="抵扣金额">
+      <el-table-column label="抵扣金额" width="100px">
         <template #default="{ row }">
           <span>{{ (row.dePrice / 100).toFixed(1) }} 元</span>
         </template>
       </el-table-column>
-      <el-table-column prop="costPoints" label="消耗积分" />
+      <el-table-column prop="costPoints" label="消耗积分" width="100px"/>
       <!-- 移除了 '是否可兑换' 列 -->
       <el-table-column prop="validity" label="有效期截至">
         <template #default="{ row }">
           <div>{{ row.validity ? formatDateTime(row.validity) : '无' }}</div>
         </template>
       </el-table-column>
-      <el-table-column label="统计">
+      <el-table-column label="统计" >
         <template #default="{ row }">
           <div>
             发放数量：{{ row.issueNum ?? 0 }}<br />
@@ -410,7 +411,7 @@ onMounted(async () => {
           <span>{{ row.status === 1 ? '上线' : '下线' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作"  width="250px">
         <template #default="{ row }">
           <el-button type="primary" @click="openEditDialog(row)">编辑</el-button>
           <el-button type="danger" @click="confirmDelete(row)">删除</el-button>
@@ -454,6 +455,11 @@ onMounted(async () => {
               :value="type.value"
             ></el-option>
           </el-select>
+        </el-form-item>
+
+          <!-- 新增说明字段 -->
+        <el-form-item label="说明" prop="description">
+          <el-input v-model="editableCoupon.description"></el-input>
         </el-form-item>
 
         <el-form-item label="分类" prop="cateId">
