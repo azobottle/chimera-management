@@ -7,6 +7,7 @@ import {
   getAllProductOptions,
   supplyOrder,
   refundApply,
+  batchSupplyOrders
 } from '../client/services.gen';
 import type { Order, Product, OptionValue, ProductOption, OrderApiParams, UserDTO, DeliveryInfo } from '../client/types.gen';
 import {
@@ -46,11 +47,56 @@ const productOptions = ref<Map<string, ProductOption>>(new Map());
 
 // 分页相关的变量
 const currentPage = ref(1); // 当前页码
-const pageSize = ref(5); // 每页展示的订单数量
+const pageSize = ref(10); // 每页展示的订单数量
 
 // Details dialog visibility and data
 const orderDetailsDialogVisible = ref(false);
 const selectedOrder = ref<Order | null>(null);
+
+const selectedOrders = ref<Order[]>([]);
+
+const selectAllOrders = () => {
+  selectedOrders.value = paginatedOrders.value.slice(); // Select all visible orders
+};
+
+const deselectAllOrders = () => {
+  selectedOrders.value = []; // Deselect all orders
+};
+
+const batchPrintOrders = () => {
+  console.log("已选订单：", selectedOrders);
+  selectedOrders.value.forEach(order => {
+    printOrder(order); // Call the printOrder function for each selected order
+  });
+};
+
+const BatchSupplyOrders = async () => {
+  // Check if all selected orders have the status "待配送"
+  const invalidOrders = selectedOrders.value.filter(order => order.state !== '待配送');
+  
+  if (invalidOrders.length > 0) {
+    ElMessage.error('选了了非待配送订单');
+    return; // Stop execution if any order is not "待配送"
+  }
+
+  const orderIds = selectedOrders.value.map(order => order.id.toString());
+  
+  try {
+    await batchSupplyOrders({ body: { orderIds } });
+    ElMessage.success('批量供餐成功');
+    await fetchOrders(); // Refresh the order list
+  } catch (error) {
+    console.error('批量供餐时出错:', error);
+    ElMessage.error('批量供餐时出错' + error);
+  }
+};
+
+
+const handleSelectionChange = (selectedItems: Order[]) => {
+  selectedOrders.value = selectedItems;
+};
+
+
 
 // 定义枚举选项
 const stateOptions = [
@@ -80,7 +126,7 @@ const sceneOptions = [
 
 const getDefaultStartTime = () => {
   const date = new Date();
-  date.setDate(date.getDate() - 3);
+  date.setDate(date.getDate() - 1);
   date.setHours(0, 0, 0, 0);
   return date;
 };
@@ -127,10 +173,40 @@ const resetFilters = () => {
   fetchOrders(); // 重新获取订单数据
 };
 
+const resetState = () => {
+  searchQuery.value.state = ''; // 手动重置属性为 ''
+};
 
-// 过滤后的订单列表
+const resetScene = () => {
+  searchQuery.value.scene = ''; // 手动重置属性为 ''
+};
+
+const resetSchool = () => {
+  searchQuery.value.school = ''; // 手动重置属性为 ''
+};
+
+const resetAddress = () => {
+  searchQuery.value.address = ''; // 手动重置属性为 ''
+};
+
+const resetTime = () => {
+  searchQuery.value.time = ''; // 手动重置属性为 ''
+};
+
+
+
 const filteredOrders = computed(() => {
   return orders.value.filter((order) => {
+    // 如果 searchQuery 中有定时达学校、地址或时间，则必须保证订单有 deliveryInfo
+    if (
+      (searchQuery.value.school && !order.deliveryInfo) ||
+      (searchQuery.value.address && !order.deliveryInfo) ||
+      (searchQuery.value.time && !order.deliveryInfo)
+    ) {
+      return false; // 如果有定时达学校、地址或时间值，但没有 deliveryInfo，则排除该订单
+    }
+
+    // 以下是原有的搜索过滤条件
     const matchesOrderNum =
       searchQuery.value.orderNum === '' ||
       order.orderNum?.toString().includes(searchQuery.value.orderNum);
@@ -149,13 +225,23 @@ const filteredOrders = computed(() => {
     const matchesScene =
       searchQuery.value.scene === '' || order.scene === searchQuery.value.scene;
 
+    const matchesSchool =
+      searchQuery.value.school === '' || order.deliveryInfo?.school === searchQuery.value.school;
+    const matchesAddress =
+      searchQuery.value.address === '' || order.deliveryInfo?.address === searchQuery.value.address;
+    const matchesTime =
+      searchQuery.value.time === '' || order.deliveryInfo?.time === searchQuery.value.time;
+
     return (
       matchesOrderNum &&
       matchesOrderId &&
       matchesUserId &&
       matchesState &&
       matchesCustomerType &&
-      matchesScene
+      matchesScene &&
+      matchesSchool &&
+      matchesAddress &&
+      matchesTime
     );
   });
 });
@@ -166,6 +252,10 @@ const paginatedOrders = computed(() => {
   const end = start + pageSize.value;
   return filteredOrders.value.slice(start, end);
 });
+
+const schoolOptions = ref<string[]>([]);
+const addressOptions = ref<string[]>([]);
+const timeOptions = ref<string[]>([]);
 
 // 获取订单数据
 const fetchOrders = async () => {
@@ -194,6 +284,25 @@ const fetchOrders = async () => {
 
 
     console.log("Orders:", orders.value)
+
+    // 提取定时达学校、地址和时间的唯一值
+    const schools = new Set<string>();
+    const addresses = new Set<string>();
+    const times = new Set<string>();
+
+    orders.value.forEach(order => {
+      if (order.deliveryInfo) {
+        if (order.deliveryInfo.school) schools.add(order.deliveryInfo.school);
+        if (order.deliveryInfo.address) addresses.add(order.deliveryInfo.address);
+        if (order.deliveryInfo.time) times.add(order.deliveryInfo.time);
+      }
+    });
+
+    // 将 Set 转换为数组
+    schoolOptions.value = Array.from(schools);
+    addressOptions.value = Array.from(addresses);
+    timeOptions.value = Array.from(times);
+    
 
     // 处理订单数据（如添加商品名称等）
     orders.value.forEach((order) => {
@@ -1420,7 +1529,7 @@ const confirmRefund = async () => {
         </el-form-item>
 
         <el-form-item label="状态" class="form-item">
-          <el-select v-model="searchQuery.state" placeholder="选择状态" clearable>
+          <el-select v-model="searchQuery.state" placeholder="选择状态" clearable @clear="resetState">
             <el-option
               v-for="option in stateOptions"
               :key="option.value"
@@ -1430,7 +1539,7 @@ const confirmRefund = async () => {
           </el-select>
         </el-form-item>
 
-        <el-form-item label="客户类型" class="form-item">
+        <!-- <el-form-item label="客户类型" class="form-item" @clear="resetcustomerType">
           <el-select
             v-model="searchQuery.customerType"
             placeholder="选择客户类型"
@@ -1443,10 +1552,10 @@ const confirmRefund = async () => {
               :value="option.value"
             />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="场景" class="form-item">
-          <el-select v-model="searchQuery.scene" placeholder="选择场景" clearable>
+          <el-select v-model="searchQuery.scene" placeholder="选择场景" clearable @clear="resetScene">
             <el-option
               v-for="option in sceneOptionsSearch"
               :key="option.value"
@@ -1456,6 +1565,11 @@ const confirmRefund = async () => {
           </el-select>
         </el-form-item>
 
+        <!-- 占位的空白表单项，用于对齐 -->
+        <el-form-item class="form-item" style="visibility: hidden;">
+          <el-input></el-input>
+        </el-form-item>
+
         <el-form-item class="button-item">
           <el-button @click="resetFilters">重置</el-button>
         </el-form-item>
@@ -1463,16 +1577,37 @@ const confirmRefund = async () => {
 
       <!-- 第三行 -->
       <div class="form-row">
-        <el-form-item label="定时达学校" class="form-item">
-          <el-input v-model="searchQuery.school" placeholder="输入定时达学校"></el-input>
+        <el-form-item label="定时达地址" class="form-item">
+          <el-select v-model="searchQuery.school" placeholder="选择定时达地址" clearable @clear="resetSchool">
+            <el-option
+              v-for="school in schoolOptions"
+              :key="school"
+              :label="school"
+              :value="school"
+            />
+          </el-select>
         </el-form-item>
 
-        <el-form-item label="定时达地址" class="form-item">
-          <el-input v-model="searchQuery.address" placeholder="输入定时达地址"></el-input>
+        <el-form-item label="送达点" class="form-item">
+          <el-select v-model="searchQuery.address" placeholder="选择送达点" clearable @clear="resetAddress">
+            <el-option
+              v-for="address in addressOptions"
+              :key="address"
+              :label="address"
+              :value="address"
+            />
+          </el-select>
         </el-form-item>
 
         <el-form-item label="定时达时间" class="form-item">
-          <el-input v-model="searchQuery.time" placeholder="输入定时达时间"></el-input>
+          <el-select v-model="searchQuery.time" placeholder="选择定时达时间" clearable @clear="resetTime">
+            <el-option
+              v-for="time in timeOptions"
+              :key="time"
+              :label="formatSendTime(time)"
+              :value="time"
+            />
+          </el-select>
         </el-form-item>
 
         <!-- 占位的空白表单项，用于对齐 -->
@@ -1488,7 +1623,16 @@ const confirmRefund = async () => {
 
     <h1>订单列表</h1>
 
-    <el-table :data="paginatedOrders" stripe>
+    <div style="margin-bottom: 10px;">
+      <!-- <el-button @click="selectAllOrders" size="small">全选</el-button>
+      <el-button @click="deselectAllOrders" size="small" style="margin-left: 10px;">取消全选</el-button> -->
+      <el-button @click="batchPrintOrders" size="small" type="success" :disabled="selectedOrders.length === 0">批量打印</el-button>
+      <el-button @click="BatchSupplyOrders" size="small" type="primary" :disabled="selectedOrders.length === 0">批量供餐</el-button>
+    </div>
+    
+
+    <el-table :data="paginatedOrders" stripe @selection-change="handleSelectionChange"> 
+      <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="orderNum" label="订单号" width="70" />
       <el-table-column prop="state" label="状态" width="80px" />
       <el-table-column label="商品" width="100px">
@@ -1510,8 +1654,8 @@ const confirmRefund = async () => {
       <el-table-column prop="remark" label="顾客备注" width="160px" />
       <el-table-column prop="scene" label="场景" width="70px" />
 
-      <el-table-column prop="deliveryInfo.school" label="定时达学校" width="100px" />
-      <el-table-column prop="deliveryInfo.address" label="定时达地址" width="120px" />
+      <el-table-column prop="deliveryInfo.school" label="定时达地址" width="100px" />
+      <el-table-column prop="deliveryInfo.address" label="送达点" width="120px" />
       <el-table-column label="定时达时间" width="160px">
         <template #default="props">
           {{ formatSendTime(props.row.deliveryInfo?.time) || '无' }}
@@ -1604,7 +1748,7 @@ const confirmRefund = async () => {
               <p><strong>时间:</strong> {{ formatSendTime(selectedOrder.deliveryInfo.time || '') }}</p>
             </el-col>
             <el-col :span="12">
-              <p><strong>电话:</strong> {{ formatSendTime(selectedOrder.deliveryInfo.number || '') }}</p>
+              <p><strong>电话:</strong> {{ selectedOrder.deliveryInfo.number }}</p>
             </el-col>
           </el-row>
         </div>

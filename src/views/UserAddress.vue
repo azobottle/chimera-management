@@ -28,14 +28,14 @@ const isDeleting = ref(false);
 const addressForm = ref();
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/; // 用于校验时间格式的正则表达式
 const rules = {
-  school: [{ required: true, message: '请输入学校名称', trigger: 'blur' }],
+  school: [{ required: true, message: '请输入地址名称', trigger: 'blur' }],
   addresses: [
     {
       validator: (rule, value, callback) => {
         if (!value.length) {
-          callback(new Error('至少需要一个地址'));
+          callback(new Error('至少需要一个配送点'));
         } else if (value.some((addr) => !addr.trim())) {
-          callback(new Error('地址不能为空'));
+          callback(new Error('配送点不能为空'));
         } else {
           callback();
         }
@@ -43,12 +43,26 @@ const rules = {
       trigger: 'blur',
     },
   ],
-  times: [
+  times_work: [
     {
       validator: (rule, value, callback) => {
         if (!value.length) {
           callback(new Error('至少需要一个时间'));
-        } else if (value.some((time) => !timeRegex.test(time))) {
+        } else if (value.some((times_work) => !timeRegex.test(times_work))) {
+          callback(new Error('时间格式无效，请输入 HH:mm 格式'));
+        } else {
+          callback();
+        }
+      },
+      trigger: 'blur',
+    },
+  ],
+  times_weekend: [
+    {
+      validator: (rule, value, callback) => {
+        if (!value.length) {
+          callback(new Error('至少需要一个时间'));
+        } else if (value.some((times_weekend) => !timeRegex.test(times_weekend))) {
           callback(new Error('时间格式无效，请输入 HH:mm 格式'));
         } else {
           callback();
@@ -72,7 +86,8 @@ const openCreateDialog = () => {
   editableFixDeliveryInfo.value = {
     school: '',
     addresses: [''],
-    times: [''],
+    times_work: [''],
+    times_weekend: [''],
   };
   isCreating.value = true;
   isEditDialogVisible.value = true;
@@ -96,15 +111,27 @@ const removeFixDeliveryInfo = (index: number) => {
   }
 };
 
-const addDeliveryTime = () => {
+const addDeliveryTimeWork = () => {
   if (editableFixDeliveryInfo.value) {
-    editableFixDeliveryInfo.value.times.push('');
+    editableFixDeliveryInfo.value.times_work.push('');
   }
 };
 
-const removeDeliveryTime = (index: number) => {
+const removeDeliveryTimeWork = (index: number) => {
   if (editableFixDeliveryInfo.value) {
-    editableFixDeliveryInfo.value.times.splice(index, 1);
+    editableFixDeliveryInfo.value.times_work.splice(index, 1);
+  }
+};
+
+const addDeliveryTimeWeekend = () => {
+  if (editableFixDeliveryInfo.value) {
+    editableFixDeliveryInfo.value.times_weekend.push('');
+  }
+};
+
+const removeDeliveryTimeWeekend = (index: number) => {
+  if (editableFixDeliveryInfo.value) {
+    editableFixDeliveryInfo.value.times_weekend.splice(index, 1);
   }
 };
 
@@ -124,12 +151,12 @@ const saveFixDeliveryInfoChanges = async () => {
           await createFixDeliveryInfo({
             body: editableFixDeliveryInfo.value,
           });
-          ElMessage.success('地址创建成功');
+          ElMessage.success('配送点创建成功');
         } else {
           await updateFixDeliveryInfo({
             body: editableFixDeliveryInfo.value,
           });
-          ElMessage.success('地址修改成功');
+          ElMessage.success('配送点修改成功');
         }
 
         await fetchFixDeliveryInfos();
@@ -164,7 +191,7 @@ const deleteFixDeliveryInfo = async () => {
 
     await fetchFixDeliveryInfos();
     isDeleteDialogVisible.value = false;
-    ElMessage.success('地址删除成功');
+    ElMessage.success('配送点删除成功');
   } catch (error) {
     console.error('Error deleting fixDeliveryInfo:', error);
     ElMessage.error('删除失败！');
@@ -181,20 +208,25 @@ onMounted(async () => {
 
 <template>
   <div>
-    <el-button type="primary" @click="openCreateDialog">新建地址</el-button>
+    <el-button type="primary" @click="openCreateDialog">新建配送点</el-button>
 
-    <h1>地址列表</h1>
+    <h1>配送点列表</h1>
 
     <el-table :data="fixDeliveryInfos" stripe>
-      <el-table-column prop="school" label="学校" />
-      <el-table-column label="地址">
+      <el-table-column prop="school" label="地址" />
+      <el-table-column label="配送点">
         <template #default="{ row }">
           <div v-for="(addr, index) in row.addresses" :key="index">{{ addr }}</div>
         </template>
       </el-table-column>
-      <el-table-column label="配送时间">
+      <el-table-column label="工作日配送时间">
         <template #default="{ row }">
-          <div v-for="(time, index) in row.times" :key="index">{{ time }}</div>
+          <div v-for="(times_work, index) in row.times_work" :key="index">{{ times_work }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="周末配送时间">
+        <template #default="{ row }">
+          <div v-for="(times_weekend, index) in row.times_weekend" :key="index">{{ times_weekend }}</div>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -207,7 +239,7 @@ onMounted(async () => {
 
     <!-- Delete Confirmation Dialog -->
     <el-dialog v-model="isDeleteDialogVisible" width="30%" title="删除确认">
-      <span>确定要删除该地址吗？</span>
+      <span>确定要删除该配送点吗？</span>
       <template #footer>
         <el-button type="primary" @click="deleteFixDeliveryInfo" :loading="isDeleting"
           >确认</el-button>
@@ -216,18 +248,18 @@ onMounted(async () => {
     </el-dialog>
 
     <!-- Create/Edit FixDeliveryInfo Dialog -->
-    <el-dialog v-model="isEditDialogVisible" width="50%" :title="isCreating ? '新建地址' : '编辑地址'">
+    <el-dialog v-model="isEditDialogVisible" width="50%" :title="isCreating ? '新建配送点' : '编辑配送点'">
       <el-form
         v-if="editableFixDeliveryInfo"
         :model="editableFixDeliveryInfo"
         :rules="rules"
         ref="addressForm"
       >
-        <el-form-item label="学校" prop="school">
+        <el-form-item label="地址" prop="school">
           <el-input v-model="editableFixDeliveryInfo.school"></el-input>
         </el-form-item>
 
-        <el-form-item label="地址" prop="addresses">
+        <el-form-item label="配送点" prop="addresses">
           <div
             v-for="(addr, index) in editableFixDeliveryInfo.addresses"
             :key="index"
@@ -235,7 +267,7 @@ onMounted(async () => {
           >
             <el-input
               v-model="editableFixDeliveryInfo.addresses[index]"
-              placeholder="输入地址"
+              placeholder="输入配送点"
               style="flex: 1;"
             ></el-input>
             <el-button
@@ -246,29 +278,52 @@ onMounted(async () => {
             >删除</el-button>
           </div>
           <el-button type="primary" plain @click="addFixDeliveryInfo"
-            >添加地址</el-button
+            >添加配送点</el-button
           >
         </el-form-item>
 
-        <el-form-item label="配送时间" prop="times">
+        <el-form-item label="工作日配送时间" prop="times_work">
           <div
-            v-for="(time, index) in editableFixDeliveryInfo.times"
+            v-for="(time, index) in editableFixDeliveryInfo.times_work"
             :key="index"
             style="display: flex; align-items: center; margin-bottom: 8px; width: 100%; "
           >
             <el-input
-              v-model="editableFixDeliveryInfo.times[index]"
+              v-model="editableFixDeliveryInfo.times_work[index]"
               placeholder="输入时间（HH:mm）"
               style="flex: 1;"
             ></el-input>
             <el-button
               type="danger"
               icon="el-icon-delete"
-              @click="removeDeliveryTime(index)"
+              @click="removeDeliveryTimeWork(index)"
               style="margin-left: 8px; width:60px;"
             >删除</el-button>
           </div>
-          <el-button type="primary" plain @click="addDeliveryTime"
+          <el-button type="primary" plain @click="addDeliveryTimeWork"
+            >添加时间</el-button
+          >
+        </el-form-item>
+
+        <el-form-item label="周末配送时间" prop="times_weekend">
+          <div
+            v-for="(time, index) in editableFixDeliveryInfo.times_weekend"
+            :key="index"
+            style="display: flex; align-items: center; margin-bottom: 8px; width: 100%; "
+          >
+            <el-input
+              v-model="editableFixDeliveryInfo.times_weekend[index]"
+              placeholder="输入时间（HH:mm）"
+              style="flex: 1;"
+            ></el-input>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              @click="removeDeliveryTimeWeekend(index)"
+              style="margin-left: 8px; width:60px;"
+            >删除</el-button>
+          </div>
+          <el-button type="primary" plain @click="addDeliveryTimeWeekend"
             >添加时间</el-button
           >
         </el-form-item>

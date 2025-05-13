@@ -21,9 +21,11 @@ const newUserCount = ref(0)
 // 商品销售数据
 const productSalesData = ref<{ name: string; sales: number }[]>([])
 
-// 订单统计数据
-const sceneOrderStats = ref<{ scene: string; count: number }[]>([])
-const customerTypeOrderStats = ref<{ customerType: string; count: number }[]>([])
+// 订单统计数据（改为场景表格 + 学校表格）
+// 场景统计
+const sceneOrderStats = ref<{ scene: string; count: number; turnover: number }[]>([])
+// 学校统计（原“不同客户类型”需求改为根据 deliveryInfo.school 分类）
+const schoolOrderStats = ref<{ school: string; count: number; turnover: number }[]>([])
 
 // 获取数据
 const fetchData = async () => {
@@ -32,7 +34,6 @@ const fetchData = async () => {
 
   if (selectedViewType.value === 'daily') {
     if (dateValue.value) {
-      console.log('date:', dateValue.value)
       startDate = new Date(dateValue.value)
       startDate.setHours(0, 0, 0, 0)
       endDate = new Date(dateValue.value)
@@ -43,17 +44,15 @@ const fetchData = async () => {
     }
   } else if (selectedViewType.value === 'weekly') {
     if (dateValue.value) {
-      console.log('date:', dateValue.value)
       const selectedDate = new Date(dateValue.value)
       const day = selectedDate.getDay()
       startDate = new Date(selectedDate)
-      startDate.setDate(selectedDate.getDate() - day) // 设置为星期一
+      // 设置为周日到周六 或者周一到周日，视需求而定，这里假设周日是第0天
+      startDate.setDate(selectedDate.getDate() - day)
       startDate.setHours(0, 0, 0, 0)
       endDate = new Date(startDate)
       endDate.setDate(startDate.getDate() + 6)
       endDate.setHours(23, 59, 59, 999)
-      console.log('start:', startDate)
-      console.log('end:', endDate)
     } else {
       ElMessage.error('请选择周')
       return
@@ -83,8 +82,7 @@ const fetchData = async () => {
     ElMessage.error('选择的视图类型无效')
     return
   }
-  console.log("startTime:"+formatDate(startDate))
-  console.log("endTime:"+formatDate(endDate))
+
   try {
     // 获取订单数据
     const orderResponse = await getAllOrders({
@@ -112,12 +110,12 @@ const fetchData = async () => {
     // 获取商品销售数据
     fetchProductSalesData(orders)
 
-    // 获取订单统计数据
+    // 获取订单统计数据（改为场景 + 学校）
     fetchOrderStats(orders)
 
-    // 等待 DOM 更新后初始化图表
-    await nextTick() // 确保 DOM 更新完成
-    initCharts() // 在 DOM 更新后初始化图表
+    // 等待 DOM 更新后初始化图表（这里仅商品销售图）
+    await nextTick()
+    initProductSalesChart()
   } catch (error) {
     console.error('获取数据时出错:', error)
     ElMessage.error('获取数据时出错:' + error)
@@ -140,7 +138,7 @@ const fetchProductSalesData = (orders: Order[]) => {
         if (!productSalesMap[key]) {
           productSalesMap[key] = {
             name: item.name || '未知商品',
-            sales: 1, // 确保统计正确的销售量
+            sales: 1,
           }
         } else {
           productSalesMap[key].sales += 1
@@ -153,48 +151,53 @@ const fetchProductSalesData = (orders: Order[]) => {
   productSalesData.value = Object.values(productSalesMap).sort((a, b) => b.sales - a.sales)
 }
 
-// 获取订单统计数据
+// 获取订单统计数据（这里把场景和学校分别聚合出订单数及营业额）
 const fetchOrderStats = (orders: Order[]) => {
   // 场景统计
-  const sceneStatsMap: Record<string, number> = {}
+  const sceneStatsMap: Record<string, { count: number; turnover: number }> = {}
+
+  // 学校统计
+  const schoolStatsMap: Record<string, { count: number; turnover: number }> = {}
 
   orders.forEach((order) => {
+    // 1) 场景统计
     const scene = order.scene || '未知场景'
     if (!sceneStatsMap[scene]) {
-      sceneStatsMap[scene] = 1
-    } else {
-      sceneStatsMap[scene] += 1
+      sceneStatsMap[scene] = { count: 0, turnover: 0 }
+    }
+    sceneStatsMap[scene].count++
+    sceneStatsMap[scene].turnover += order.totalPrice ?? 0
+
+    // 2) 学校统计
+    // 根据定时达客户类型需求，分类依据为 order.deliveryInfo.school
+    if (order.deliveryInfo?.school) {
+      
+      const school = order.deliveryInfo?.school
+      if (!schoolStatsMap[school]) {
+        schoolStatsMap[school] = { count: 0, turnover: 0 }
+      }
+      schoolStatsMap[school].count++
+      schoolStatsMap[school].turnover += order.totalPrice ?? 0
+
     }
   })
 
-  sceneOrderStats.value = Object.entries(sceneStatsMap).map(([scene, count]) => ({
+  // 整理为数组
+  sceneOrderStats.value = Object.entries(sceneStatsMap).map(([scene, data]) => ({
     scene,
-    count,
+    count: data.count,
+    turnover: data.turnover / 100, // 分转元
   }))
 
-  // 客户类型统计
-  const customerTypeStatsMap: Record<string, number> = {}
-
-  orders.forEach((order) => {
-    const customerType = order.customerType || '未知客户类型'
-    if (!customerTypeStatsMap[customerType]) {
-      customerTypeStatsMap[customerType] = 1
-    } else {
-      customerTypeStatsMap[customerType] += 1
-    }
-  })
-
-  customerTypeOrderStats.value = Object.entries(customerTypeStatsMap).map(
-    ([customerType, count]) => ({
-      customerType,
-      count,
-    })
-  )
+  schoolOrderStats.value = Object.entries(schoolStatsMap).map(([school, data]) => ({
+    school,
+    count: data.count,
+    turnover: data.turnover / 100, // 分转元
+  }))
 }
 
-// 初始化图表
-const initCharts = () => {
-  // 商品售卖情况图表
+// 初始化「商品售卖情况」图表
+const initProductSalesChart = () => {
   const productSalesElement = document.getElementById('product-sales-chart')
   if (productSalesElement) {
     const productSalesChart = echarts.init(productSalesElement)
@@ -208,7 +211,6 @@ const initCharts = () => {
           fontSize: 16,
         },
       },
-      color: ['#409EFF'],
       tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -252,9 +254,6 @@ const initCharts = () => {
           name: '销售量',
           type: 'bar',
           data: productSalesData.value.map((item) => item.sales),
-          itemStyle: {
-            color: '#409EFF',
-          },
           barWidth: '50%',
         },
       ],
@@ -262,98 +261,6 @@ const initCharts = () => {
     productSalesChart.setOption(productSalesOption)
   } else {
     console.warn('商品售卖情况图表的 DOM 元素未找到')
-  }
-
-  // 场景订单统计图表
-  const sceneOrderStatsElement = document.getElementById('scene-order-stats-chart')
-  if (sceneOrderStatsElement) {
-    const sceneOrderStatsChart = echarts.init(sceneOrderStatsElement)
-    const sceneOrderOption = {
-      title: {
-        text: '不同场景订单统计',
-        left: 'center',
-        textStyle: {
-          color: '#333',
-          fontSize: 16,
-        },
-      },
-      color: ['#67C23A', '#E6A23C', '#F56C6C', '#909399'],
-      tooltip: {
-        trigger: 'item',
-      },
-      series: [
-        {
-          name: '订单数',
-          type: 'pie',
-          radius: '50%',
-          data: sceneOrderStats.value.map((item) => ({
-            value: item.count,
-            name: item.scene,
-          })),
-          label: {
-            formatter: '{b}: {d}%',
-            fontSize: 14,
-            fontWeight: 'bold',
-          },
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-            },
-          },
-        },
-      ],
-    }
-    sceneOrderStatsChart.setOption(sceneOrderOption)
-  } else {
-    console.warn('场景订单统计图表的 DOM 元素未找到')
-  }
-
-  // 客户类型订单统计图表
-  const customerTypeOrderStatsElement = document.getElementById('customer-type-order-stats-chart')
-  if (customerTypeOrderStatsElement) {
-    const customerTypeOrderStatsChart = echarts.init(customerTypeOrderStatsElement)
-    const customerTypeOrderOption = {
-      title: {
-        text: '不同客户类型订单统计',
-        left: 'center',
-        textStyle: {
-          color: '#333',
-          fontSize: 16,
-        },
-      },
-      color: ['#67C23A', '#E6A23C', '#F56C6C', '#909399'],
-      tooltip: {
-        trigger: 'item',
-      },
-      series: [
-        {
-          name: '订单数',
-          type: 'pie',
-          radius: '50%',
-          data: customerTypeOrderStats.value.map((item) => ({
-            value: item.count,
-            name: item.customerType,
-          })),
-          label: {
-            formatter: '{b}: {d}%',
-            fontSize: 14,
-            fontWeight: 'bold',
-          },
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-            },
-          },
-        },
-      ],
-    }
-    customerTypeOrderStatsChart.setOption(customerTypeOrderOption)
-  } else {
-    console.warn('客户类型订单统计图表的 DOM 元素未找到')
   }
 }
 
@@ -373,24 +280,28 @@ const exportToExcel = () => {
 
   // 创建商品销售数据工作表
   const productSalesHeader = ['商品名称', '销售量']
-  const productSalesRows = productSalesData.value.map(item => [item.name, item.sales])
+  const productSalesRows = productSalesData.value.map((item) => [item.name, item.sales])
   const productSalesDataArray = [productSalesHeader, ...productSalesRows]
   const productSalesSheet = XLSX.utils.aoa_to_sheet(productSalesDataArray)
   XLSX.utils.book_append_sheet(workbook, productSalesSheet, '商品销售')
 
-  // 创建场景订单统计工作表
-  const sceneOrderHeader = ['场景', '订单数']
-  const sceneOrderRows = sceneOrderStats.value.map(item => [item.scene, item.count])
+  // 场景订单统计工作表
+  const sceneOrderHeader = ['场景', '订单数', '营业额（元）']
+  const sceneOrderRows = sceneOrderStats.value.map((item) => [item.scene, item.count, item.turnover])
   const sceneOrderDataArray = [sceneOrderHeader, ...sceneOrderRows]
   const sceneOrderSheet = XLSX.utils.aoa_to_sheet(sceneOrderDataArray)
-  XLSX.utils.book_append_sheet(workbook, sceneOrderSheet, '场景订单统计')
+  XLSX.utils.book_append_sheet(workbook, sceneOrderSheet, '场景统计')
 
-  // 创建客户类型订单统计工作表
-  const customerTypeHeader = ['客户类型', '订单数']
-  const customerTypeRows = customerTypeOrderStats.value.map(item => [item.customerType, item.count])
-  const customerTypeDataArray = [customerTypeHeader, ...customerTypeRows]
-  const customerTypeSheet = XLSX.utils.aoa_to_sheet(customerTypeDataArray)
-  XLSX.utils.book_append_sheet(workbook, customerTypeSheet, '客户类型统计')
+  // 学校订单统计工作表（定时达客户类型）
+  const schoolOrderHeader = ['学校', '订单数', '营业额（元）']
+  const schoolOrderRows = schoolOrderStats.value.map((item) => [
+    item.school,
+    item.count,
+    item.turnover,
+  ])
+  const schoolOrderDataArray = [schoolOrderHeader, ...schoolOrderRows]
+  const schoolOrderSheet = XLSX.utils.aoa_to_sheet(schoolOrderDataArray)
+  XLSX.utils.book_append_sheet(workbook, schoolOrderSheet, '学校统计')
 
   // 生成 Excel 文件并下载
   const fileName = `经营统计_${getFormattedDateRange()}.xlsx`
@@ -407,7 +318,7 @@ const getFormattedDateRange = () => {
     endDate = new Date(dateValue.value!)
   } else if (selectedViewType.value === 'weekly') {
     const selectedDate = new Date(dateValue.value!)
-    const day = selectedDate.getDay() // 获取星期几（0表示星期日）
+    const day = selectedDate.getDay()
     startDate = new Date(selectedDate)
     startDate.setDate(selectedDate.getDate() - day)
     endDate = new Date(startDate)
@@ -468,21 +379,18 @@ onMounted(() => {
           v-model="dateValue"
           type="date"
           placeholder="选择日期"
-          @change="fetchData"
         ></el-date-picker>
         <el-date-picker
           v-else-if="selectedViewType === 'weekly'"
           v-model="dateValue"
           type="week"
           placeholder="选择周"
-          @change="fetchData"
         ></el-date-picker>
         <el-date-picker
           v-else-if="selectedViewType === 'monthly'"
           v-model="dateValue"
           type="month"
           placeholder="选择月"
-          @change="fetchData"
         ></el-date-picker>
         <el-date-picker
           v-else-if="selectedViewType === 'custom'"
@@ -491,7 +399,6 @@ onMounted(() => {
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          @change="fetchData"
         ></el-date-picker>
       </el-col>
     </el-row>
@@ -525,17 +432,30 @@ onMounted(() => {
       </el-col>
     </el-row>
 
-    <!-- 图表展示 -->
+    <!-- 场景订单统计：表格 -->
+    <div style="margin-top: 20px;">
+      <h3>不同场景订单统计</h3>
+      <el-table :data="sceneOrderStats" style="width: 100%;">
+        <el-table-column prop="scene" label="场景" />
+        <el-table-column prop="count" label="订单数" />
+        <el-table-column prop="turnover" label="营业额" />
+      </el-table>
+    </div>
+
+    <!-- 学校订单统计：表格 -->
+    <div style="margin-top: 20px;">
+      <h3>定时达客户类型（按学校分类）</h3>
+      <el-table :data="schoolOrderStats" style="width: 100%;">
+        <el-table-column prop="school" label="学校" />
+        <el-table-column prop="count" label="订单数" />
+        <el-table-column prop="turnover" label="营业额" />
+      </el-table>
+    </div>
+
+    <!-- 商品销售图表 -->
     <el-row :gutter="20" style="margin-top: 20px;">
-      <el-col :span="12">
-        <div id="scene-order-stats-chart" style="width: 100%; height: 400px;"></div>
-        <div
-          id="customer-type-order-stats-chart"
-          style="width: 100%; height: 400px; margin-top: 20px;"
-        ></div>
-      </el-col>
-      <el-col :span="12">
-        <div id="product-sales-chart" style="width: 100%; height: 820px;"></div>
+      <el-col :span="24">
+        <div id="product-sales-chart" style="width: 100%; height: 600px;"></div>
       </el-col>
     </el-row>
   </div>

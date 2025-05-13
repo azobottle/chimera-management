@@ -426,6 +426,8 @@ const openCreateDialog = () => {
     imgURL: '',
     productOptions: {},
     onlyDining: false,
+    onlyDelivery: false,
+    no_coupon: false,
     needStockWithRestrictBuy: false,
     stock: 0,
     presaleNum: 0,
@@ -571,9 +573,15 @@ const replenish = async () => {
         </template>
       </el-table-column>
 
-      <el-table-column label="堂食限定" width="100px">
+      <el-table-column label="限定" width="120px">
         <template #default="{ row }">
           <span v-if="row.onlyDining">仅限堂食</span>
+          <span v-else> - </span>
+          <br />
+          <span v-if="row.onlyDelivery">仅限定时达</span>
+          <span v-else> - </span>
+          <br />
+          <span v-if="row.no_coupon">不可用优惠券</span>
           <span v-else> - </span>
         </template>
       </el-table-column>
@@ -584,7 +592,7 @@ const replenish = async () => {
         </template>
       </el-table-column>
 
-      <el-table-column label="统计" width="200px">
+      <el-table-column label="统计" width="100px">
         <template #default="{ row }">
           <div v-if="row.needStockWithRestrictBuy">
             <div>库存: {{ row.stock }}</div>
@@ -661,6 +669,20 @@ const replenish = async () => {
 
         <el-form-item label="仅限堂食">
           <el-radio-group v-model="editableProduct.onlyDining">
+            <el-radio :label="true">是</el-radio>
+            <el-radio :label="false">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="仅限定时达">
+          <el-radio-group v-model="editableProduct.onlyDelivery">
+            <el-radio :label="true">是</el-radio>
+            <el-radio :label="false">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="不可用优惠券">
+          <el-radio-group v-model="editableProduct.no_coupon">
             <el-radio :label="true">是</el-radio>
             <el-radio :label="false">否</el-radio>
           </el-radio-group>

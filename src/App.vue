@@ -28,7 +28,7 @@
           </template>
           <el-menu-item-group>
             <el-menu-item index="/orderShop">订单列表</el-menu-item>
-            <el-menu-item index="/deliveryShop">送达管理</el-menu-item>
+            <!-- <el-menu-item index="/deliveryShop">送达管理</el-menu-item> -->
           </el-menu-item-group>
         </el-sub-menu>
 

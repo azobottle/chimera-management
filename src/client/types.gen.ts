@@ -242,6 +242,14 @@ export type Product = {
      * 是否只限堂食，为true时定时达页面不显示该商品
      */
     onlyDining?: boolean;
+    /**
+     * 是否只限定时达，为true时堂食页面不显示该商品
+     */
+    onlyDelivery?: boolean;
+    /**
+     * 是否不能用优惠券，为true时不能用
+     */
+    no_coupon?: boolean;
 };
 
 export type ProductOption = {
