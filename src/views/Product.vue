@@ -432,6 +432,7 @@ const openCreateDialog = () => {
     stock: 0,
     presaleNum: 0,
     stocked: false,
+    rank: 0,
   };
   selectedOptionValues.value = {};
   imageFile.value = null;
@@ -586,9 +587,12 @@ const replenish = async () => {
         </template>
       </el-table-column>
 
-      <el-table-column label="状态" width="100px">
+      <el-table-column label="状态/排序" width="100px">
         <template #default="{ row }">
           <span>{{ getStatusLabel(row.status) }}</span>
+          <br />
+          <span v-if="row.rank">{{ row.rank }}</span>
+          <span v-else> 0 </span>
         </template>
       </el-table-column>
 
@@ -686,6 +690,10 @@ const replenish = async () => {
             <el-radio :label="true">是</el-radio>
             <el-radio :label="false">否</el-radio>
           </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="排序">
+          <el-input-number v-model.number="editableProduct.rank" :step="1" />
         </el-form-item>
 
         <el-form-item label="商品状态">

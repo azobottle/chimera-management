@@ -250,6 +250,10 @@ export type Product = {
      * 是否不能用优惠券，为true时不能用
      */
     no_coupon?: boolean;
+    /**
+     * rank 越大越靠前；允许为 null
+     */
+    rank?: number;
 };
 
 export type ProductOption = {

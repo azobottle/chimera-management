@@ -39,7 +39,7 @@ export const createProductCate = <ThrowOnError extends boolean = false>(options:
 }); };
 
 /**
- * 获得所有Products，用于菜单展示
+ * 获得所有 Products，用于菜单展示
  */
 export const getAllProducts = <ThrowOnError extends boolean = false>(options?: Options<unknown, ThrowOnError>) => { return (options?.client ?? client).get<GetAllProductsResponse, GetAllProductsError, ThrowOnError>({
     ...options,
