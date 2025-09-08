@@ -1092,8 +1092,6 @@ const connectWebSocket = () => {
       const order = orders.value.find(o => o.id.toString() === orderId);
       console.log("订单数据总:", orders); // 输出提取的订单号
       console.log("订单数据:", order); // 输出提取的订单号
-      
-      printOrder(order);
 
       ElMessageBox.alert(
       event.data,
