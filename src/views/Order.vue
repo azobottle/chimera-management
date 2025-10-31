@@ -963,7 +963,10 @@ tagInfo.forEach((item, index) => {
   // 模板对象获取
   // const printerList = hiprintTemplate.getPrinterList();
   // console.log("printerList:", JSON.stringify(printerList, null, 2));
-  hiprintTemplate.print2(printData, {printer: "Xprinter XP-T202UA"});
+  // Chimera
+  // hiprintTemplate.print2(printData, {printer: "Xprinter XP-T202UA"});
+  //YuanQi
+  hiprintTemplate.print2(printData, {printer: "Xprinter XP-236B"});
 });
 };
 
