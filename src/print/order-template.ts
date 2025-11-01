@@ -65,7 +65,7 @@ export function buildOrderTemplate(
   elements.push(EZ.hline(6, 86, PANEL.contentWidth, 'solid')); // 注意这里使用 left=6 以和你原始横线对齐
 
   // 列标题
-  elements.push(...EZ.row4(90.5, [58.5, 105, 27, 28.5], 6, H.cell, ['项目名称','数量','单价','小计'], true));
+  elements.push(...EZ.row4(90.5, [163.5, 50, 0, 0], 6, H.cell, ['项目名称','数量','',''], true));
 
   // 表体前的虚线
   elements.push(EZ.hline(PANEL.contentLeft, 105.5, PANEL.contentWidth, 'dashed'));
@@ -75,14 +75,14 @@ export function buildOrderTemplate(
   for (const it of finalItemDetails) {
     elements.push(...EZ.row4(
       top,
-      [153.5, 18, 18, 28.5], // 你的明细列宽（与原 JSON 一致）
+      [163.5, 50, 0, 0], // 你的明细列宽（与原 JSON 一致）
       6,
       H.cell,
       [
         it.projectName,
         String(it.quantity),
-        (it.price/100).toFixed(1),
-        (it.itemTotal/100).toFixed(1),
+        '',
+        '',
       ],
       false
     ));
@@ -122,13 +122,22 @@ export function buildOrderTemplate(
     elements.push(EZ.hline(PANEL.contentLeft, sectionTop - 6, PANEL.contentWidth, 'dashed'));
 
     elements.push(
+      // 订单号：左标签 + 右值(绑定 orderNum)
+      EZ.text(4.5,   y(0), 69,      H.cell, '订单号', EZ.mix(EZ.style.h6, EZ.style.bold)),
+      EZ.text(109.5, y(0), 108,     H.cell, '',         EZ.mix(EZ.style.h6, EZ.style.bold, EZ.style.right), { field: 'orderNum' }),
+
+      // 联系方式：左标签 + 右值(绑定 userNum)
+      EZ.text(4.5,   y(1), 69,      H.cell, '手机尾号', EZ.mix(EZ.style.h6, EZ.style.bold)),
+      EZ.text(109.5, y(1), 108,     H.cell, '',         EZ.mix(EZ.style.h6, EZ.style.bold,  EZ.style.right), { field: 'userNum' }),
+
+
       // 配送时间：左标签 + 右值(绑定 sendTime)
       EZ.text(4.5,   y(2), 69,      H.cell, '配送时间', EZ.mix(EZ.style.h6, EZ.style.bold)),
       EZ.text(109.5, y(2), 108,     H.cell, '',         EZ.mix(EZ.style.h6, EZ.style.bold, EZ.style.right), { field: 'sendTime' }),
 
       // 配送地址：左标签 + 右值(绑定 addr)
       EZ.text(4.5,   y(3), 69,      H.cell, '配送地址', EZ.mix(EZ.style.h6, EZ.style.bold)),
-      EZ.text(75,    y(3), 145.5,   H.cell, '',         EZ.mix(EZ.style.h6, EZ.style.bold),                  { field: 'addr' }),
+      EZ.text(75,    y(3), 145.5,   H.cell, '',         EZ.mix(EZ.style.h6, EZ.style.bold, EZ.style.right),                  { field: 'addr' }),
 
       // 备注（多行）
       EZ.text(4.5,   y(4), 216,     20,     remark,     EZ.mix(EZ.style.h6, EZ.style.bold, { lineHeight: 18 }))
