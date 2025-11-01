@@ -584,6 +584,7 @@ const printOrder = (order: Order) => {
         })()
 
       printOrderDetails(finalItemDetails, totalInfo, discountAmount, order_time, order);
+  }
 
       // 创建独立的 tagInfo 数组
       const tagInfo = order.items.map(item => {
