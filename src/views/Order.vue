@@ -583,6 +583,9 @@ const printOrder = (order: Order) => {
           return `${year}-${month}-${day} ${hours}:${minutes}`;
         })()
 
+    
+  // 检查是否是外送订单，如果不是直接跳过
+  if (order.deliveryInfo) {
       printOrderDetails(finalItemDetails, totalInfo, discountAmount, order_time, order);
   }
 
