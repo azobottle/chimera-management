@@ -1,0 +1,48 @@
+{
+  "panels": [
+    {
+      "index": 0,
+      "name": 1,
+      "height": 120,
+      "width": 80,
+      "paperHeader": 4.5,
+      "paperFooter": 200,
+      "printElements": [
+        {
+          "options": {
+            "left": 42,
+            "top": 25.5,
+            "height": 16.5,
+            "width": 147,
+            "title": "学生咖啡外送",
+            "right": 188.25,
+            "bottom": 48.75,
+            "vCenter": 114.75,
+            "hCenter": 36.75,
+            "coordinateSync": false,
+            "widthHeightSync": false,
+            "fontSize": 20.25,
+            "qrCodeLevel": 0,
+            "fontFamily": "STKaiti",
+            "fontWeight": "bolder",
+            "textAlign": "center"
+          },
+          "printElementType": {
+            "title": "文本",
+            "type": "text"
+          }
+        }
+      ],
+      "paperNumberLeft": 196,
+      "paperNumberTop": 318,
+      "paperNumberDisabled": true,
+      "paperNumberContinue": true,
+      "watermarkOptions": {},
+      "panelLayoutOptions": {
+        "layoutType": "column",
+        "layoutRowGap": 0,
+        "layoutColumnGap": 0
+      }
+    }
+  ]
+}

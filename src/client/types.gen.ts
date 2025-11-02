@@ -668,6 +668,10 @@ export type Order = {
      * 异常结束原因
      */
     abNormalEndReason?: string;
+    /**
+     * 打印属性
+     */
+    printAttr?: PrintAttr;
 };
 
 /**
@@ -695,6 +699,15 @@ export type OrderItem = {
      */
     imgURL_small?: string;
 };
+
+
+/**
+ * 打印属性
+ */
+export type PrintAttr = {
+    howManyOrderDetails?: number;
+    howManyorderTag?: number;
+}
 
 export type GetAllUsersResponse = (Array<User>);
 
