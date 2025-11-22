@@ -28,12 +28,15 @@ import {
   ElRow,
   ElCol,
   ElMessageBox,
+  ElTabs,
+  ElTabPane,
 } from 'element-plus';
 import { API_BASE_URL, LOCAL_AUTH_NAME } from '@/client/customize';
 import { hiprint, hiPrintPlugin } from 'vue-plugin-hiprint';
 import { USER_DTO } from '@/router';
 import templateTag from '@/assets/printTag.json';
 import { buildOrderTemplate } from '@/print/order-template';
+import * as XLSX from 'xlsx';
 
 // 初始化 hiprint
 hiprint.init({
@@ -424,8 +427,8 @@ const printOrderDetails = (
   // 打印
   // hiprintTemplate.print2(printData, {printer: 'XP-80C (副本 1)'});
   // hiprintTemplate.print2(printData, {printer: 'Microsoft Print to PDF'});
-  hiprintTemplate.print2(printData, {printer: 'XP-80C'});
-  // hiprintTemplate.print(printData);
+  // hiprintTemplate.print2(printData, {printer: 'XP-80C'});
+  hiprintTemplate.print(printData);
 };
 
 const printOrderTag = (tagInfo: any[], orderId: string, order_time: string) => {
@@ -518,90 +521,90 @@ const printOrder = (order: Order) => {
             itemTotal, // 添加 itemTotal 字段
         };
       });
+  
+  // 统计数量
+  const quantityMap = new Map<string, number>();
 
-      // 统计数量
-      const quantityMap = new Map<string, number>();
+  itemDetails.forEach(detail => {
+    if (quantityMap.has(detail.projectName)) {
+        quantityMap.set(detail.projectName, quantityMap.get(detail.projectName)! + 1);
+    } else {
+        quantityMap.set(detail.projectName, detail.quantity);
+    }
+  });
 
-      itemDetails.forEach(detail => {
-        if (quantityMap.has(detail.projectName)) {
-            quantityMap.set(detail.projectName, quantityMap.get(detail.projectName)! + 1);
-        } else {
-            quantityMap.set(detail.projectName, detail.quantity);
-        }
-      });
+  // 构建最终结果
+  const finalItemDetails = Array.from(quantityMap.entries()).map(([projectName, quantity]) => {
+    const price = order.items.find(item => {
+      const options = item.optionValues ? Object.values(item.optionValues).map(option => option.value) : [];
+      return `${item.name}[${options.join(', ')}]` === projectName;
+    })?.price;
 
-      // 构建最终结果
-      const finalItemDetails = Array.from(quantityMap.entries()).map(([projectName, quantity]) => {
-        const price = order.items.find(item => {
-          const options = item.optionValues ? Object.values(item.optionValues).map(option => option.value) : [];
-          return `${item.name}[${options.join(', ')}]` === projectName;
-        })?.price;
+    const itemTotal = (price || 0) * quantity; // 计算每个项目的总价
 
-        const itemTotal = (price || 0) * quantity; // 计算每个项目的总价
+    return {
+        projectName,
+        quantity,
+        price: price || 0,
+        itemTotal, // 添加 itemTotal 字段
+    };
+  });
 
-        return {
-            projectName,
-            quantity,
-            price: price || 0,
-            itemTotal, // 添加 itemTotal 字段
-        };
-      });
+  // 输出最终结果
+  console.log(finalItemDetails);
 
-      // 输出最终结果
-      console.log(finalItemDetails);
+  // 计算总数量、总价格和总小计
+  const totalInfo = finalItemDetails.reduce((acc, detail) => {
+      acc.totalQuantity += detail.quantity;
+      acc.totalItemTotal += detail.itemTotal;
+      return acc;
+  }, { totalQuantity: 0, totalItemTotal: 0 });
 
-      // 计算总数量、总价格和总小计
-      const totalInfo = finalItemDetails.reduce((acc, detail) => {
-          acc.totalQuantity += detail.quantity;
-          acc.totalItemTotal += detail.itemTotal;
-          return acc;
-      }, { totalQuantity: 0, totalItemTotal: 0 });
+  // 输出 totalInfo
+  console.log(totalInfo);
 
-      // 输出 totalInfo
-      console.log(totalInfo);
+  // 计算优惠金额
+  let discountAmount = 0;
 
-      // 计算优惠金额
-      let discountAmount = 0;
+  if (order.disPrice) {
+    discountAmount = order.disPrice;
+  } else if (order.coupon) {
+    discountAmount = order.coupon.dePrice;
+  }
 
-      if (order.disPrice) {
-        discountAmount = order.disPrice;
-      } else if (order.coupon) {
-        discountAmount = order.coupon.dePrice;
-      }
+  console.log(discountAmount);
+  //处理打印模板
+  // 初始位置
 
-      console.log(discountAmount);
-      //处理打印模板
-      // 初始位置
-
-      let order_time = (function() {
-          const now = new Date();
-          const year = now.getFullYear();
-          const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要加1
-          const day = String(now.getDate()).padStart(2, '0');
-          const hours = String(now.getHours()).padStart(2, '0');
-          const minutes = String(now.getMinutes()).padStart(2, '0');
-          return `${year}-${month}-${day} ${hours}:${minutes}`;
-        })()
+  let order_time = (function() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要加1
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      return `${year}-${month}-${day} ${hours}:${minutes}`;
+    })()
 
     
   // 检查是否是外送订单，如果不是直接跳过
   if (order.deliveryInfo) {
-      printOrderDetails(finalItemDetails, totalInfo, discountAmount, order_time, order);
+    printOrderDetails(finalItemDetails, totalInfo, discountAmount, order_time, order);
   }
 
-      // 创建独立的 tagInfo 数组
-      const tagInfo = order.items.map(item => {
-          const options = item.optionValues ? Object.values(item.optionValues).map(option => option.value) : [];
-          const name = item.name
-          const tag = `${options.join('\\')}`; // 以 \\ 分隔选项
-          return {
-            tag,
-            name
-          };
-      });
+  // 创建独立的 tagInfo 数组
+  const tagInfo = order.items.map(item => {
+      const options = item.optionValues ? Object.values(item.optionValues).map(option => option.value) : [];
+      const name = item.name
+      const tag = `${options.join('\\')}`; // 以 \\ 分隔选项
+      return {
+        tag,
+        name
+      };
+  });
 
-      console.log(tagInfo);
-      printOrderTag(tagInfo, order.orderNum.toString(), order_time);
+  console.log(tagInfo);
+  printOrderTag(tagInfo, order.orderNum.toString(), order_time);
 
 };
 
@@ -1016,6 +1019,524 @@ const confirmRefund = async () => {
   }
 };
 
+// ==================== 批量导入订单功能 ====================
+const batchImportDialogVisible = ref(false);
+const batchImportJson = ref('');
+const batchImportProgress = ref(0);
+const batchImportTotal = ref(0);
+const batchImportResults = ref<Array<{ success: boolean; message: string; orderData?: any }>>([]);
+
+interface BatchOrderItem {
+  productName: string;
+  options: Record<string, string>;
+}
+
+interface BatchOrder {
+  customerInfo?: {
+    name?: string;
+    phone?: string;
+  };
+  scene: string;
+  deliveryLocation?: string;  // 仅用于外带/堂食订单，会添加到备注中
+  deliveryInfo?: {  // 用于定时达订单
+    school: string;
+    address: string;
+    time: string;  // 格式: "2025-11-20 12:45"
+    number: string;
+  };
+  remark?: string;
+  items: BatchOrderItem[];
+}
+
+interface BatchOrdersData {
+  orders: BatchOrder[];
+}
+
+const openBatchImportDialog = () => {
+  batchImportDialogVisible.value = true;
+  batchImportJson.value = '';
+  batchImportProgress.value = 0;
+  batchImportTotal.value = 0;
+  batchImportResults.value = [];
+};
+
+const findProductByName = (productName: string): Product | null => {
+  const trimmedName = productName.trim();
+  
+  // 第一步：尝试精确匹配
+  const exactMatch = productOptionsList.value.find(p => p.name?.trim() === trimmedName);
+  if (exactMatch) {
+    return exactMatch;
+  }
+  
+  // 第二步：如果没有精确匹配，尝试模糊匹配（但优先匹配完整包含的）
+  const fuzzyMatches = productOptionsList.value.filter(p => 
+    p.name?.includes(trimmedName) || trimmedName.includes(p.name || '')
+  );
+  
+  if (fuzzyMatches.length === 1) {
+    return fuzzyMatches[0];
+  }
+  
+  // 如果有多个模糊匹配，返回 null（要求用户使用精确名称）
+  if (fuzzyMatches.length > 1) {
+    console.warn(`商品名称 "${trimmedName}" 匹配到多个商品: ${fuzzyMatches.map(p => p.name).join(', ')}，请使用精确名称`);
+    return null;
+  }
+  
+  return null;
+};
+
+const findOptionValueByName = (optionName: string, valueName: string): { optionId: string; uuid: string } | null => {
+  for (const [optionId, option] of productOptions.value) {
+    if (option.name === optionName) {
+      const value = option.values.find(v => v.value === valueName);
+      if (value?.uuid) {
+        return { optionId, uuid: value.uuid };
+      }
+    }
+  }
+  return null;
+};
+
+const processBatchImport = async () => {
+  try {
+    const data: BatchOrdersData = JSON.parse(batchImportJson.value);
+    
+    if (!data.orders || !Array.isArray(data.orders)) {
+      ElMessage.error('JSON 格式错误：缺少 orders 数组');
+      return;
+    }
+
+    batchImportTotal.value = data.orders.length;
+    batchImportProgress.value = 0;
+    batchImportResults.value = [];
+
+    const str = localStorage.getItem(USER_DTO);
+    const userDTO = JSON.parse(str as string) as UserDTO;
+
+    for (const [index, batchOrder] of data.orders.entries()) {
+      try {
+        // 验证定时达订单必须包含 deliveryInfo
+        if (batchOrder.scene === '定时达' && !batchOrder.deliveryInfo) {
+          throw new Error('定时达订单必须包含 deliveryInfo（school, address, time, number）');
+        }
+
+        // 构建备注（仅用于非定时达订单）
+        let fullRemark = '';
+        if (batchOrder.scene !== '定时达') {
+          if (batchOrder.deliveryLocation) {
+            fullRemark += `【配送地点：${batchOrder.deliveryLocation}】`;
+          }
+          if (batchOrder.customerInfo?.name) {
+            fullRemark += `【客户：${batchOrder.customerInfo.name}】`;
+          }
+          if (batchOrder.customerInfo?.phone) {
+            fullRemark += `【电话：${batchOrder.customerInfo.phone}】`;
+          }
+        }
+        if (batchOrder.remark) {
+          fullRemark += fullRemark ? ` ${batchOrder.remark}` : batchOrder.remark;
+        }
+
+        // 处理商品和选项
+        const items: Array<{ productId: string; optionValues: Record<string, string> }> = [];
+        
+        for (const item of batchOrder.items) {
+          const product = findProductByName(item.productName);
+          if (!product?.id) {
+            throw new Error(`找不到商品：${item.productName}`);
+          }
+
+          const optionValues: Record<string, string> = {};
+          for (const [optionName, valueName] of Object.entries(item.options)) {
+            const result = findOptionValueByName(optionName, valueName);
+            if (result) {
+              optionValues[result.optionId] = result.uuid;
+            } else {
+              console.warn(`找不到选项：${optionName} = ${valueName}，跳过此选项`);
+            }
+          }
+
+          items.push({
+            productId: product.id,
+            optionValues
+          });
+        }
+
+        // 创建订单
+        const orderData: OrderApiParams = {
+          userId: userDTO.id,
+          scene: batchOrder.scene || '外带',
+          customerType: '未学生认证业务',
+          disPrice: 0,
+          items,
+          remark: fullRemark
+        };
+
+        // 如果是定时达订单，添加 deliveryInfo
+        if (batchOrder.scene === '定时达' && batchOrder.deliveryInfo) {
+          // 将时间字符串转换为 ISO 8601 格式
+          const timeStr = batchOrder.deliveryInfo.time;
+          let isoTime: string;
+          
+          // 如果已经是 ISO 格式，直接使用
+          if (timeStr.includes('T') || timeStr.includes('+')) {
+            isoTime = timeStr;
+          } else {
+            // 否则转换为 ISO 格式（假设用户输入的是本地时间）
+            const date = new Date(timeStr);
+            if (isNaN(date.getTime())) {
+              throw new Error(`无效的时间格式：${timeStr}，请使用 "YYYY-MM-DD HH:mm" 格式`);
+            }
+            isoTime = date.toISOString();
+          }
+          
+          orderData.deliveryInfo = {
+            school: batchOrder.deliveryInfo.school,
+            address: batchOrder.deliveryInfo.address,
+            time: isoTime,
+            number: batchOrder.deliveryInfo.number
+          };
+        }
+
+        await createOrderInStore({ body: orderData });
+
+        batchImportResults.value.push({
+          success: true,
+          message: `订单 ${index + 1} 创建成功`,
+          orderData: batchOrder
+        });
+
+        batchImportProgress.value++;
+
+      } catch (error: any) {
+        batchImportResults.value.push({
+          success: false,
+          message: `订单 ${index + 1} 失败: ${error.message || error}`,
+          orderData: batchOrder
+        });
+        batchImportProgress.value++;
+      }
+    }
+
+    ElMessage.success(`批量导入完成：成功 ${batchImportResults.value.filter(r => r.success).length}/${batchImportTotal.value}`);
+    await fetchOrders(); // 刷新订单列表
+
+  } catch (error: any) {
+    console.error('批量导入失败:', error);
+    ElMessage.error('JSON 解析失败: ' + error.message);
+  }
+};
+
+const downloadTemplate = () => {
+  const template = {
+    orders: [
+      {
+        customerInfo: {
+          name: "张三",
+          phone: "13800138000"
+        },
+        scene: "外带",
+        deliveryLocation: "北京大学东门",
+        remark: "请快点",
+        items: [
+          {
+            productName: "美式咖啡",
+            options: {
+              "温度": "热",
+              "糖度": "少糖",
+              "杯型": "大杯"
+            }
+          }
+        ]
+      },
+      {
+        scene: "定时达",
+        deliveryInfo: {
+          school: "咖啡—燕园",
+          address: "#7 图书馆南门",
+          time: "2025-11-20 12:45",
+          number: "18156657202"
+        },
+        remark: "需要打包好",
+        items: [
+          {
+            productName: "话梅气泡美式",
+            options: {
+              "温度": "少冰"
+            }
+          }
+        ]
+      }
+    ]
+  };
+
+  const blob = new Blob([JSON.stringify(template, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'batch_orders_template.json';
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+// ==================== XLSX 批量导入订单功能 ====================
+
+const xlsxFile = ref<File | null>(null);
+const xlsxImportProgress = ref(0);
+const xlsxImportTotal = ref(0);
+const xlsxImportResults = ref<Array<{ success: boolean; message: string; orderData?: any }>>([]);
+
+// 处理文件选择
+const handleXlsxFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    xlsxFile.value = target.files[0];
+    ElMessage.success(`已选择文件: ${xlsxFile.value.name}`);
+  }
+};
+
+// 解析饮品字符串，提取商品名称
+// 格式：【类别】商品名：价格
+// 多杯格式：【类别】商品名：价格 | 【类别】商品名：价格 或 【类别】商品名：价格】【类别】商品名：价格
+// 提取方法：找到所有 】 和 ： 之间的内容（可能包含【类别】前缀，需要去除）
+const parseDrinkString = (drinkStr: string): string[] => {
+  if (!drinkStr) return [];
+  
+  const drinks: string[] = [];
+  
+  // 使用正则表达式匹配所有 】 和 ： 之间的内容
+  // 模式：】后面跟任意字符（排除【），直到遇到：
+  const pattern = /】([^：]+?)：/g;
+  let match;
+  
+  while ((match = pattern.exec(drinkStr)) !== null) {
+    let productName = match[1].trim();
+    // 去除可能存在的【类别】前缀（如果有的话）
+    if (productName.includes('【') && productName.includes('】')) {
+      productName = productName.split('】').pop()?.trim() || productName;
+    }
+    if (productName) {
+      drinks.push(productName);
+    }
+  }
+  
+  return drinks;
+};
+
+// 检测温度：检查字符串中是否包含"热"或"冰"
+const detectTemperature = (tempStr: string): string | null => {
+  if (!tempStr) return null;
+  
+  if (tempStr.includes('热')) {
+    return '热';
+  } else if (tempStr.includes('少冰')) {
+    return '少冰';
+  } else if (tempStr.includes('冰')) {
+    return '冰';
+  }
+  
+  return null;
+};
+
+// 检测是否需要燕麦奶
+const shouldAddOatMilk = (oatMilkStr: string): boolean => {
+  if (!oatMilkStr || oatMilkStr.trim() === '') {
+    return false;
+  }
+  
+  // 如果包含"不"或"否"，则不添加燕麦奶
+  if (oatMilkStr.includes('不') || oatMilkStr.includes('否')) {
+    return false;
+  }
+  
+  return true;
+};
+
+// 解析配送地点
+// 格式：北大：二教 或 咖啡—燕园：#7 图书馆南门
+const parseDeliveryLocation = (locationStr: string): { school: string; address: string } => {
+  if (!locationStr) {
+    return { school: '', address: '' };
+  }
+  
+  // 先尝试按 "：" 分割
+  if (locationStr.includes('：')) {
+    const parts = locationStr.split('：');
+    return {
+      school: parts[0].trim(),
+      address: parts[1]?.trim() || ''
+    };
+  }
+  
+  // 如果没有冒号，尝试按 ":" 分割
+  if (locationStr.includes(':')) {
+    const parts = locationStr.split(':');
+    return {
+      school: parts[0].trim(),
+      address: parts[1]?.trim() || ''
+    };
+  }
+  
+  // 如果都没有，整个字符串作为 school
+  return {
+    school: locationStr.trim(),
+    address: ''
+  };
+};
+
+// 处理 XLSX 文件并导入订单
+const processXlsxImport = async () => {
+  if (!xlsxFile.value) {
+    ElMessage.error('请先选择 XLSX 文件');
+    return;
+  }
+  
+  try {
+    // 读取文件
+    const fileData = await xlsxFile.value.arrayBuffer();
+    const workbook = XLSX.read(fileData);
+    
+    // 读取第一个 sheet
+    const firstSheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[firstSheetName];
+    
+    // 转换为 JSON（数组格式，保留原始结构）
+    const data: any[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    
+    if (data.length <= 1) {
+      ElMessage.error('XLSX 文件没有数据行');
+      return;
+    }
+    
+    // 跳过标题行，从第二行开始处理
+    const dataRows = data.slice(1);
+    
+    xlsxImportTotal.value = dataRows.length;
+    xlsxImportProgress.value = 0;
+    xlsxImportResults.value = [];
+    
+    const str = localStorage.getItem(USER_DTO);
+    const userDTO = JSON.parse(str as string) as UserDTO;
+    
+    for (const [index, row] of dataRows.entries()) {
+      try {
+        // 解析每一行
+        // 列索引：0=序号, 1=时间, 2=地点, 3=饮品, 4=冰热, 5=燕麦奶
+        const timeStr = row[1]?.toString().trim();
+        const locationStr = row[2]?.toString().trim();
+        const drinkStr = row[3]?.toString().trim();
+        const tempStr = row[4]?.toString().trim();
+        const oatMilkStr = row[5]?.toString().trim();
+        
+        if (!timeStr || !locationStr || !drinkStr) {
+          throw new Error('缺少必要字段：时间、地点或饮品');
+        }
+        
+        // 解析时间（处理中文冒号）
+        const normalizedTime = timeStr.replace(/：/g, ':');
+        const date = new Date(normalizedTime);
+        if (isNaN(date.getTime())) {
+          throw new Error(`无效的时间格式：${timeStr}`);
+        }
+        const isoTime = date.toISOString();
+        
+        // 解析地点
+        const location = parseDeliveryLocation(locationStr);
+        if (!location.school) {
+          throw new Error(`无效的地点格式：${locationStr}`);
+        }
+        
+        // 解析饮品
+        const productNames = parseDrinkString(drinkStr);
+        if (productNames.length === 0) {
+          throw new Error(`无法解析饮品：${drinkStr}`);
+        }
+        
+        // 检测温度
+        const temperature = detectTemperature(tempStr);
+        
+        // 检测燕麦奶
+        const needOatMilk = shouldAddOatMilk(oatMilkStr);
+        
+        // 构建订单商品列表
+        const items: Array<{ productId: string; optionValues: Record<string, string> }> = [];
+        
+        for (const productName of productNames) {
+          const product = findProductByName(productName);
+          if (!product?.id) {
+            throw new Error(`找不到商品：${productName}`);
+          }
+          
+          const optionValues: Record<string, string> = {};
+          
+          // 添加温度选项
+          if (temperature) {
+            const tempOption = findOptionValueByName('温度', temperature);
+            if (tempOption) {
+              optionValues[tempOption.optionId] = tempOption.uuid;
+            }
+          }
+          
+          // 添加燕麦奶选项
+          if (needOatMilk) {
+            const oatMilkOption = findOptionValueByName('换燕麦奶', '燕麦奶');
+            if (oatMilkOption) {
+              optionValues[oatMilkOption.optionId] = oatMilkOption.uuid;
+            }
+          }
+          
+          items.push({
+            productId: product.id,
+            optionValues
+          });
+        }
+        
+        // 创建订单
+        const orderData: OrderApiParams = {
+          userId: userDTO.id,
+          scene: '定时达',
+          customerType: '未学生认证业务',
+          disPrice: 0,
+          items,
+          deliveryInfo: {
+            school: location.school,
+            address: location.address,
+            time: isoTime,
+            number: '' // XLSX 中没有电话号码，使用空字符串
+          },
+          remark: ''
+        };
+        
+        await createOrderInStore({ body: orderData });
+        
+        xlsxImportResults.value.push({
+          success: true,
+          message: `第 ${index + 2} 行：订单创建成功 (${productNames.join(', ')})`,
+          orderData: { locationStr, drinkStr, tempStr, productNames }
+        });
+        
+        xlsxImportProgress.value++;
+        
+      } catch (error: any) {
+        xlsxImportResults.value.push({
+          success: false,
+          message: `第 ${index + 2} 行失败: ${error.message || error}`,
+          orderData: row
+        });
+        xlsxImportProgress.value++;
+      }
+    }
+    
+    ElMessage.success(`XLSX 导入完成：成功 ${xlsxImportResults.value.filter(r => r.success).length}/${xlsxImportTotal.value}`);
+    await fetchOrders(); // 刷新订单列表
+    
+  } catch (error: any) {
+    console.error('XLSX 导入失败:', error);
+    ElMessage.error('XLSX 文件解析失败: ' + error.message);
+  }
+};
 
 
 </script>
@@ -1165,6 +1686,7 @@ const confirmRefund = async () => {
       <el-button @click="deselectAllOrders" size="small" style="margin-left: 10px;">取消全选</el-button> -->
       <el-button @click="batchPrintOrders" size="small" type="success" :disabled="selectedOrders.length === 0">批量打印</el-button>
       <el-button @click="BatchSupplyOrders" size="small" type="primary" :disabled="selectedOrders.length === 0">批量供餐</el-button>
+      <el-button @click="openBatchImportDialog" size="small" type="warning" style="margin-left: 10px;">批量导入订单</el-button>
     </div>
     
 
@@ -1322,6 +1844,198 @@ const confirmRefund = async () => {
       <template #footer>
         <el-button @click="refundDialogVisible = false">取消</el-button>
         <el-button type="primary" @click="confirmRefund">确认</el-button>
+      </template>
+    </el-dialog>
+
+    <!-- 批量导入订单对话框 -->
+    <el-dialog title="批量导入订单" v-model="batchImportDialogVisible" width="70%">
+      <el-tabs type="border-card">
+        <!-- JSON 导入选项卡 -->
+        <el-tab-pane label="JSON 格式导入">
+          <div style="margin-bottom: 20px;">
+            <el-alert
+              title="使用说明"
+              type="info"
+              :closable="false"
+              show-icon
+            >
+              <template #default>
+                <ol style="margin: 0; padding-left: 20px;">
+                  <li>点击"下载模板"按钮获取 JSON 模板文件</li>
+                  <li>按照模板格式填写订单数据（商品名必须与系统中的商品名完全一致）</li>
+                  <li><strong>外带/堂食订单</strong>：使用 deliveryLocation 字段（会添加到备注中）</li>
+                  <li><strong>定时达订单</strong>：scene 设为 "定时达"，必须填写 deliveryInfo（school, address, time, number）</li>
+                  <li>支持的选项包括：温度（热/冰/少冰）、糖度、杯型等，根据实际商品配置</li>
+                  <li>将编辑好的 JSON 粘贴到下方文本框，点击"开始导入"</li>
+                </ol>
+              </template>
+            </el-alert>
+            <el-button 
+              type="primary" 
+              @click="downloadTemplate" 
+              style="margin-top: 10px;"
+              icon="Download"
+            >
+              下载 JSON 模板
+            </el-button>
+          </div>
+
+          <el-form-item label="JSON 数据">
+            <el-input
+              v-model="batchImportJson"
+              type="textarea"
+              :rows="15"
+              placeholder='粘贴 JSON 数据，格式参考模板'
+            ></el-input>
+          </el-form-item>
+
+          <div v-if="batchImportTotal > 0" style="margin-top: 20px;">
+            <el-progress 
+              :percentage="Math.round((batchImportProgress / batchImportTotal) * 100)"
+              :status="batchImportProgress === batchImportTotal ? 'success' : undefined"
+            ></el-progress>
+            <p style="margin-top: 10px;">
+              进度: {{ batchImportProgress }} / {{ batchImportTotal }}
+            </p>
+          </div>
+
+          <div v-if="batchImportResults.length > 0" style="margin-top: 20px; max-height: 300px; overflow-y: auto;">
+            <h4>导入结果：</h4>
+            <el-alert
+              v-for="(result, index) in batchImportResults"
+              :key="index"
+              :title="result.message"
+              :type="result.success ? 'success' : 'error'"
+              :closable="false"
+              style="margin-bottom: 10px;"
+            >
+              <template #default v-if="result.orderData">
+                <div style="font-size: 12px;">
+                  <div>场景: {{ result.orderData.scene }}</div>
+                  <div>商品: {{ result.orderData.items?.map((i: any) => i.productName).join(', ') }}</div>
+                </div>
+              </template>
+            </el-alert>
+          </div>
+
+          <div style="margin-top: 20px; text-align: right;">
+            <el-button 
+              type="primary" 
+              @click="processBatchImport"
+              :disabled="!batchImportJson || batchImportProgress > 0"
+            >
+              开始导入 JSON
+            </el-button>
+          </div>
+        </el-tab-pane>
+
+        <!-- XLSX 导入选项卡 -->
+        <el-tab-pane label="XLSX 文件导入（定时达订单）">
+          <div style="margin-bottom: 20px;">
+            <el-alert
+              title="使用说明"
+              type="warning"
+              :closable="false"
+              show-icon
+            >
+              <template #default>
+                <ol style="margin: 0; padding-left: 20px;">
+                  <li><strong>仅支持导入定时达订单</strong></li>
+                  <li><strong>XLSX 文件格式要求：</strong>
+                    <ul style="margin-top: 5px;">
+                      <li><strong>第1列</strong>：序号（可忽略）</li>
+                      <li><strong>第2列</strong>：定时达时间
+                        <br>格式示例：<code>2025-11-22 10:00</code> 或 <code>2025-11-22 10：00</code>（支持中文冒号）
+                      </li>
+                      <li><strong>第3列</strong>：配送地点
+                        <br>格式示例：<code>北大：二教</code> 或 <code>咖啡—燕园：#7 图书馆</code>
+                        <br>系统会自动分割为"学校"和"地址"
+                      </li>
+                      <li><strong>第4列</strong>：饮品信息
+                        <br>单杯格式：<code>【美式】葡萄美式：10.8r</code>
+                        <br>多杯格式：<code>【美式】葡萄美式：10.8r | 【奶咖】香蕉拿铁：10.8r</code>
+                        <br>或：<code>【美式】葡萄美式：10.8r】【奶咖】香蕉拿铁：10.8r</code>
+                        <br><em>提取规则：查找 】 和 ： 之间的文字作为商品名</em>
+                      </li>
+                      <li><strong>第5列</strong>：冰热选项
+                        <br>自动识别关键字：<code>热</code>、<code>冰</code>、<code>少冰</code>
+                        <br>示例：<code>冰的！</code>、<code>热的！</code>
+                      </li>
+                      <li><strong>第6列</strong>：燕麦奶选项
+                        <br>规则：字段非空且不包含"不"或"否"时，自动添加"换燕麦奶"选项
+                        <br>示例：<code>不要！</code>（不添加）、<code>要</code>（添加）
+                      </li>
+                    </ul>
+                  </li>
+                  <li><strong>重要提示：</strong>
+                    <ul style="margin-top: 5px;">
+                      <li>商品名必须与系统中的商品名<strong>完全一致</strong></li>
+                      <li>系统会自动匹配商品和选项，找不到的商品将导致该订单导入失败</li>
+                      <li>支持一行多杯，每杯可以有不同的商品</li>
+                    </ul>
+                  </li>
+                  <li>选择 XLSX 文件后，点击"开始导入 XLSX"</li>
+                </ol>
+              </template>
+            </el-alert>
+          </div>
+
+          <el-form-item label="选择 XLSX 文件">
+            <input 
+              type="file" 
+              accept=".xlsx,.xls" 
+              @change="handleXlsxFileChange"
+              style="margin-bottom: 10px;"
+            />
+            <div v-if="xlsxFile" style="color: #67c23a; margin-top: 5px;">
+              已选择：{{ xlsxFile.name }}
+            </div>
+          </el-form-item>
+
+          <div v-if="xlsxImportTotal > 0" style="margin-top: 20px;">
+            <el-progress 
+              :percentage="Math.round((xlsxImportProgress / xlsxImportTotal) * 100)"
+              :status="xlsxImportProgress === xlsxImportTotal ? 'success' : undefined"
+            ></el-progress>
+            <p style="margin-top: 10px;">
+              进度: {{ xlsxImportProgress }} / {{ xlsxImportTotal }}
+            </p>
+          </div>
+
+          <div v-if="xlsxImportResults.length > 0" style="margin-top: 20px; max-height: 300px; overflow-y: auto;">
+            <h4>导入结果：</h4>
+            <el-alert
+              v-for="(result, index) in xlsxImportResults"
+              :key="index"
+              :title="result.message"
+              :type="result.success ? 'success' : 'error'"
+              :closable="false"
+              style="margin-bottom: 10px;"
+            >
+              <template #default v-if="result.orderData">
+                <div style="font-size: 12px;">
+                  <div v-if="result.orderData.locationStr">地点: {{ result.orderData.locationStr }}</div>
+                  <div v-if="result.orderData.drinkStr">饮品: {{ result.orderData.drinkStr }}</div>
+                  <div v-if="result.orderData.productNames">解析出: {{ result.orderData.productNames.join(', ') }}</div>
+                </div>
+              </template>
+            </el-alert>
+          </div>
+
+          <div style="margin-top: 20px; text-align: right;">
+            <el-button 
+              type="primary" 
+              @click="processXlsxImport"
+              :disabled="!xlsxFile || xlsxImportProgress > 0"
+            >
+              开始导入 XLSX
+            </el-button>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+
+      <template #footer>
+        <el-button @click="batchImportDialogVisible = false">关闭</el-button>
       </template>
     </el-dialog>
 

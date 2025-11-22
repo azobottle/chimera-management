@@ -1,0 +1,3975 @@
+[
+  {
+    "id": "68b05b7b3dc7c2220e448bfe",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "GPA 4.00",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b055d43dc7c2220e448bec",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "Merry Christmas",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68243a0e3dc7c2220e448bae",
+    "cateId": "68230b068783181b8a9b941d",
+    "name": "NFC果汁",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_juice.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_juice_small.png",
+    "price": 1000,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "NFC Juice",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "68243a2a3dc7c2220e448baf": [
+        {
+          "uuid": "1747204634895",
+          "value": "苹果",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747204639642",
+          "value": "葡萄",
+          "priceAdjustment": 0
+        }
+      ],
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747206635133",
+          "value": "常温",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": true,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 29
+  },
+  {
+    "id": "68ed278f2d07341865ea3de0",
+    "cateId": "682442c63dc7c2220e448bc2",
+    "name": "[万圣节限定] 元气弦月卡",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_yueka2.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_yueka2_small.png",
+    "price": 9000,
+    "stuPrice": 0,
+    "describe": "您将在24小时内接收到志愿者发放的9张10元券和2张5元券，有效期一年",
+    "short_desc": "充值90元送10元，相当于九折，适合一般用户",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": true,
+    "rank": -20000
+  },
+  {
+    "id": "68ed27302d07341865ea3ddf",
+    "cateId": "682442c63dc7c2220e448bc2",
+    "name": "[万圣节限定] 元气满月卡",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_yueka1.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_yueka1_small.png",
+    "price": 15000,
+    "stuPrice": 0,
+    "describe": "您将在24小时内接收到志愿者发放的15张10元券和10张5元券，有效期永久",
+    "short_desc": "充值150元送50元，相当于七五折，适合重度用户",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": true,
+    "rank": -20000
+  },
+  {
+    "id": "68243cbe3dc7c2220e448bb3",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "[云南限定]  奶白酒",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_mw.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_mw_small.png",
+    "price": 1000,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "牛奶+米酿",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -297
+  },
+  {
+    "id": "68b05df43dc7c2220e448c10",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "[浙江限定] 抹茶干酪",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_matcha.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_matcha_small.png",
+    "price": 1800,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "浓厚，浓厚，浓厚",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "68f82e052d07341865ea42b6": [
+        {
+          "uuid": "1761095117352",
+          "value": "牛奶",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1761095164635",
+          "value": "椰子水",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": -300
+  },
+  {
+    "id": "68b05d4b3dc7c2220e448c0a",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "[福建限定] 冬瓜茶美式",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_kuang3.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_kuang3_small.jpg",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "既是茶，又是咖啡",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "682324671f0a6866818707fd": [
+        {
+          "uuid": "1747133538707",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760493211420",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": -299
+  },
+  {
+    "id": "68b05cbf3dc7c2220e448c04",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "[辽宁限定] 微醺莓莓奶醉",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_kuang4.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_kuang4_small.jpg",
+    "price": 1500,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "比草莓牛奶更醇厚、更浓烈",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": -298
+  },
+  {
+    "id": "68b054173dc7c2220e448beb",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "一体的清晨",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68fa3cf22d07341865ea43a1",
+    "cateId": "6823238a1f0a6866818707fa",
+    "name": "三重柠檬巴斯克(八寸切角)",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_cake3.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_cake3_small.jpg",
+    "price": 2100,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "68243fe63dc7c2220e448bbf": [
+        {
+          "uuid": "1747206082507",
+          "value": "切角",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -1002
+  },
+  {
+    "id": "68b05e553dc7c2220e448c14",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "乌龙姜姜奶枣",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68efd22d2d07341865ea3eed",
+    "cateId": "682442c63dc7c2220e448bc2",
+    "name": "二人同行",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_taocan1.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_taocan1_small.png",
+    "price": 2000,
+    "stuPrice": 0,
+    "describe": "和直接选购相比优惠2~6元",
+    "short_desc": "根据实时更新的销冠前四搭配的二人优惠套餐，欢迎用脚投票~",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "68efd2e22d07341865ea3eee": [
+        {
+          "uuid": "1760547533313",
+          "value": "苹果美式",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760547543704",
+          "value": "葡萄美式",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760547831894",
+          "value": "香蕉拿铁",
+          "priceAdjustment": 0
+        }
+      ],
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        }
+      ],
+      "68efd2ef2d07341865ea3eef": [
+        {
+          "uuid": "1760547555736",
+          "value": "苹果美式",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760547566036",
+          "value": "葡萄美式",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760547965442",
+          "value": "香蕉拿铁",
+          "priceAdjustment": 0
+        }
+      ],
+      "68f07fe02d07341865ea3f24": [
+        {
+          "uuid": "1760591802389",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760591814892",
+          "value": "热",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": true,
+    "rank": 500
+  },
+  {
+    "id": "68ae7d7d3dc7c2220e448be9",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "你妈叫你秋天多喝热水",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1000,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Pear Americano",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b05c003dc7c2220e448c01",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "内蒙古限定 [苏台茄]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b05e3b3dc7c2220e448c13",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "冬吃萝卜夏吃姜",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68ec590d2d07341865ea3cc6",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "冰与火之歌",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_18.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_18_small.JPG",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "白朗姆,金酒,蓝橙利口酒,柠檬汁,雪碧,红石榴糖浆",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -18
+  },
+  {
+    "id": "68f057912d07341865ea3f0b",
+    "cateId": "68f057a32d07341865ea3f0c",
+    "name": "冰杯",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_ice.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_ice_small.png",
+    "price": 100,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "1块钱是包材的成本~",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": true,
+    "rank": 0
+  },
+  {
+    "id": "68f979c82d07341865ea4341",
+    "cateId": "68f898ce2d07341865ea42f6",
+    "name": "冰滴",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_icedrip.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_icedrip_small.png",
+    "price": 1600,
+    "stuPrice": 0,
+    "describe": "像化学家一样喝咖啡",
+    "short_desc": "Ice Drip",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 3,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": -10000
+  },
+  {
+    "id": "6911fabe2d07341865ea4aa3",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "冰糖葫芦",
+    "imgURL": "https://chimeracoffee.top/product/webwxgetmsgimg (2).jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/webwxgetmsgimg (2)_small.jpg",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "手作山楂泥、威士忌、蔓越莓汁、柠檬汁、红石榴糖浆",
+    "short_desc": "vol：★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 2
+  },
+  {
+    "id": "68b0563f3dc7c2220e448bed",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "冰糖葫芦美式",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1000,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68ec51b72d07341865ea3cbc",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "初恋",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_12.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_12_small.JPG",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "伏特加,金酒,白朗姆,红石榴糖浆,柠檬水溶C",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -12
+  },
+  {
+    "id": "68ec51962d07341865ea3cba",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "加州之恋",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_8.jpeg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_8_small.jpeg",
+    "price": 3600,
+    "stuPrice": 0,
+    "describe": "红石榴糖浆,金酒,橙汁,雪碧",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -11
+  },
+  {
+    "id": "690b53682d07341865ea48eb",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "单身狗Atomic Dog",
+    "imgURL": "https://chimeracoffee.top/product/11.11.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/11.11_small.jpg",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "蜜瓜利口酒、金酒、薄荷糖浆、柠檬汁",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 0
+  },
+  {
+    "id": "68ec4fca2d07341865ea3cb0",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "博雅",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_2.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_2_small.JPG",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "百利甜,伏特加,牛奶,乌龙茶",
+    "short_desc": "vol：★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -2
+  },
+  {
+    "id": "68dffce83dc7c2220e448c2f",
+    "cateId": "68230b068783181b8a9b941d",
+    "name": "厚椰乳",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_coconutmilk.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_coconutmilk_small.png",
+    "price": 900,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Coconut Milk",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747206635133",
+          "value": "常温",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": true,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 27
+  },
+  {
+    "id": "68efd33c2d07341865ea3ef0",
+    "cateId": "682442c63dc7c2220e448bc2",
+    "name": "双拼盲盒",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_taocan2.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_taocan2_small.png",
+    "price": 1600,
+    "stuPrice": 0,
+    "describe": "5%概率获得待上架新品",
+    "short_desc": "两杯随机饮品（绝对不是两杯美式噢）",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "68f049442d07341865ea3eff": [
+        {
+          "uuid": "1760577820568",
+          "value": "加杠杆",
+          "priceAdjustment": 200
+        },
+        {
+          "uuid": "1760577839851",
+          "value": "不加杠杆",
+          "priceAdjustment": 0
+        }
+      ],
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        }
+      ],
+      "68f07fe02d07341865ea3f24": [
+        {
+          "uuid": "1760591802389",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760591814892",
+          "value": "热",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": true,
+    "rank": 499
+  },
+  {
+    "id": "68ec51072d07341865ea3cb6",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "可乐桶",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_8.jpeg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_8_small.jpeg",
+    "price": 3400,
+    "stuPrice": 0,
+    "describe": "威士忌,可乐,柠檬汁",
+    "short_desc": "vol：★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -8
+  },
+  {
+    "id": "68dffc083dc7c2220e448c2c",
+    "cateId": "682323821f0a6866818707f9",
+    "name": "可可",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_cocoa2.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_cocoa2_small.JPG",
+    "price": 1100,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Cocoa",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "691c684c2d07341865ea4c95": [
+        {
+          "uuid": "1763469322192",
+          "value": "牛奶",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1763469327279",
+          "value": "燕麦奶",
+          "priceAdjustment": 300
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 49
+  },
+  {
+    "id": "68ec583c2d07341865ea3cc2",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "吉姆雷特",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_14.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_14_small.JPG",
+    "price": 3600,
+    "stuPrice": 0,
+    "describe": "金酒,柠檬汁,甘蔗糖浆",
+    "short_desc": "vol：★★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -14
+  },
+  {
+    "id": "68b05e1d3dc7c2220e448c12",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "吉林限定 [玉米熟了]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68dffb3e3dc7c2220e448c2a",
+    "cateId": "682323621f0a6866818707f7",
+    "name": "咸摩卡",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_smocha.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_smocha_small.png",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Salty Mocha",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "68ec7e5d2d07341865ea3ceb": [
+        {
+          "uuid": "1760329261150",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760329288223",
+          "value": "减半",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760330852349",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ],
+      "691c684c2d07341865ea4c95": [
+        {
+          "uuid": "1763469322192",
+          "value": "牛奶",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1763469327279",
+          "value": "燕麦奶",
+          "priceAdjustment": 300
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 63
+  },
+  {
+    "id": "68ec58752d07341865ea3cc3",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "嗨棒",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_15.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_15_small.JPG",
+    "price": 3400,
+    "stuPrice": 0,
+    "describe": "威士忌,气泡水",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -15
+  },
+  {
+    "id": "68b05d363dc7c2220e448c09",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "四川限定 [青花椒气泡美式]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b057143dc7c2220e448bf0",
+    "cateId": "68f4ce8e2d07341865ea4097",
+    "name": "围炉夜话",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_weiluyehua.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_weiluyehua_small.png",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "围炉橙梅香，共叙冬夜暖",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68ec580f2d07341865ea3cc1",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "大吉利",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_13.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_13_small.JPG",
+    "price": 3600,
+    "stuPrice": 0,
+    "describe": "白朗姆,柠檬汁,甘蔗糖浆",
+    "short_desc": "vol：★★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -13
+  },
+  {
+    "id": "68ec58932d07341865ea3cc4",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "失眠药",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_16.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_16_small.JPG",
+    "price": 3600,
+    "stuPrice": 0,
+    "describe": "威士忌,牛奶,甘蔗糖浆",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -16
+  },
+  {
+    "id": "68b059ae3dc7c2220e448bf7",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "好事花生拿铁",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68ec50742d07341865ea3cb4",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "威士忌酸（无蛋清版）",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_6.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_6_small.JPG",
+    "price": 3600,
+    "stuPrice": 0,
+    "describe": "威士忌,柠檬汁,甘蔗糖浆",
+    "short_desc": "vol：★★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -6
+  },
+  {
+    "id": "68b05bc53dc7c2220e448c00",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "小雪人",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1600,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b05a083dc7c2220e448bf9",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "山楂冰酪",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b05eb33dc7c2220e448c18",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "巴西柠檬水",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b0585b3dc7c2220e448bf5",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "幽灵拿铁",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b05d603dc7c2220e448c0b",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "广东限定 [岭南的荔枝]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b05d053dc7c2220e448c07",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "广西限定 [芭乐美式]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68fa3ca42d07341865ea43a0",
+    "cateId": "6823238a1f0a6866818707fa",
+    "name": "开心果巴斯克(八寸切角)",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_cake2.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_cake2_small.jpg",
+    "price": 2300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "68243fe63dc7c2220e448bbf": [
+        {
+          "uuid": "1747206082507",
+          "value": "切角",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -1001
+  },
+  {
+    "id": "68f8a2972d07341865ea42fc",
+    "cateId": "68230b018783181b8a9b941c",
+    "name": "德式",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_pfeffer.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_pfeffer_small.png",
+    "price": 900,
+    "stuPrice": 0,
+    "describe": "黑胡椒+白醋，是液体沙拉",
+    "short_desc": "Patricks Kaffee",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 99
+  },
+  {
+    "id": "68ae7d0c3dc7c2220e448be8",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "怡泉C美式",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 900,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Schweppes C Americano",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68fe382b2d07341865ea44c3",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "恶魔之眼",
+    "imgURL": "https://chimeracoffee.top/product/MEITU_20251026_225443856.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/MEITU_20251026_225443856_small.jpg",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "伏特加、柠檬汁、红石榴糖浆、蔓越莓",
+    "short_desc": "vol：★★",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 0
+  },
+  {
+    "id": "68230b368783181b8a9b941e",
+    "cateId": "68230b018783181b8a9b941c",
+    "name": "意式",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_espresso2.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_espresso2_small.png",
+    "price": 800,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Espresso",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 100
+  },
+  {
+    "id": "682438cd3dc7c2220e448ba8",
+    "cateId": "682323621f0a6866818707f7",
+    "name": "拿铁",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_latte.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_latte_small.png",
+    "price": 1000,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Latte",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "68ec7e5d2d07341865ea3ceb": [
+        {
+          "uuid": "1760329261150",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760329288223",
+          "value": "减半",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760330852349",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ],
+      "691c684c2d07341865ea4c95": [
+        {
+          "uuid": "1763469322192",
+          "value": "牛奶",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1763469327279",
+          "value": "燕麦奶",
+          "priceAdjustment": 300
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 70
+  },
+  {
+    "id": "68fa3d142d07341865ea43a2",
+    "cateId": "6823238a1f0a6866818707fa",
+    "name": "捣蛋南瓜巴斯克(八寸切角)",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_cake4.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_cake4_small.jpg",
+    "price": 2300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "68243fe63dc7c2220e448bbf": [
+        {
+          "uuid": "1747206082507",
+          "value": "切角",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -1003
+  },
+  {
+    "id": "68f4d0e02d07341865ea4098",
+    "cateId": "68230b068783181b8a9b941d",
+    "name": "斑斓牛奶",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_pandan.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_pandan_small.png",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Pandan Milk",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747206635133",
+          "value": "常温",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 25
+  },
+  {
+    "id": "68b05dce3dc7c2220e448c0e",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "新疆限定 [葡萄朗姆拿铁]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1500,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b05de33dc7c2220e448c0f",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "新疆限定 [葡萄气泡]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1100,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68ec58c32d07341865ea3cc5",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "暮光之城（无酒精）",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_17.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_17_small.JPG",
+    "price": 2800,
+    "stuPrice": 0,
+    "describe": "橙汁,红石榴糖浆,雪碧,养乐多",
+    "short_desc": "vol：/",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -17
+  },
+  {
+    "id": "68f4d17c2d07341865ea409a",
+    "cateId": "68230b068783181b8a9b941d",
+    "name": "板栗牛奶",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_chestnut.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_chestnut_small.png",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Chestnut Milk",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747206635133",
+          "value": "常温",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 25
+  },
+  {
+    "id": "68b05a243dc7c2220e448bfa",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "极地冰川",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_kuang2.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_kuang2_small.jpg",
+    "price": 1500,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "蓝柑薄荷风味生椰拿铁,海盐奶盖",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": -400
+  },
+  {
+    "id": "68f899fc2d07341865ea42f7",
+    "cateId": "68f898ce2d07341865ea42f6",
+    "name": "果味冷萃(六件套)",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_coldbrew.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_coldbrew_small.png",
+    "price": 6300,
+    "stuPrice": 0,
+    "describe": "除经典的苹果、葡萄外，还有平时喝不到的芒果和芭乐两款",
+    "short_desc": "六件套，七天装",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "68f89a6f2d07341865ea42f8": [
+        {
+          "uuid": "1761122871929",
+          "value": "两种口味(苹果,葡萄)",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1761122875913",
+          "value": "四种口味(苹果,葡萄,芒果,芭乐)",
+          "priceAdjustment": 600
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": -10000
+  },
+  {
+    "id": "68dffe583dc7c2220e448c31",
+    "cateId": "68230b068783181b8a9b941d",
+    "name": "果汁气泡水",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_sjuice.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_sjuice_small.png",
+    "price": 900,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Sparkling Juice",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "68243a2a3dc7c2220e448baf": [
+        {
+          "uuid": "1747204634895",
+          "value": "苹果",
+          "priceAdjustment": 0
+        }
+      ],
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": true,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 28
+  },
+  {
+    "id": "68b05e9c3dc7c2220e448c17",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "柠檬酪酪",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "6900c5e52d07341865ea4617",
+    "cateId": "682323821f0a6866818707f9",
+    "name": "树莓可可",
+    "imgURL": "https://chimeracoffee.top/product/WechatIMG13.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/WechatIMG13_small.jpg",
+    "price": 1600,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": 2000
+  },
+  {
+    "id": "68b0580d3dc7c2220e448bf3",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "桂花拿铁",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68fa34bb2d07341865ea4394",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "桂花热酒酿",
+    "imgURL": "https://chimeracoffee.top/product/WechatIMG10215.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/WechatIMG10215_small.jpg",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "醪糟、热牛奶、桂花蜜、干桂花",
+    "short_desc": "vol：★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 0
+  },
+  {
+    "id": "68dffbcf3dc7c2220e448c2b",
+    "cateId": "682323621f0a6866818707f7",
+    "name": "桂花米酿拿铁",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_orwlatte.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_orwlatte_small.png",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Osmanthus Rice Wine Latte",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "68ec7e5d2d07341865ea3ceb": [
+        {
+          "uuid": "1760329261150",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760329288223",
+          "value": "减半",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760330852349",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ],
+      "691c684c2d07341865ea4c95": [
+        {
+          "uuid": "1763469322192",
+          "value": "牛奶",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1763469327279",
+          "value": "燕麦奶",
+          "priceAdjustment": 300
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 64
+  },
+  {
+    "id": "68dffc9e3dc7c2220e448c2e",
+    "cateId": "68230b068783181b8a9b941d",
+    "name": "椰子水",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_coconutwater.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_coconutwater_small.png",
+    "price": 800,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Coconut Water",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747206635133",
+          "value": "常温",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": true,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 30
+  },
+  {
+    "id": "682437a43dc7c2220e448ba4",
+    "cateId": "68230b018783181b8a9b941c",
+    "name": "椰青美式",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_cwamericano.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_cwamericano_small.png",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Coconut Water Americano",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "68ec7e5d2d07341865ea3ceb": [
+        {
+          "uuid": "1760329261150",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760329288223",
+          "value": "减半",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760330852349",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 98
+  },
+  {
+    "id": "68b05c333dc7c2220e448c02",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "江苏限定 [米店]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b05b373dc7c2220e448bfd",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "河西走廊",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b05e083dc7c2220e448c11",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "浙江限定 [苦抹]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1600,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b05dbb3dc7c2220e448c0d",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "海南限定 [菠萝的海]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b05d763dc7c2220e448c0c",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "海南限定 [菠萝酒心巧克力]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b056a33dc7c2220e448bee",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "海底世界美式",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b05cdb3dc7c2220e448c05",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "澳门限定 [澳挞拿铁]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1500,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68b057e83dc7c2220e448bf2",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "火山熔岩拿铁",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "6908a2a92d07341865ea47fa",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "热托蒂Hot Toddy",
+    "imgURL": "https://chimeracoffee.top/product/webwxgetmsgimg.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/webwxgetmsgimg_small.jpg",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "威士忌、蜂蜜、柠檬汁、现切苹果片",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 20
+  },
+  {
+    "id": "68f507252d07341865ea40d9",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "热红酒",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_mulledwine.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_mulledwine_small.JPG",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "红葡萄酒、苹果、橙子、肉桂棒、丁香",
+    "short_desc": "vol：★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -1
+  },
+  {
+    "id": "68fe35fe2d07341865ea44bd",
+    "cateId": "682323821f0a6866818707f9",
+    "name": "焦糖南瓜肉桂拿铁",
+    "imgURL": "https://chimeracoffee.top/product/WechatIMG12.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/WechatIMG12_small.jpg",
+    "price": 1900,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": 2000
+  },
+  {
+    "id": "68fa3c5e2d07341865ea439f",
+    "cateId": "6823238a1f0a6866818707fa",
+    "name": "焦糖红茶栗子巴斯克(八寸切角)",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_cake1.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_cake1_small.jpg",
+    "price": 2100,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "68243fe63dc7c2220e448bbf": [
+        {
+          "uuid": "1747206082507",
+          "value": "切角",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -1000
+  },
+  {
+    "id": "68b056d33dc7c2220e448bef",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "玫瑰椰子糖美式",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_kuang1.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_kuang1_small.jpg",
+    "price": 1500,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "椰青美式,(令人迷醉的)玫瑰奶盖",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": -400
+  },
+  {
+    "id": "68b05cf33dc7c2220e448c06",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "甘肃限定 [杏会]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68dffa573dc7c2220e448c27",
+    "cateId": "682323621f0a6866818707f7",
+    "name": "生椰拿铁",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_cmlatte.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_cmlatte_small.png",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Coconut Milk Latte",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "68ec7e5d2d07341865ea3ceb": [
+        {
+          "uuid": "1760329261150",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760329288223",
+          "value": "减半",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760330852349",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ],
+      "691c684c2d07341865ea4c95": [
+        {
+          "uuid": "1763469322192",
+          "value": "牛奶",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1763469327279",
+          "value": "燕麦奶",
+          "priceAdjustment": 300
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 67
+  },
+  {
+    "id": "68ec50212d07341865ea3cb2",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "秘密",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_4.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_4_small.JPG",
+    "price": 3600,
+    "stuPrice": 0,
+    "describe": "白朗姆,气泡水,红石榴糖浆,柠檬汁",
+    "short_desc": "vol：★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -4
+  },
+  {
+    "id": "68ec4ff32d07341865ea3cb1",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "紫荆",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_3.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_3_small.JPG",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "伏特加,葡萄汁,柠檬水溶C",
+    "short_desc": "vol：★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -3
+  },
+  {
+    "id": "68f4d15c2d07341865ea4099",
+    "cateId": "68230b068783181b8a9b941d",
+    "name": "紫薯牛奶",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_sp.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_sp_small.png",
+    "price": 1100,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Sweet Potato Milk",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747206635133",
+          "value": "常温",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 25
+  },
+  {
+    "id": "68dffb033dc7c2220e448c29",
+    "cateId": "682323621f0a6866818707f7",
+    "name": "红枣拿铁",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_jujubelatte.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_jujubelatte_small.png",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Jujube Latte",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "68ec7e5d2d07341865ea3ceb": [
+        {
+          "uuid": "1760329261150",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760329288223",
+          "value": "减半",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760330852349",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ],
+      "691c684c2d07341865ea4c95": [
+        {
+          "uuid": "1763469322192",
+          "value": "牛奶",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1763469327279",
+          "value": "燕麦奶",
+          "priceAdjustment": 300
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 65
+  },
+  {
+    "id": "6911ddd72d07341865ea4a8f",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "红茶热可可（可备注是否加肉桂粉）",
+    "imgURL": "https://chimeracoffee.top/product/webwxgetmsgimg (1).jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/webwxgetmsgimg (1)_small.jpg",
+    "price": 2800,
+    "stuPrice": 0,
+    "describe": "巧克力、牛奶、红茶、可可",
+    "short_desc": "vol：/",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 1
+  },
+  {
+    "id": "6824372b3dc7c2220e448ba2",
+    "cateId": "68230b018783181b8a9b941c",
+    "name": "美式",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_americano.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_americano_small.png",
+    "price": 800,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Americano",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "68ec7e5d2d07341865ea3ceb": [
+        {
+          "uuid": "1760329261150",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760329288223",
+          "value": "减半",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760330852349",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 99
+  },
+  {
+    "id": "68ec50382d07341865ea3cb3",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "自由古巴",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_8.jpeg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_8_small.jpeg",
+    "price": 3600,
+    "stuPrice": 0,
+    "describe": "白朗姆,柠檬汁,可乐",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -5
+  },
+  {
+    "id": "68dffd2c3dc7c2220e448c30",
+    "cateId": "68230b068783181b8a9b941d",
+    "name": "芒果椰乳",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_mangococonutmilk.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_mangococonutmilk_small.png",
+    "price": 900,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Mango Coconut Milk",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747206635133",
+          "value": "常温",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": true,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 26
+  },
+  {
+    "id": "68f395ce2d07341865ea4073",
+    "cateId": "682323821f0a6866818707f9",
+    "name": "苹果奶绿",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_applericano.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_applericano_small.png",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Apple Milk Tea",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": true,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 45
+  },
+  {
+    "id": "68dffa1d3dc7c2220e448c26",
+    "cateId": "68230b018783181b8a9b941c",
+    "name": "苹果气泡美式",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_apamericano.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_apamericano_small.png",
+    "price": 1100,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Apple Sparkling Americano",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "68ec7e5d2d07341865ea3ceb": [
+        {
+          "uuid": "1760329261150",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760329288223",
+          "value": "减半",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760330852349",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 95
+  },
+  {
+    "id": "691488632d07341865ea4b65",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "苹果热橙茶",
+    "imgURL": "https://chimeracoffee.top/product/1112g.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/1112g_small.jpg",
+    "price": 2800,
+    "stuPrice": 0,
+    "describe": "苹果片、橙子片、俄罗斯 Greenfield 红茶、冰糖",
+    "short_desc": "vol：/",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 3
+  },
+  {
+    "id": "68e8f97a2d07341865ea3be6",
+    "cateId": "68230b018783181b8a9b941c",
+    "name": "苹果美式",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_applericano.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_applericano_small.jpg",
+    "price": 1100,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Applericano",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "68ec7e5d2d07341865ea3ceb": [
+        {
+          "uuid": "1760329261150",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760329288223",
+          "value": "减半",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760330852349",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 96
+  },
+  {
+    "id": "691dd5602d07341865ea4ce9",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "荔枝金Lychee Gin",
+    "imgURL": "https://chimeracoffee.top/product/tg.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/tg_small.jpg",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "荔枝汁、金酒、柠檬汁",
+    "short_desc": "vol：★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 3
+  },
+  {
+    "id": "68b05e7b3dc7c2220e448c16",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "莓莓抹茶白巧",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1600,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68ec51492d07341865ea3cb8",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "落日飞车",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_10.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_10_small.JPG",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "伏特加,白朗姆,金酒,红石榴糖浆,橙汁,气泡水",
+    "short_desc": "vol：★★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -10
+  },
+  {
+    "id": "682437c73dc7c2220e448ba5",
+    "cateId": "68230b018783181b8a9b941c",
+    "name": "葡萄美式",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_grapericano.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_grapericano_small.png",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Grapericano",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "68ec7e5d2d07341865ea3ceb": [
+        {
+          "uuid": "1760329261150",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760329288223",
+          "value": "减半",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760330852349",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 97
+  },
+  {
+    "id": "68243d483dc7c2220e448bb6",
+    "cateId": "682323821f0a6866818707f9",
+    "name": "葡萄茉莉",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_grapejasmine.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_grapejasmine_small.jpg",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Grape Jasmine Tea",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 46
+  },
+  {
+    "id": "68f4cdfa2d07341865ea4096",
+    "cateId": "682323821f0a6866818707f9",
+    "name": "蓝莓肉桂苏打",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_bcsoda.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_bcsoda_small.png",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Blueberry Cinnamon Soda",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 28
+  },
+  {
+    "id": "68dffc2c3dc7c2220e448c2d",
+    "cateId": "682323821f0a6866818707f9",
+    "name": "薄荷奶绿",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_jasminemilktea.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_jasminemilktea_small.png",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Peppermint Milk Tea",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": true,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 47
+  },
+  {
+    "id": "68ec4ecb2d07341865ea3cad",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "螺丝起子",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_1.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_1_small.JPG",
+    "price": 3600,
+    "stuPrice": 0,
+    "describe": "伏特加,橙汁",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -2
+  },
+  {
+    "id": "68ec50b62d07341865ea3cb5",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "血色浪漫",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_7.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_7_small.JPG",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "威士忌,柠檬汁,橙汁,红石榴糖浆",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -7
+  },
+  {
+    "id": "68fe378a2d07341865ea44c1",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "血色禁忌（血浆袋）",
+    "imgURL": "https://chimeracoffee.top/product/MEITU_20251026_225420449.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/MEITU_20251026_225420449_small.jpg",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "伏特加、柠檬汁、红石榴糖浆、蔓越莓",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 0
+  },
+  {
+    "id": "68ae7cc33dc7c2220e448be7",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "话梅气泡美式",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_plum.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_plum_small.png",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "老盐话梅席卷口腔！",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": -401
+  },
+  {
+    "id": "68b059453dc7c2220e448bf6",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "豆乳拿铁-农场主拿铁",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_soy.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_soy_small.png",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "豆控狂喜，喝完变成农场主了",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": -402
+  },
+  {
+    "id": "68ec59302d07341865ea3cc7",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "迈阿密沙滩",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_19.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_19_small.JPG",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "白朗姆,养乐多,葡萄气泡水",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -19
+  },
+  {
+    "id": "68b05d183dc7c2220e448c08",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "重庆限定 [豆奶拿铁]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68ec51312d07341865ea3cb7",
+    "cateId": "6823239a1f0a6866818707fb",
+    "name": "金台夕照",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_9.JPG",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_9_small.JPG",
+    "price": 3800,
+    "stuPrice": 0,
+    "describe": "金酒,伏特加,乌龙茶,柠檬水溶C",
+    "short_desc": "vol：★★",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": -9
+  },
+  {
+    "id": "68b05e6a3dc7c2220e448c15",
+    "cateId": "68f4ce8e2d07341865ea4097",
+    "name": "阿婆梅子酪",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_apo.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_apo_small.png",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "梅香茶乳温柔交融，一口回到阿婆院落",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": 1
+  },
+  {
+    "id": "68b05af93dc7c2220e448bfc",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "阿尔卑斯",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68fa4efe2d07341865ea43b6",
+    "cateId": "682442c63dc7c2220e448bc2",
+    "name": "随心配",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 2800,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "68efd2e22d07341865ea3eee": [
+        {
+          "uuid": "1760547533313",
+          "value": "苹果美式",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760547543704",
+          "value": "葡萄美式",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760547831894",
+          "value": "香蕉拿铁",
+          "priceAdjustment": 0
+        }
+      ],
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        }
+      ],
+      "68fa4f972d07341865ea43b7": [
+        {
+          "uuid": "1761234741703",
+          "value": "红茶栗子",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1761234798509",
+          "value": "香草",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1761234802527",
+          "value": "柠檬",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1761234811326",
+          "value": "巧克力",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": true,
+    "rank": 498
+  },
+  {
+    "id": "68b05a753dc7c2220e448bfb",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "雨过天青",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68dff7c93dc7c2220e448c25",
+    "cateId": "68230b018783181b8a9b941c",
+    "name": "香柚气泡美式",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_psamericano.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_psamericano_small.png",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Pomelo Sparkling Americano",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "68ec7e5d2d07341865ea3ceb": [
+        {
+          "uuid": "1760329261150",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760329288223",
+          "value": "减半",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760330852349",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": true,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 94
+  },
+  {
+    "id": "68dffaa53dc7c2220e448c28",
+    "cateId": "682323621f0a6866818707f7",
+    "name": "香蕉拿铁",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_bananalatte.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_bananalatte_small.png",
+    "price": 1200,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Banana Latte",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ],
+      "68ec7e5d2d07341865ea3ceb": [
+        {
+          "uuid": "1760329261150",
+          "value": "加倍",
+          "priceAdjustment": 400
+        },
+        {
+          "uuid": "1760329288223",
+          "value": "减半",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1760330852349",
+          "value": "正常",
+          "priceAdjustment": 0
+        }
+      ],
+      "691c684c2d07341865ea4c95": [
+        {
+          "uuid": "1763469322192",
+          "value": "牛奶",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1763469327279",
+          "value": "燕麦奶",
+          "priceAdjustment": 300
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 66
+  },
+  {
+    "id": "68b057c83dc7c2220e448bf1",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "香蕉燕麦拿铁",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1400,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "68243c4e3dc7c2220e448bb2",
+    "cateId": "68230b068783181b8a9b941d",
+    "name": "香蕉牛奶",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_bananamilk.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_bananamilk_small.png",
+    "price": 1000,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Banana Milk",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747206635133",
+          "value": "常温",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 24
+  },
+  {
+    "id": "682439553dc7c2220e448bab",
+    "cateId": "68230b068783181b8a9b941d",
+    "name": "鲜牛奶",
+    "imgURL": "https://chimeracoffee.top/product/yuanqi_milk.png",
+    "imgURL_small": "https://chimeracoffee.top/product/yuanqi_milk_small.png",
+    "price": 1000,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "Fresh Milk",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133350891",
+          "value": "热",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747206635133",
+          "value": "常温",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": true,
+    "onlyDelivery": false,
+    "no_coupon": false,
+    "rank": 25
+  },
+  {
+    "id": "68b059d13dc7c2220e448bf8",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "鸳鸳鸯鸯拿铁",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  },
+  {
+    "id": "6902e2bb2d07341865ea46a6",
+    "cateId": "682323821f0a6866818707f9",
+    "name": "黄油柿子美式",
+    "imgURL": "https://chimeracoffee.top/product/WechatIMG11.jpg",
+    "imgURL_small": "https://chimeracoffee.top/product/WechatIMG11_small.jpg",
+    "price": 2100,
+    "stuPrice": 0,
+    "describe": "",
+    "short_desc": "",
+    "status": 1,
+    "delete": 0,
+    "productOptions": {
+      "682323b01f0a6866818707fc": [
+        {
+          "uuid": "1747133345575",
+          "value": "冰",
+          "priceAdjustment": 0
+        },
+        {
+          "uuid": "1747133355174",
+          "value": "少冰",
+          "priceAdjustment": 0
+        }
+      ]
+    },
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": 2000
+  },
+  {
+    "id": "68b05c763dc7c2220e448c03",
+    "cateId": "68ae78f53dc7c2220e448be5",
+    "name": "黑龙江限定 [黄油列巴美式]",
+    "imgURL": "https://chimeracoffee.top/product/",
+    "imgURL_small": "https://chimeracoffee.top/product/_small",
+    "price": 1300,
+    "stuPrice": 0,
+    "describe": "price unknown",
+    "short_desc": "",
+    "status": 0,
+    "delete": 0,
+    "productOptions": {},
+    "needStockWithRestrictBuy": false,
+    "stock": 0,
+    "presaleNum": 0,
+    "stocked": false,
+    "onlyDining": false,
+    "onlyDelivery": true,
+    "no_coupon": false,
+    "rank": null
+  }
+]

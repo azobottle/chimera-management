@@ -1,0 +1,22 @@
+{
+  "orders": [
+    {
+      "scene": "定时达",
+      "deliveryInfo": {
+        "school": "咖啡—燕园",
+        "address": "#7 图书馆南门",
+        "time": "2025-11-20 12:45",
+        "number": "18156657202"
+      },
+      "remark": "需要打包好",
+      "items": [
+        {
+          "productName": "话梅气泡美式",
+          "options": {
+            "温度": "少冰"
+          }
+        }
+      ]
+    }
+  ]
+}

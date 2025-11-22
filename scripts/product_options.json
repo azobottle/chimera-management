@@ -1,0 +1,280 @@
+[
+  {
+    "id": "682323b01f0a6866818707fc",
+    "name": "温度",
+    "values": [
+      {
+        "uuid": "1747133345575",
+        "value": "冰",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1747133350891",
+        "value": "热",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1747133355174",
+        "value": "少冰",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1747206635133",
+        "value": "常温",
+        "priceAdjustment": 0
+      }
+    ]
+  },
+  {
+    "id": "682324671f0a6866818707fd",
+    "name": "茶",
+    "values": [
+      {
+        "uuid": "1747133538707",
+        "value": "加倍",
+        "priceAdjustment": 400
+      },
+      {
+        "uuid": "1760493211420",
+        "value": "正常",
+        "priceAdjustment": 0
+      }
+    ]
+  },
+  {
+    "id": "68243a2a3dc7c2220e448baf",
+    "name": "NFC果汁",
+    "values": [
+      {
+        "uuid": "1747204626010",
+        "value": "脐橙",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1747204634895",
+        "value": "苹果",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1747204639642",
+        "value": "葡萄",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1747204642143",
+        "value": "梨",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1747204644493",
+        "value": "宋柚",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1759508201513",
+        "value": "芒果",
+        "priceAdjustment": 0
+      }
+    ]
+  },
+  {
+    "id": "68243fe63dc7c2220e448bbf",
+    "name": "规格",
+    "values": [
+      {
+        "uuid": "1747206082507",
+        "value": "切角",
+        "priceAdjustment": 0
+      }
+    ]
+  },
+  {
+    "id": "68ec7e5d2d07341865ea3ceb",
+    "name": "浓缩",
+    "values": [
+      {
+        "uuid": "1760329261150",
+        "value": "加倍",
+        "priceAdjustment": 400
+      },
+      {
+        "uuid": "1760329288223",
+        "value": "减半",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1760330852349",
+        "value": "正常",
+        "priceAdjustment": 0
+      }
+    ]
+  },
+  {
+    "id": "68efd2e22d07341865ea3eee",
+    "name": "第一杯",
+    "values": [
+      {
+        "uuid": "1760547533313",
+        "value": "苹果美式",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1760547543704",
+        "value": "葡萄美式",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1760547824328",
+        "value": "咸摩卡",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1760547831894",
+        "value": "香蕉拿铁",
+        "priceAdjustment": 0
+      }
+    ]
+  },
+  {
+    "id": "68efd2ef2d07341865ea3eef",
+    "name": "第二杯",
+    "values": [
+      {
+        "uuid": "1760547555736",
+        "value": "苹果美式",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1760547566036",
+        "value": "葡萄美式",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1760547961523",
+        "value": "咸摩卡",
+        "priceAdjustment": 200
+      },
+      {
+        "uuid": "1760547965442",
+        "value": "香蕉拿铁",
+        "priceAdjustment": 0
+      }
+    ]
+  },
+  {
+    "id": "68f049442d07341865ea3eff",
+    "name": "杠杆",
+    "values": [
+      {
+        "uuid": "1760577820568",
+        "value": "加杠杆",
+        "priceAdjustment": 200
+      },
+      {
+        "uuid": "1760577839851",
+        "value": "不加杠杆",
+        "priceAdjustment": 0
+      }
+    ]
+  },
+  {
+    "id": "68f07fe02d07341865ea3f24",
+    "name": "第二杯温度",
+    "values": [
+      {
+        "uuid": "1760591802389",
+        "value": "冰",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1760591814892",
+        "value": "热",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1760591817878",
+        "value": "少冰",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1760591827692",
+        "value": "常温",
+        "priceAdjustment": 0
+      }
+    ]
+  },
+  {
+    "id": "68f82e052d07341865ea42b6",
+    "name": "茶底",
+    "values": [
+      {
+        "uuid": "1761095117352",
+        "value": "牛奶",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1761095164635",
+        "value": "椰子水",
+        "priceAdjustment": 0
+      }
+    ]
+  },
+  {
+    "id": "68f89a6f2d07341865ea42f8",
+    "name": "规格",
+    "values": [
+      {
+        "uuid": "1761122871929",
+        "value": "两种口味(苹果,葡萄)",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1761122875913",
+        "value": "四种口味(苹果,葡萄,芒果,芭乐)",
+        "priceAdjustment": 600
+      }
+    ]
+  },
+  {
+    "id": "68fa4f972d07341865ea43b7",
+    "name": "蛋糕",
+    "values": [
+      {
+        "uuid": "1761234741703",
+        "value": "红茶栗子",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1761234798509",
+        "value": "香草",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1761234802527",
+        "value": "柠檬",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1761234811326",
+        "value": "巧克力",
+        "priceAdjustment": 0
+      }
+    ]
+  },
+  {
+    "id": "691c684c2d07341865ea4c95",
+    "name": "换燕麦奶",
+    "values": [
+      {
+        "uuid": "1763469322192",
+        "value": "牛奶",
+        "priceAdjustment": 0
+      },
+      {
+        "uuid": "1763469327279",
+        "value": "燕麦奶",
+        "priceAdjustment": 300
+      }
+    ]
+  }
+]
